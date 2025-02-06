@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DerivativeVisualizerModel")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f6b16e679d8580e4e3b13616118977fe2fba20a")]
 [assembly: System.Reflection.AssemblyProductAttribute("DerivativeVisualizerModel")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DerivativeVisualizerModel")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

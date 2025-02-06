@@ -49,38 +49,89 @@ namespace DerivativeVisualizerModel
         private ASTNode ParseExponent()
         {
             ASTNode node = ParsePrimary();
-            while (Match(TokenType.Operator) && CurrentToken().Value == "^")
+            if (Match(TokenType.Operator) && CurrentToken().Value == "^")
             {
                 string op = Consume().Value;
-                ASTNode right = ParsePrimary();
+                ASTNode right = ParseExponent();
                 node = new ASTNode(op, node, right);
             }
             return node;
         }
 
+
         private ASTNode ParsePrimary()
         {
+            if (Match(TokenType.Operator) && CurrentToken().Value == "-")
+            {
+                Consume();
+                ASTNode operand = ParsePrimary();
+                return new ASTNode("NEGATE", operand);
+            }
             if (Match(TokenType.Number) || Match(TokenType.Variable))
             {
-                return new ASTNode(Consume().Value);
+                ASTNode node = new ASTNode(Consume().Value);
+
+                if (Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
+                {
+                    throw new Exception("Missing explicit multiplication operator (*)");
+                }
+
+                return node;
             }
             if (Match(TokenType.Function))
             {
                 string functionName = Consume().Value;
                 Consume(TokenType.LeftParen);
+
+                if (functionName == "log")
+                {
+                    if (!Match(TokenType.Number))
+                    {
+                        throw new Exception($"{functionName} base must be a number.");
+                    }
+                    ASTNode baseNode = new ASTNode(Consume().Value);
+
+                    if (baseNode.Value == "1")
+                    {
+                        throw new Exception("Logarithm base cannot be 1.");
+                    }
+
+                    Consume(TokenType.Comma);
+
+                    ASTNode argumentNode = ParseExpression();
+                    Consume(TokenType.RightParen);
+
+                    return new ASTNode(functionName, baseNode, argumentNode);
+                }
+
                 ASTNode argument = ParseExpression();
                 Consume(TokenType.RightParen);
-                return new ASTNode(functionName, argument);
+                ASTNode node = new ASTNode(functionName, argument);
+
+                if (Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
+                {
+                    throw new Exception("Missing explicit multiplication operator (*)");
+                }
+
+                return node;
             }
             if (Match(TokenType.LeftParen))
             {
                 Consume();
                 ASTNode expression = ParseExpression();
                 Consume(TokenType.RightParen);
+
+                if (Match(TokenType.Number) || Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
+                {
+                    throw new Exception("Missing explicit multiplication operator (*)");
+                }
+
                 return expression;
             }
             throw new Exception("Unexpected token in primary expression");
         }
+
+
 
         private bool Match(TokenType type)
         {

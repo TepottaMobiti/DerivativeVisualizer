@@ -1,5 +1,14 @@
 ﻿namespace DerivativeVisualizerModel
 {
+    /*
+     Tokeneket csinál az inputból.
+     A whitespaceket törli.
+     Elfogad az inputban: whitespaceket, x-et mint változó, függvényeket, +, -, *, /, ^, (, ), számokat, e-t mint szimbólum.
+     Függvények: "log", "sin", "cos", "tan", "cot", "arcsin", "arccos", "arctan", "arccot", "sinh", "cosh", "tanh", "coth", "arsinh", "arcosh", "artanh", "arcoth"
+     Szekánsékat kihagyjuk, nem szeretnék abszolútértékkel szórakozni, azok lesznek, amik voltak az egyetemen.
+     Kérdés: Legyen pi? Most még nem lesz, aztán ha kell, majd lesz.
+     */
+
     public class Tokenizer
     {
         private string input;
@@ -32,23 +41,28 @@
                     tokens.Add(TokenizeFunctionOrVariable());
                     continue;
                 }
-                if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
+                switch (c)
                 {
-                    tokens.Add(new Token(c.ToString(), TokenType.Operator));
-                    currentIndex++;
-                    continue;
-                }
-                if (c == '(')
-                {
-                    tokens.Add(new Token(c.ToString(), TokenType.LeftParen));
-                    currentIndex++;
-                    continue;
-                }
-                if (c == ')')
-                {
-                    tokens.Add(new Token(c.ToString(), TokenType.RightParen));
-                    currentIndex++;
-                    continue;
+                    case '+':
+                    case '-':
+                    case '*':
+                    case '/':
+                    case '^':
+                        tokens.Add(new Token(c.ToString(), TokenType.Operator));
+                        currentIndex++;
+                        continue;
+                    case '(':
+                        tokens.Add(new Token(c.ToString(), TokenType.LeftParen));
+                        currentIndex++;
+                        continue;
+                    case ')':
+                        tokens.Add(new Token(c.ToString(), TokenType.RightParen));
+                        currentIndex++;
+                        continue;
+                    case ',':
+                        tokens.Add(new Token(c.ToString(), TokenType.Comma));
+                        currentIndex++;
+                        continue;
                 }
                 throw new Exception($"Unexpected character: {c}");
             }
@@ -83,8 +97,8 @@
                 name += input[currentIndex];
                 currentIndex++;
             }
-            // Bővíthető, ha kell még több függvény. Pl. tetszőleges alapú logaritmus, tetszőleges alapú exponenciális, stb.
-            string[] functions = { "sin", "cos", "tan", "cot", "arcsin", "arccos", "arctan", "arccot", "sinh", "cosh", "tanh", "coth", "arsinh", "arcosh", "artanh", "arcoth"};
+
+            string[] functions = {"log", "sin", "cos", "tan", "cot", "arcsin", "arccos", "arctan", "arccot", "sinh", "cosh", "tanh", "coth", "arsinh", "arcosh", "artanh", "arcoth"};
             if (Array.Exists(functions, func => func == name))
             {
                 return new Token(name, TokenType.Function);
@@ -92,6 +106,10 @@
             if (name == "x")
             {
                 return new Token(name, TokenType.Variable);
+            }
+            if (name == "e")
+            {
+                return new Token(name, TokenType.Number);
             }
             throw new Exception($"Unexpected identifier: {name}. Only variable 'x' and known functions are allowed"); // Legyen egyértelmű az appból, hogy mik az ismert függvények.
         }

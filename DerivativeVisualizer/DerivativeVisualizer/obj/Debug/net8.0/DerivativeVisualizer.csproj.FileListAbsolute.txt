@@ -16,3 +16,4 @@ C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\Deriv
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizer\obj\Debug\net8.0\DerivativeVisualizer.pdb
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizer\obj\Debug\net8.0\DerivativeVisualizer.genruntimeconfig.cache
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizer\obj\Debug\net8.0\ref\DerivativeVisualizer.dll
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizer\obj\Debug\net8.0\DerivativeVisualizer.sourcelink.json
