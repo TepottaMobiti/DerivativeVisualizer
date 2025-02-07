@@ -81,8 +81,8 @@ namespace DerivateVisualizerModelTest
         [TestMethod]
         public void TestTrigonometricInput()
         {
-            input = "sin(x) + cos(3*x) - tan(4*x) * cot(2*x)";
-            actualTokens = ["sin","(","x",")","+","cos","(","3","*","x",")","-","tan","(","4","*","x",")","*","cot","(","2","*","x",")"];
+            input = "sin(x) + cos(3*x) - tg(4*x) * ctg(2*x)";
+            actualTokens = ["sin","(","x",")","+","cos","(","3","*","x",")","-","tg","(","4","*","x",")","*","ctg","(","2","*","x",")"];
             IsTokenizationCorrect(input, actualTokens);
         }
 
@@ -92,8 +92,8 @@ namespace DerivateVisualizerModelTest
         [TestMethod]
         public void TestTrigonometricInverseInput()
         {
-            input = "arcsin(x) + arccos(3-x) - arctan(4^x) * arccot(2+x)";
-            actualTokens = ["arcsin", "(", "x", ")", "+", "arccos", "(", "3", "-", "x", ")", "-", "arctan", "(", "4", "^", "x", ")", "*", "arccot", "(", "2", "+", "x", ")"];
+            input = "arcsin(x) + arccos(3-x) - arctg(4^x) * arcctg(2+x)";
+            actualTokens = ["arcsin", "(", "x", ")", "+", "arccos", "(", "3", "-", "x", ")", "-", "arctg", "(", "4", "^", "x", ")", "*", "arcctg", "(", "2", "+", "x", ")"];
             IsTokenizationCorrect(input, actualTokens);
         }
 
@@ -103,8 +103,8 @@ namespace DerivateVisualizerModelTest
         [TestMethod]
         public void TestHyperbolicInput()
         {
-            input = "sinh(x) + cosh(3/x) - tanh(4^x) / coth(2*x)";
-            actualTokens = ["sinh", "(", "x", ")", "+", "cosh", "(", "3", "/", "x", ")", "-", "tanh", "(", "4", "^", "x", ")", "/", "coth", "(", "2", "*", "x", ")"];
+            input = "sh(x) + ch(3/x) - th(4^x) / cth(2*x)";
+            actualTokens = ["sh", "(", "x", ")", "+", "ch", "(", "3", "/", "x", ")", "-", "th", "(", "4", "^", "x", ")", "/", "cth", "(", "2", "*", "x", ")"];
             IsTokenizationCorrect(input, actualTokens);
         }
 
@@ -114,8 +114,8 @@ namespace DerivateVisualizerModelTest
         [TestMethod]
         public void TestHyperbolicInverseInput()
         {
-            input = "arsinh(x) * arcosh(3^x) - artanh(x^2) * arcoth(2*x)";
-            actualTokens = ["arsinh", "(", "x", ")", "*", "arcosh", "(", "3", "^", "x", ")", "-", "artanh", "(", "x", "^", "2", ")", "*", "arcoth", "(", "2", "*", "x", ")"];
+            input = "arsh(x) * arch(3^x) - arth(x^2) * arcth(2*x)";
+            actualTokens = ["arsh", "(", "x", ")", "*", "arch", "(", "3", "^", "x", ")", "-", "arth", "(", "x", "^", "2", ")", "*", "arcth", "(", "2", "*", "x", ")"];
             IsTokenizationCorrect(input, actualTokens);
         }
 

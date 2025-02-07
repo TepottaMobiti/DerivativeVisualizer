@@ -4,7 +4,7 @@
      Tokeneket csinál az inputból.
      A whitespaceket törli.
      Elfogad az inputban: whitespaceket, x-et mint változó, függvényeket, +, -, *, /, ^, (, ), számokat, e-t mint szimbólum.
-     Függvények: "log", "sin", "cos", "tan", "cot", "arcsin", "arccos", "arctan", "arccot", "sinh", "cosh", "tanh", "coth", "arsinh", "arcosh", "artanh", "arcoth"
+     Függvények: "log", "ln", "sin", "cos", "tg", "ctg", "arcsin", "arccos", "arctg", "arcctg", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth"
      Szekánsékat kihagyjuk, nem szeretnék abszolútértékkel szórakozni, azok lesznek, amik voltak az egyetemen.
      Kérdés: Legyen pi? Most még nem lesz, aztán ha kell, majd lesz.
      */
@@ -98,7 +98,7 @@
                 currentIndex++;
             }
 
-            string[] functions = {"log", "sin", "cos", "tan", "cot", "arcsin", "arccos", "arctan", "arccot", "sinh", "cosh", "tanh", "coth", "arsinh", "arcosh", "artanh", "arcoth"};
+            string[] functions = {"log", "ln", "sin", "cos", "tg", "ctg", "arcsin", "arccos", "arctg", "arcctg", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth"};
             if (Array.Exists(functions, func => func == name))
             {
                 return new Token(name, TokenType.Function);

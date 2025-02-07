@@ -64,8 +64,12 @@ namespace DerivativeVisualizerModel
             if (Match(TokenType.Operator) && CurrentToken().Value == "-")
             {
                 Consume();
-                ASTNode operand = ParsePrimary();
-                return new ASTNode("NEGATE", operand);
+                if (!Match(TokenType.Number))
+                {
+                    throw new Exception("Negative sign must be followed by a number.");
+                }
+                string negativeValue = "-" + Consume().Value;
+                return new ASTNode(negativeValue);
             }
             if (Match(TokenType.Number) || Match(TokenType.Variable))
             {

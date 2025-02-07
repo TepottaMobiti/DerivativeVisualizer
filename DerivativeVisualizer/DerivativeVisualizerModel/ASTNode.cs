@@ -15,6 +15,7 @@ namespace DerivativeVisualizerModel
             Right = right;
         }
 
+        // AI, Dokumentáció: mivel, prompt.
         public void Print(string indent = "", bool last = true)
         {
             Console.WriteLine(indent + (last ? "└── " : "├── ") + Value);

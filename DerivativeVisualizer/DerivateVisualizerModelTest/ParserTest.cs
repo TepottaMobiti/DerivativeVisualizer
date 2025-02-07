@@ -141,7 +141,7 @@ namespace DerivateVisualizerModelTest
                 new Token("2",TokenType.Number)
             };
 
-            ASTNode actualExpr = new ASTNode("NEGATE", new ASTNode("2"));
+            ASTNode actualExpr = new ASTNode("-2");
             Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
         }
 
