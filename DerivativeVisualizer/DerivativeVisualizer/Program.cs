@@ -31,8 +31,10 @@ namespace DerivativeVisualizer
                     tokens = tokenizer.Tokenize();
                     parser = new Parser(tokens);
                     ast = parser.ParseExpression();
-                    Console.WriteLine("A deriváltfüggvény szintaxisfája:");
+                    Console.WriteLine("\nA deriváltfüggvény szintaxisfája:");
                     ASTNode.Simplify(Differentiator.Differentiate(ast)).Print();
+                    Console.Write("\nA deriváltfüggvény hozzárendelési szabálya:\nf(x) = ");
+                    Console.WriteLine(ASTNode.Simplify(Differentiator.Differentiate(ast)).ToString());
                     Console.WriteLine("-------------------------------");
                 }
                 catch (Exception e)
