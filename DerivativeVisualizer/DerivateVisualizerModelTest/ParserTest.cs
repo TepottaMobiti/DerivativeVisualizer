@@ -41,7 +41,7 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("log", new ASTNode("e"), new ASTNode("x"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("+", new ASTNode("x"), new ASTNode("2"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("-", new ASTNode("x"), new ASTNode("2"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("*", new ASTNode("x"), new ASTNode("2"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -109,7 +109,36 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("/", new ASTNode("x"), new ASTNode("2"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
+        }
+
+        /// <summary>
+        /// Tests if an exception is thrown when division by zero is encountered.
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        [TestMethod]
+        public void TestDivisionByZero()
+        {
+            tokens = new List<Token>()
+            {
+                new Token("x",TokenType.Variable),
+                new Token("/",TokenType.Operator),
+                new Token("0",TokenType.Number)
+            };
+            Assert.ThrowsException<Exception>(() =>
+            {
+                try
+                {
+                    parser.ParseExpression();
+                }
+                catch (Exception e)
+                {
+                    if (e.Message == "Division by zero is not allowed.")
+                    {
+                        throw new Exception();
+                    }
+                }
+            });
         }
 
         /// <summary>
@@ -126,7 +155,7 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("^", new ASTNode("x"), new ASTNode("2"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -142,7 +171,7 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("-2");
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -161,7 +190,7 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("sin", new ASTNode("x"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -199,7 +228,7 @@ namespace DerivateVisualizerModelTest
             };
 
             ASTNode actualExpr = new ASTNode("log", new ASTNode("2"), new ASTNode("x"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -261,7 +290,7 @@ namespace DerivateVisualizerModelTest
                                          new ASTNode("x"),
                                          new ASTNode("2")),
                                      new ASTNode("3"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -285,7 +314,7 @@ namespace DerivateVisualizerModelTest
                                          new ASTNode("x"),
                                          new ASTNode("2")),
                                      new ASTNode("3"));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -309,7 +338,7 @@ namespace DerivateVisualizerModelTest
                                      new ASTNode("^",
                                          new ASTNode("2"),
                                          new ASTNode("3")));
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -333,7 +362,7 @@ namespace DerivateVisualizerModelTest
                                          new ASTNode("2"),
                                          new ASTNode("3")));
 
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -359,7 +388,7 @@ namespace DerivateVisualizerModelTest
                                          new ASTNode("2")),
                                      new ASTNode("3"));
 
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -383,7 +412,7 @@ namespace DerivateVisualizerModelTest
                                          new ASTNode("2"),
                                          new ASTNode("3")));
 
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -409,7 +438,7 @@ namespace DerivateVisualizerModelTest
                                          new ASTNode("2")),
                                      new ASTNode("3"));
 
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -433,7 +462,7 @@ namespace DerivateVisualizerModelTest
                                          new ASTNode("2"),
                                          new ASTNode("3")));
 
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -459,7 +488,7 @@ namespace DerivateVisualizerModelTest
                                          new ASTNode("2")),
                                      new ASTNode("3"));
 
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
 
         /// <summary>
@@ -496,21 +525,7 @@ namespace DerivateVisualizerModelTest
                                              new ASTNode("x"),
                                              new ASTNode("3"))));
 
-            Assert.IsTrue(AreTreesEqual(parsedExpr, actualExpr));
-        }
-
-        /// <summary>
-        /// Determines if two trees are equal.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        private bool AreTreesEqual(ASTNode a, ASTNode b)
-        {
-            if (a == null && b == null) return true;
-            if (a == null || b == null) return false;
-            if (a.Value != b.Value) return false;
-            return AreTreesEqual(a.Left,b.Left) && AreTreesEqual(a.Right,b.Right);
+            Assert.IsTrue(ASTNode.AreTreesEqual(parsedExpr, actualExpr));
         }
     }
 }

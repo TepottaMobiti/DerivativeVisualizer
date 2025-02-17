@@ -41,6 +41,10 @@ namespace DerivativeVisualizerModel
             {
                 string op = Consume().Value;
                 ASTNode right = ParseExponent();
+                if (op == "/" && right.Value == "0")
+                {
+                    throw new Exception("Division by zero is not allowed.");
+                }
                 node = new ASTNode(op, node, right);
             }
             return node;
@@ -53,6 +57,10 @@ namespace DerivativeVisualizerModel
             {
                 string op = Consume().Value;
                 ASTNode right = ParseExponent();
+                if (node.Value == "0" && right.Value == "0")
+                {
+                    throw new Exception("0^0 is undefined.");
+                }
                 node = new ASTNode(op, node, right);
             }
             return node;
