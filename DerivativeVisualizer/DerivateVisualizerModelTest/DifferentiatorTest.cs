@@ -10,7 +10,10 @@ namespace DerivateVisualizerModelTest
     [TestClass]
     public class DifferentiatorTest
     {
-        //TODO: Exception tesztelésnél tesztelni mindenhol, hogy jó exception jön-e, ld. 220. sor
+        // TODO: Exception tesztelésnél tesztelni mindenhol, hogy jó exception jön-e, ld. 220. sor
+        // TODO: Egyszerűsítsd az összetett függvényes dolgokat: Ha csak x van pl ^ bal oldalán, akkor egyszerűsíts, illetve ha fv inputja csak x, akkor is.
+        // Ezt persze csak az új deriválás függvényben csináld meg, a régit tartsd meg úgy ahogy van, letesztelve, jó az.
+
         private ASTNode tree = null!;
         private ASTNode expected = null!;
 

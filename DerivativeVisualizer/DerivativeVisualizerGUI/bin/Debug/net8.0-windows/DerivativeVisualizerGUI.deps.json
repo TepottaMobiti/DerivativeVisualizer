@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "DerivativeVisualizerGUI/1.0.0": {
+        "dependencies": {
+          "DerivativeVisualizerModel": "1.0.0"
+        },
+        "runtime": {
+          "DerivativeVisualizerGUI.dll": {}
+        }
+      },
+      "DerivativeVisualizerModel/1.0.0": {
+        "runtime": {
+          "DerivativeVisualizerModel.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "DerivativeVisualizerGUI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DerivativeVisualizerModel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
