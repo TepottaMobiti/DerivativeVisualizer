@@ -10,6 +10,7 @@ namespace DerivativeVisualizerModel
     // Egyetlen input mezőre van szüksége, ennyit fog kapni a viewtől, és utána csak eventeket vált ki. Minden többi classtól jövő exceptiont önmagában lekezel, csak eventekkel kommunikál kifelé.
     // Itt legyen minden üzleti logika, a viewmodelben semmilyen komolyabb számítás ne legyen.
     // Modellben nem try-catchelünk, majd az appban kezeljük az ilyen errorokat az App-ban felugró ablakokkal.
+    // TODO: Ha kész a deriválás, azaz nincs több NeedsDiff a fában, akkor küldjünk egy Complete Eventet, ami megjelenít egy egyszerűsítés gombot, ami visszaküldi az egyszerűsített deriváltat.
     public class Model
     {
         private Tokenizer tokenizer = null!;

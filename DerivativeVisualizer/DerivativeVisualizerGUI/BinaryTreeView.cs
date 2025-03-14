@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -51,9 +52,9 @@ namespace DerivativeVisualizerGUI
             Width = Math.Max(treeWidth, MinCanvasWidth) + 50;
             Height = treeHeight;
 
-            double centerX = (Width - treeWidth) / 2;  // Calculate the offset for centering
+            double centerX = (Width - treeWidth) / 2;
 
-            DrawNode(TreeToPresent, centerX + treeWidth / 2, 20, treeWidth / 4);  // Adjust root position
+            DrawNode(TreeToPresent, centerX + treeWidth / 2, 20, treeWidth / 4);
         }
 
         private void DrawNode(ASTNode node, double x, double y, double offset)
@@ -83,10 +84,12 @@ namespace DerivativeVisualizerGUI
                 nodeButton.Style = (Style)Application.Current.Resources["CircleButton"];
             }
 
-            if (node.NeedsDifferentiation)
+            var binding = new Binding($"DataContext.NodeClickCommands[{node.Locator}]")
             {
-                nodeButton.Click += (s, e) => NodeClicked(node.Locator);
-            }
+                RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(Window), 1),
+                Mode = BindingMode.OneWay
+            };
+            nodeButton.SetBinding(Button.CommandProperty, binding);
 
             Children.Add(nodeButton);
             SetLeft(nodeButton, x - NodeSize / 2);
@@ -105,11 +108,6 @@ namespace DerivativeVisualizerGUI
                 DrawLine(x, y + NodeSize, x + newOffset, y + NodeSize + VerticalSpacing);
                 DrawNode(node.Right, x + newOffset, y + NodeSize + VerticalSpacing, newOffset);
             }
-        }
-
-        private void NodeClicked(int id)
-        {
-            // call model
         }
 
         private void DrawLine(double x1, double y1, double x2, double y2)

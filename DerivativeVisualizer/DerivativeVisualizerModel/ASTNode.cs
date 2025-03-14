@@ -39,7 +39,6 @@ namespace DerivativeVisualizerModel
             ASTNode? leftCopy = Left?.DeepCopy();
             ASTNode? rightCopy = Right?.DeepCopy();
 
-            // Create a new ASTNode, copying the necessary properties and ensuring no null dereferencing.
             return new ASTNode(Value, leftCopy!, rightCopy!)
             {
                 NeedsDifferentiation = NeedsDifferentiation,

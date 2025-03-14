@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace DerivativeVisualizerGUI
@@ -28,7 +30,27 @@ namespace DerivativeVisualizerGUI
             {
                 treeToPresent = value;
                 OnPropertyChanged(nameof(TreeToPresent));
+                InitializeCommands(TreeToPresent);
             }
+        }
+
+        public Dictionary<int, DelegateCommand> NodeClickCommands { get; } = new();
+
+        private void InitializeCommands(ASTNode? node)
+        {
+            if (node == null) return;
+
+            NodeClickCommands[node.Locator] = new DelegateCommand(param => OnNodeClick(node));
+
+            Debug.WriteLine($"Added command for node {node.Locator}");
+
+            InitializeCommands(node.Left);
+            InitializeCommands(node.Right);
+        }
+
+        private void OnNodeClick(ASTNode node)
+        {
+            model.DifferentiateByLocator(node.Locator);
         }
 
         public ViewModel()
@@ -110,6 +132,12 @@ namespace DerivativeVisualizerGUI
             }
 
             TreeToPresent = tree;
+
+            Debug.WriteLine("Commands in dictionary:");
+            foreach (var key in NodeClickCommands.Keys)
+            {
+                Debug.WriteLine($"Locator: {key}");
+            }
         }
     }
 }
