@@ -12,7 +12,7 @@ namespace DerivateVisualizerModelTest
     {
         private List<Token>? tokens;
         private Parser parser => new Parser(tokens ?? new List<Token>());
-        private ASTNode parsedExpr => parser.ParseExpression();
+        private ASTNode parsedExpr => parser.ParseExpression().Item1 ?? null!;
 
         /// <summary>
         /// Tests if empty token list creates an exception.

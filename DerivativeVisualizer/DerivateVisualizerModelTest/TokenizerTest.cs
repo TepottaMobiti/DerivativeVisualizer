@@ -17,7 +17,7 @@ namespace DerivateVisualizerModelTest
         {
             get
             {
-                return tokenizer.Tokenize() ?? new List<Token>();
+                return tokenizer.Tokenize().Item1 ?? new List<Token>();
             }
         }
         private string[]? actualTokens;

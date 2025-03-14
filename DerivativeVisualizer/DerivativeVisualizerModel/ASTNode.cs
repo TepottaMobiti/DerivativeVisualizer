@@ -4,11 +4,24 @@ using System.Xml;
 namespace DerivativeVisualizerModel
 {
     //TODO: Mivel ide is került azóta néhány függvény, amik elég fontosak, így ezt a classt is tesztelni kell.
+    //TODO: Az egész alkalmazásban ne legyen sehol erőlködés, ! tilos, mindenhol legyen nullable ahol kell és legyenek null checkek. Clean code legyen.
+    // TODO: Ha kész a program, lesz benne egy csomó minden ami amúgy hasznos, de nem fog kelleni a program végén, például a teljes rekurzív deriválás. Ezeket mentsd el egy másik fájlba, tartsd meg őket magadnak,
+    // de a szakdogába ne add be, ne legyen olyan kód amit nem használ fel az app.
     public class ASTNode
     {
+        private static int counter = 0;
         public string Value { get; }
         public ASTNode Left { get; set; }
         public ASTNode Right { get; set; }
+        public int Locator { get; private set; }
+
+        public string DiffRule
+        {
+            get
+            {
+                return "RULE";
+            }
+        }
 
         public bool NeedsDifferentiation { get; set; }
 
@@ -17,13 +30,20 @@ namespace DerivativeVisualizerModel
             Value = value;
             Left = left;
             Right = right;
+            Locator = counter;
+            counter++;
         }
 
         public ASTNode DeepCopy()
         {
-            return new ASTNode(Value, Left?.DeepCopy()!, Right?.DeepCopy()!)
+            ASTNode? leftCopy = Left?.DeepCopy();
+            ASTNode? rightCopy = Right?.DeepCopy();
+
+            // Create a new ASTNode, copying the necessary properties and ensuring no null dereferencing.
+            return new ASTNode(Value, leftCopy!, rightCopy!)
             {
-                NeedsDifferentiation = this.NeedsDifferentiation
+                NeedsDifferentiation = NeedsDifferentiation,
+                Locator = Locator
             };
         }
 
@@ -143,6 +163,17 @@ namespace DerivativeVisualizerModel
             if (node.Value == "^" && node.Left.Value == "0" && node.Right.Value != "0") return new ASTNode("0"); // 0 ^ x = 0 (x not 0)   
 
             return new ASTNode(node.Value, SimplifyOnce(node.Left), SimplifyOnce(node.Right)) { NeedsDifferentiation = node.NeedsDifferentiation};
+        }
+
+        public bool IsOperator()
+        {
+            return Value is "+" or "-" or "*" or "/" or "^";
+        }
+
+        public bool IsFunction()
+        {
+            return Value is "sin" or "cos" or "tg" or "ctg" or "arcsin" or "arccos" or "arctg" or "arcctg" or
+                   "sh" or "ch" or "th" or "cth" or "arsh" or "arch" or "arth" or "arcth" or "ln" or "log";
         }
     }
 }

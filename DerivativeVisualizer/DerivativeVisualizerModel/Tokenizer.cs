@@ -1,4 +1,7 @@
-﻿namespace DerivativeVisualizerModel
+﻿using Microsoft.VisualBasic;
+using System.Xml.Linq;
+
+namespace DerivativeVisualizerModel
 {
     /*
      Tokeneket csinál az inputból.
@@ -20,8 +23,10 @@
             currentIndex = 0;
         }
 
-        public List<Token> Tokenize()
+        public (List<Token>?,string) Tokenize()
         {
+            Token? t;
+            string msg;
             List<Token> tokens = new List<Token>();
             while (currentIndex < input.Length)
             {
@@ -33,12 +38,22 @@
                 }
                 if (char.IsDigit(c))
                 {
-                    tokens.Add(TokenizeNumber());
+                    (t, msg) = TokenizeNumber();
+                    if (t is null)
+                    {
+                        return (null, msg);
+                    }
+                    tokens.Add(t);
                     continue;
                 }
                 if (char.IsLetter(c))
                 {
-                    tokens.Add(TokenizeFunctionOrVariable());
+                    (t, msg) = TokenizeFunctionOrVariable();
+                    if (t is null)
+                    {
+                        return (null, msg);
+                    }
+                    tokens.Add(t);
                     continue;
                 }
                 switch (c)
@@ -64,12 +79,12 @@
                         currentIndex++;
                         continue;
                 }
-                throw new Exception($"Unexpected character: {c}");
+                return (null, $"Unexpected character: {c}");
             }
-            return tokens;
+            return (tokens,"");
         }
 
-        private Token TokenizeNumber()
+        private (Token?,string) TokenizeNumber()
         {
             string number = string.Empty;
             bool hasDecimal = false;
@@ -79,17 +94,17 @@
                 {
                     if(hasDecimal)
                     {
-                        throw new Exception("Invalid number format: multiple decimal points.");
+                        return (null,"Invalid number format: multiple decimal points.");
                     }
                     hasDecimal = true;
                 }
                 number += input[currentIndex];
                 currentIndex++;
             }
-            return new Token(number,TokenType.Number);
+            return (new Token(number,TokenType.Number),"");
         }
 
-        private Token TokenizeFunctionOrVariable()
+        private (Token?,string) TokenizeFunctionOrVariable()
         {
             string name = string.Empty;
             while(currentIndex < input.Length && char.IsLetter(input[currentIndex]))
@@ -101,17 +116,17 @@
             string[] functions = {"log", "ln", "sin", "cos", "tg", "ctg", "arcsin", "arccos", "arctg", "arcctg", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth"};
             if (Array.Exists(functions, func => func == name))
             {
-                return new Token(name, TokenType.Function);
+                return (new Token(name, TokenType.Function),"");
             }
             if (name == "x")
             {
-                return new Token(name, TokenType.Variable);
+                return (new Token(name, TokenType.Variable),"");
             }
             if (name == "e")
             {
-                return new Token(name, TokenType.Number);
+                return (new Token(name, TokenType.Number),"");
             }
-            throw new Exception($"Unexpected identifier: {name}. Only variable 'x' and known functions are allowed"); // Legyen egyértelmű az appból, hogy mik az ismert függvények.
+            return (null,$"Unexpected identifier: {name}. Only variable 'x' and known functions are allowed"); // Legyen egyértelmű az appból, hogy mik az ismert függvények.
         }
     }
 }

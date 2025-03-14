@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DerivativeVisualizerModel
 {
-    //TODO: FunctionEvaluator class Evaluate(ASTNode, double) kiértékelő metódussal
-    // Ne hagyatkozz itt a ChadGPT-re, ezt magadtól is meg tudod valósítani. Megkeresed a részfát ami flagelve van, és azt deriválod, a derivált részfát kicseréled az eredetivel,
-    // a deriválásban rekurzív hívás helyett pedig
-    // flagelsz. Ez addig fut, amíg van flag a fában. Minden iteráció után elmented a fát.
-    //TODO: Ellenőrizd, hogy a Deriváló függvényben biztosan nincsenek-e referencia miatti hibák: ahol nem új ASTNode-ot csinálsz, ott biztos nincs gyereke a használt Node-nak? Ha félsz,
-    //csinálj mindenhol új ASTNode-ot
+    // TODO: Ellenőrizd, hogy a Deriváló függvényben biztosan nincsenek-e referencia miatti hibák: ahol nem új ASTNode-ot csinálsz, ott biztos nincs gyereke a használt Node-nak? Ha félsz,
+    // csinálj mindenhol új ASTNode-ot
+    // TODO: Ha már majd az ID alapján történő keresést csinálod (kattintás vezérelt deriválás), akkor figyelj arra, hogy az ID-k is egyezzenek. Például a DeepCopy metódus mentse át az ID-kat is.
+    // Legyen egy statikus ID mezője az ASTNode-nak, ami új Node létrehozásakor automatikusan egy új, egyedi ID-t ad, de lehessen valahogy kívülről is felülírni az ID-t DeepCopy-hoz.
     public class Differentiator
     {
         private ASTNode root;
@@ -25,6 +24,34 @@ namespace DerivativeVisualizerModel
         }
 
         public List<ASTNode> GetSteps() => differentiationSteps;
+
+        public ASTNode CurrentTree
+        {
+            get => differentiationSteps.Last();
+        }
+
+        public ASTNode Differentiate(int locator)
+        {
+            ASTNode lastTree = differentiationSteps.Last().DeepCopy();
+
+            ASTNode nodeToDifferentiate = FindDifferentiationNode(lastTree, locator);
+
+            ASTNode differentiatedNode = DifferentiateOnce(nodeToDifferentiate);
+
+            ASTNode newTree = ReplaceNode(lastTree, nodeToDifferentiate, differentiatedNode);
+
+            differentiationSteps.Add(newTree);
+            return newTree;
+        }
+
+        public ASTNode FindDifferentiationNode(ASTNode node, int locator)
+        {
+            if (node == null) return null!;
+            if (node.NeedsDifferentiation && node.Locator == locator) return node;
+
+            ASTNode found = FindDifferentiationNode(node.Left, locator);
+            return found ?? FindDifferentiationNode(node.Right, locator);
+        }
 
         public void Differentiate()
         {
@@ -191,7 +218,7 @@ namespace DerivativeVisualizerModel
                     }
                     throw new Exception("The base of the logarithm should be a positive number other than 1.");
                 case "ln": // ln'(f) = f'/f
-                    if (right.Value == "x")
+                    if (left.Value == "x")
                     {
                         return new ASTNode("/",
                                    new ASTNode("1"),

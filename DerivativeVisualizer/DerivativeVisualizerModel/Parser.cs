@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DerivativeVisualizerModel
 {
+    // Hiba: Valamiért elfogadunk olyan inputot, hogy "x5". Ki kéne kényszeríteni, hogy minden szám vagy x után csak operátor jöhessen? Igazából igen, mert a levelek úgyis csak szám meg x lehet a fában.
     public class Parser
     {
         private List<Token> tokens;
@@ -17,130 +19,235 @@ namespace DerivativeVisualizerModel
             currentIndex = 0;
         }
 
-        public ASTNode ParseExpression()
+        public (ASTNode?, string) ParseExpression()
         {
             return ParseTerm();
         }
 
-        private ASTNode ParseTerm()
+        private (ASTNode?, string) ParseTerm()
         {
-            ASTNode node = ParseFactor();
+            ASTNode? node;
+            string msg;
+            (node, msg) = ParseFactor();
+            if (node is null)
+            {
+                return (null, msg);
+            }
             while (Match(TokenType.Operator) && (CurrentToken().Value == "+" || CurrentToken().Value == "-"))
             {
-                string op = Consume().Value;
-                ASTNode right = ParseFactor();
+                Token? token;
+                (token, msg) = Consume();
+                if (token is null)
+                {
+                    return (null, msg);
+                }
+                string op = token.Value;
+                ASTNode? right;
+                (right, msg) = ParseFactor();
+                if (right is null)
+                {
+                    return (null, msg);
+                }
                 node = new ASTNode(op, node, right);
             }
-            return node;
+            return (node,"");
         }
 
-        private ASTNode ParseFactor()
+        private (ASTNode?,string) ParseFactor()
         {
-            ASTNode node = ParseExponent();
+            ASTNode? node;
+            string msg;
+            (node, msg) = ParseExponent();
+            if (node is null)
+            {
+                return (null, msg);
+            }
             while (Match(TokenType.Operator) && (CurrentToken().Value == "*" || CurrentToken().Value == "/"))
             {
-                string op = Consume().Value;
-                ASTNode right = ParseExponent();
+                Token? token;
+                (token, msg) = Consume();
+                if (token is null)
+                {
+                    return (null, msg);
+                }
+                string op = token.Value;
+                ASTNode? right;
+                (right, msg) = ParseExponent();
+                if (right is null)
+                {
+                    return (null, msg);
+                }
                 if (op == "/" && right.Value == "0")
                 {
-                    throw new Exception("Division by zero is not allowed.");
+                    return (null, "Division by zero is not allowed.");
                 }
                 node = new ASTNode(op, node, right);
             }
-            return node;
+            return (node,"");
         }
 
-        private ASTNode ParseExponent()
+        private (ASTNode?,string) ParseExponent()
         {
-            ASTNode node = ParsePrimary();
+            ASTNode? node;
+            string msg;
+            (node, msg) = ParsePrimary();
+            if (node is null)
+            {
+                return (null,msg);
+            }
             if (Match(TokenType.Operator) && CurrentToken().Value == "^")
             {
-                string op = Consume().Value;
-                ASTNode right = ParseExponent();
+                Token? token;
+                (token, msg) = Consume();
+                if (token is null)
+                {
+                    return (null, msg);
+                }
+                string op = token.Value;
+                ASTNode? right;
+                (right, msg) = ParseExponent();
+                if (right is null)
+                {
+                    return (null, msg);
+                }
                 if (node.Value == "0" && right.Value == "0")
                 {
-                    throw new Exception("0^0 is undefined.");
+                    return (null, "0^0 is undefined.");
                 }
                 node = new ASTNode(op, node, right);
             }
-            return node;
+            return (node,"");
         }
 
 
-        private ASTNode ParsePrimary()
+        private (ASTNode?,string) ParsePrimary()
         {
+            Token? t;
+            string msg;
             if (Match(TokenType.Operator) && CurrentToken().Value == "-")
             {
                 Consume();
                 if (!Match(TokenType.Number))
                 {
-                    throw new Exception("Negative sign must be followed by a number.");
+                    return (null, "Negative sign must be followed by a number.");
                 }
-                string negativeValue = "-" + Consume().Value;
-                return new ASTNode(negativeValue);
+                (t, msg) = Consume();
+                if (t is null)
+                {
+                    return (null, msg);
+                }
+                string negativeValue = "-" + t.Value;
+                return (new ASTNode(negativeValue),"");
             }
             if (Match(TokenType.Number) || Match(TokenType.Variable))
             {
-                ASTNode node = new ASTNode(Consume().Value);
+                (t,msg) = Consume();
+                if (t is null)
+                {
+                    return (null, msg);
+                }
+                ASTNode node = new ASTNode(t.Value);
 
                 if (Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
                 {
-                    throw new Exception("Missing explicit multiplication operator (*)");
+                    return (null, "Missing explicit multiplication operator (*)");
                 }
 
-                return node;
+                return (node,"");
             }
             if (Match(TokenType.Function))
             {
-                string functionName = Consume().Value;
+                Token? rightParen;
+                (t,msg) = Consume();
+                if (t is null)
+                {
+                    return (null, msg);
+                }
+                string functionName = t.Value;
                 Consume(TokenType.LeftParen);
 
                 if (functionName == "log")
                 {
                     if (!Match(TokenType.Number))
                     {
-                        throw new Exception($"{functionName} base must be a number.");
+                        return (null, $"{functionName} base must be a number.");
                     }
-                    ASTNode baseNode = new ASTNode(Consume().Value);
+                    (t, msg) = Consume();
+                    if (t is null)
+                    {
+                        return (null, msg);
+                    }
+                    ASTNode baseNode = new ASTNode(t.Value);
 
                     if (baseNode.Value == "1")
                     {
-                        throw new Exception("Logarithm base cannot be 1.");
+                        return (null, "Logarithm base cannot be 1.");
                     }
 
                     Consume(TokenType.Comma);
 
-                    ASTNode argumentNode = ParseExpression();
-                    Consume(TokenType.RightParen);
+                    ASTNode? argumentNode;
+                    (argumentNode, msg) = ParseExpression();
+                    if (argumentNode is null)
+                    {
+                        return (null, msg);
+                    }
 
-                    return new ASTNode(functionName, baseNode, argumentNode);
+                    (rightParen, msg) = Consume(TokenType.RightParen);
+                    if (rightParen is null)
+                    {
+                        return (null, "Missing closing parenthesis for function argument.");
+                    }
+
+                    return (new ASTNode(functionName, baseNode, argumentNode),"");
                 }
 
-                ASTNode argument = ParseExpression();
-                Consume(TokenType.RightParen);
+                ASTNode? argument;
+                (argument, msg) = ParseExpression();
+                if (argument is null)
+                {
+                    return (null, msg);
+                }
+
+                (rightParen, msg) = Consume(TokenType.RightParen);
+                if (rightParen is null)
+                {
+                    return (null, "Missing closing parenthesis for function argument.");
+                }
+
                 ASTNode node = new ASTNode(functionName, argument);
 
                 if (Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
                 {
-                    throw new Exception("Missing explicit multiplication operator (*)");
+                    return (null, "Missing explicit multiplication operator (*)");
                 }
 
-                return node;
+                return (node,"");
             }
             if (Match(TokenType.LeftParen))
             {
                 Consume();
-                ASTNode expression = ParseExpression();
-                Consume(TokenType.RightParen);
+                ASTNode? expression;
+                (expression, msg) = ParseExpression();
+                if (expression is null)
+                {
+                    return (null, msg);
+                }
+
+                (Token? rightParen, msg) = Consume(TokenType.RightParen);
+                if (rightParen is null)
+                {
+                    return (null, "Missing closing parenthesis in expression.");
+                }
 
                 if (Match(TokenType.Number) || Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
                 {
-                    throw new Exception("Missing explicit multiplication operator (*)");
+                    return (null, "Missing explicit multiplication operator (*)");
                 }
 
-                return expression;
+                return (expression,"");
             }
-            throw new Exception("Unexpected token in primary expression");
+            return (null, "Unexpected token in primary expression");
         }
 
 
@@ -150,16 +257,16 @@ namespace DerivativeVisualizerModel
             return !IsAtEnd() && tokens[currentIndex].Type == type;
         }
 
-        private Token Consume()
+        private (Token?,string) Consume()
         {
-            if (IsAtEnd()) throw new Exception("Unexpected end of input");
-            return tokens[currentIndex++];
+            if (IsAtEnd()) return (null,"Unexpected end of input");
+            return (tokens[currentIndex++],"");
         }
 
-        private void Consume(TokenType type)
+        private (Token?,string) Consume(TokenType type)
         {
-            if (!Match(type)) throw new Exception($"Expected token type {type}, but got {CurrentToken().Type}");
-            Consume();
+            if (!Match(type)) return (null,$"Expected token type {type}");
+            return Consume();
         }
 
         private Token CurrentToken()

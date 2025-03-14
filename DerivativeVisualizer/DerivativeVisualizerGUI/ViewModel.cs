@@ -9,18 +9,37 @@ using System.Windows.Media;
 
 namespace DerivativeVisualizerGUI
 {
-    // TODO: Csinálj egy modellt ami összevonja a classok funckionalitását, és az invokáljon eventeket, stb.
-    public class ViewModel : INotifyPropertyChanged
+    // Hiba: Ha kinyitjuk a ?-et pl. "sin(x"-nél, és utána bezárjuk a zárójelet "sin(x)" akkor a kérdőjel eltűnik de az error message nem.
+    // TODO: Átírni magyarra a parser / tokenizer üzeneteit és ne hiba szerűek legyenek, hanem segítő hangnem. Legyenek újfajta üzenetek is, ahol lehet, küldjünk vissza valamit. Pl. ha felismerjük, hogy fv,
+    // mondjuk "sin", de nincs utána nyitó zárójel.
+    // Hiba: pl. elfogad ilyen inputot: "x5". Miért?
+    public class ViewModel : ViewModelBase
     {
         private string inputText;
-        private Brush backgroundColor;
-        private Tokenizer? tokenizer;
-        private Parser? parser;
+        private string errorMessage;
+        private bool showErrorMessage;
+        private Model model;
+        private ASTNode? treeToPresent;
+
+        public ASTNode? TreeToPresent
+        {
+            get => treeToPresent;
+            set
+            {
+                treeToPresent = value;
+                OnPropertyChanged(nameof(TreeToPresent));
+            }
+        }
 
         public ViewModel()
         {
             inputText = string.Empty;
-            backgroundColor = Brushes.White;
+            errorMessage = string.Empty;
+            model = new Model();
+            model.InputProcessed += Model_OnInputProcessed;
+            model.TreeUpdated += Model_OnTreeUpdated;
+            treeToPresent = null;
+            ToggleErrorMessageCommand = new DelegateCommand(_ => ShowErrorMessage = !ShowErrorMessage);
         }
 
         public string InputText
@@ -29,43 +48,68 @@ namespace DerivativeVisualizerGUI
             set
             {
                 inputText = value;
-                OnPropertyChanged(nameof(inputText));
-                ValidateInput();
+                OnPropertyChanged(nameof(InputText));
+                model.ProcessInput(InputText);
+                if (inputText.Length == 0)
+                {
+                    TreeToPresent = null;
+                }
             }
         }
 
-        public Brush BackgroundColor
+        public string ErrorMessage
         {
-            get => backgroundColor;
+            get => errorMessage;
             set
             {
-                backgroundColor = value;
-                OnPropertyChanged(nameof(backgroundColor));
+                errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
             }
         }
 
-        // TODO
-        // Inkább úgy legyen, hogy eventekkel játszol a modelben, és az event handlerben állítod a background colort. Az eventben küldd el az üzit is, legyen egy box ennek, ami a hibaüzenetet vagy
-        // Jó inputot ír ki.
-        private void ValidateInput()
+        public bool ShowErrorMessage
         {
-            tokenizer = new Tokenizer(InputText);
-            bool success = false;
-
-            try
+            get => showErrorMessage;
+            set
             {
-                parser = new Parser(tokenizer.Tokenize());
-                parser.ParseExpression();
-                success = true;
-            } catch (Exception) { }
-
-            BackgroundColor = success ? Brushes.LightGreen : Brushes.LightCoral;
+                showErrorMessage = value;
+                OnPropertyChanged();
+            }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+        public DelegateCommand ToggleErrorMessageCommand { get; }
+
+
+
+        private bool? inputValid;
+        public bool? InputValid
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => inputValid;
+            set
+            {
+                inputValid = value;
+                OnPropertyChanged(nameof(InputValid));
+            }
+        }
+
+        private void Model_OnInputProcessed(ASTNode? tree, string msg)
+        {
+            InputValid = inputText.Length == 0 ? null : tree is not null;
+
+            if (InputValid == false)
+            {
+                ErrorMessage = msg;
+            }
+        }
+
+        private void Model_OnTreeUpdated(ASTNode? tree)
+        {
+            if (tree is null)
+            {
+                return;
+            }
+
+            TreeToPresent = tree;
         }
     }
 }

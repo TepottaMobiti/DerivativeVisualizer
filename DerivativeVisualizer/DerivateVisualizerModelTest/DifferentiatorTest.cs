@@ -13,6 +13,7 @@ namespace DerivateVisualizerModelTest
         // TODO: Exception tesztelésnél tesztelni mindenhol, hogy jó exception jön-e, ld. 220. sor
         // TODO: Egyszerűsítsd az összetett függvényes dolgokat: Ha csak x van pl ^ bal oldalán, akkor egyszerűsíts, illetve ha fv inputja csak x, akkor is.
         // Ezt persze csak az új deriválás függvényben csináld meg, a régit tartsd meg úgy ahogy van, letesztelve, jó az.
+        // TODO: Írd át a teszteket úgy, hogy a lépésenkénti deriválást használják, és az utolsó lépéssel hasonlítsd össze az expectedet.
 
         private ASTNode tree = null!;
         private ASTNode expected = null!;
