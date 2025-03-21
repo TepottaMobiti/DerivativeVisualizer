@@ -32,9 +32,18 @@ namespace DerivativeVisualizerModel
 
         public event TreeUpdatedDelegate TreeUpdated = null!;
 
-        private void OnTreeUpdated(ASTNode tree)
+        private void OnTreeUpdated(ASTNode? tree)
         {
             TreeUpdated?.Invoke(tree);
+        }
+
+        public delegate void DifferentiationFinishedDelegate(ASTNode? tree);
+
+        public event DifferentiationFinishedDelegate DifferentiationFinished = null!;
+
+        private void OnDifferentiationFinished(ASTNode? tree)
+        {
+            DifferentiationFinished?.Invoke(tree);
         }
 
         public void ProcessInput(string input)
@@ -67,6 +76,11 @@ namespace DerivativeVisualizerModel
         {
             ASTNode differentiatedTree = differentiator.Differentiate(locator);
             OnTreeUpdated(differentiatedTree);
+
+            if (!ASTNode.HasDifferentiationNode(differentiatedTree))
+            {
+                OnDifferentiationFinished(ASTNode.Simplify(differentiatedTree));
+            }
         }
     }
 }

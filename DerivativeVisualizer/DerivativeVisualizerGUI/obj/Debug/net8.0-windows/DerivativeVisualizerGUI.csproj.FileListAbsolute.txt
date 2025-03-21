@@ -25,3 +25,6 @@ C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\Deriv
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerGUI\obj\Debug\net8.0-windows\ref\DerivativeVisualizerGUI.dll
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerGUI\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerGUI\obj\Debug\net8.0-windows\App.baml
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerGUI\bin\Debug\net8.0-windows\OxyPlot.dll
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerGUI\bin\Debug\net8.0-windows\OxyPlot.Wpf.dll
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerGUI\bin\Debug\net8.0-windows\OxyPlot.Wpf.Shared.dll

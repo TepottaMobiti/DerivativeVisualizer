@@ -120,10 +120,11 @@ namespace DerivativeVisualizerModel
         }
 
 
-        private (ASTNode?,string) ParsePrimary()
+        private (ASTNode?, string) ParsePrimary()
         {
             Token? t;
             string msg;
+
             if (Match(TokenType.Operator) && CurrentToken().Value == "-")
             {
                 Consume();
@@ -137,28 +138,36 @@ namespace DerivativeVisualizerModel
                     return (null, msg);
                 }
                 string negativeValue = "-" + t.Value;
-                return (new ASTNode(negativeValue),"");
+
+                if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
+                {
+                    return (null, $"Expected operator after {negativeValue}");
+                }
+
+                return (new ASTNode(negativeValue), "");
             }
+
             if (Match(TokenType.Number) || Match(TokenType.Variable))
             {
-                (t,msg) = Consume();
+                (t, msg) = Consume();
                 if (t is null)
                 {
                     return (null, msg);
                 }
                 ASTNode node = new ASTNode(t.Value);
 
-                if (Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
+                if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, "Missing explicit multiplication operator (*)");
+                    return (null, $"Expected operator after {t.Value}");
                 }
 
-                return (node,"");
+                return (node, "");
             }
+
             if (Match(TokenType.Function))
             {
                 Token? rightParen;
-                (t,msg) = Consume();
+                (t, msg) = Consume();
                 if (t is null)
                 {
                     return (null, msg);
@@ -184,7 +193,11 @@ namespace DerivativeVisualizerModel
                         return (null, "Logarithm base cannot be 1.");
                     }
 
-                    Consume(TokenType.Comma);
+                    var (comma, commaMsg) = Consume(TokenType.Comma);
+                    if (comma is null)
+                    {
+                        return (null, "Missing comma after log base.");
+                    }
 
                     ASTNode? argumentNode;
                     (argumentNode, msg) = ParseExpression();
@@ -199,7 +212,12 @@ namespace DerivativeVisualizerModel
                         return (null, "Missing closing parenthesis for function argument.");
                     }
 
-                    return (new ASTNode(functionName, baseNode, argumentNode),"");
+                    if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
+                    {
+                        return (null, "Expected operator after function.");
+                    }
+
+                    return (new ASTNode(functionName, baseNode, argumentNode), "");
                 }
 
                 ASTNode? argument;
@@ -215,15 +233,15 @@ namespace DerivativeVisualizerModel
                     return (null, "Missing closing parenthesis for function argument.");
                 }
 
-                ASTNode node = new ASTNode(functionName, argument);
-
-                if (Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
+                if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, "Missing explicit multiplication operator (*)");
+                    return (null, "Expected operator after function.");
                 }
 
-                return (node,"");
+                ASTNode node = new ASTNode(functionName, argument);
+                return (node, "");
             }
+
             if (Match(TokenType.LeftParen))
             {
                 Consume();
@@ -240,15 +258,17 @@ namespace DerivativeVisualizerModel
                     return (null, "Missing closing parenthesis in expression.");
                 }
 
-                if (Match(TokenType.Number) || Match(TokenType.Function) || Match(TokenType.Variable) || Match(TokenType.LeftParen))
+                if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, "Missing explicit multiplication operator (*)");
+                    return (null, "Expected operator after closing parenthesis.");
                 }
 
-                return (expression,"");
+                return (expression, "");
             }
+
             return (null, "Unexpected token in primary expression");
         }
+
 
 
 

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
+using System.Xml.Linq;
 namespace DerivativeVisualizerModel
 {
-    //TODO: Mivel ide is került azóta néhány függvény, amik elég fontosak, így ezt a classt is tesztelni kell.
-    //TODO: Az egész alkalmazásban ne legyen sehol erőlködés, ! tilos, mindenhol legyen nullable ahol kell és legyenek null checkek. Clean code legyen.
+    // TODO: Mivel ide is került azóta néhány függvény, amik elég fontosak, így ezt a classt is tesztelni kell.
+    // TODO: Az egész alkalmazásban ne legyen sehol erőlködés, ! tilos, mindenhol legyen nullable ahol kell és legyenek null checkek. Clean code legyen.
     // TODO: Ha kész a program, lesz benne egy csomó minden ami amúgy hasznos, de nem fog kelleni a program végén, például a teljes rekurzív deriválás. Ezeket mentsd el egy másik fájlba, tartsd meg őket magadnak,
     // de a szakdogába ne add be, ne legyen olyan kód amit nem használ fel az app.
+    // TODO: Deriválás hívásnál kezelni az exceptionöket. Ott kell a messagebox.
     public class ASTNode
     {
         private static int counter = 0;
@@ -19,7 +22,177 @@ namespace DerivativeVisualizerModel
         {
             get
             {
-                return "RULE";
+                if (!NeedsDifferentiation)
+                {
+                    return "";
+                }
+                if (double.TryParse(Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Value == "e") //a' = 0 (a is real)
+                {
+                    return "a' = 0 (a is real)";
+                }
+                switch (Value)
+                {
+                    case "x": return "x' = 1";
+                    case "+":
+                    case "-":
+                        return $"(f {Value} g)' = f' {Value} g'";
+                    case "*":
+                        return "(f * g)' = f' * g + f * g'";
+                    case "/":
+                        return "(f / g)' = (f' * g - f * g') / (g ^ 2)";
+                    case "^":
+                        if (Left.Value == "e" && Right.Value == "x")
+                        {
+                            return "(e ^ x)' = e ^ x";
+                        }
+                        else if (Left.Value == "e")
+                        {
+                            return "(e ^ f)' = e ^ f * f'";
+                        }
+                        else if (double.TryParse(Left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double a) && Right.Value == "x")
+                        {
+                            if (a > 0)
+                            {
+                                return "(a ^ x)' = a ^ x * ln(a) (a>0)";
+                            }
+                            else
+                            {
+                                return $"Can't differentiate a^x if a <= 0 (a = {a})";
+                            }
+                        }
+                        else if ((double.TryParse(Right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Right.Value == "e") && Left.Value == "x")
+                        {
+                            return "(x ^ n)' =  n * x ^ (n - 1)";
+                        }
+                        else if (double.TryParse(Right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Right.Value == "e")
+                        {
+                            return "(f ^ n)' = n * f ^ (n-1) * f'";
+                        }
+                        else
+                        {
+                            return "(f ^ g)' = (f ^ g)*(f' * g / f + g' * ln(f)) (f>0, not checked)";
+                        }
+                    case "log":
+                        if (double.TryParse(Left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double b) || Left.Value == "e")
+                        {
+                            if (Left.Value == "e")
+                            {
+                                if (Right.Value == "x")
+                                {
+                                    return "log'(e,x) = 1 / x";
+                                }
+                                return "log'(e,f) = f' / f";
+                            }
+                            if (b <= 0 || b == 1)
+                            {
+                                return "The base of the logarithm should be a positive number other than 1.";
+                            }
+                            if (Right.Value == "x")
+                            {
+                                return "log'(a,x) = 1 / (x * ln(a))";
+                            }
+                            return "log'(a,f) = f' / (f * ln(a))";
+                        }
+                        return "The base of the logarithm should be a positive number other than 1.";
+                    case "ln":
+                        if (Left.Value == "x")
+                        {
+                            return "ln'(x) = 1 / x";
+                        }
+                        return "ln'(f) = f' / f";
+                    case "sin":
+                        if (Left.Value == "x")
+                        {
+                            return "sin'(x) = cos(x)";
+                        }
+                        return "sin'(f) = cos(f) * f'";
+                    case "cos":
+                        if (Left.Value == "x")
+                        {
+                            return "cos'(x) = -1 * sin(x)";
+                        }
+                        return "cos'(f) = -1 * sin(f) * f'";
+                    case "tg":
+                        if (Left.Value == "x")
+                        {
+                            return "tg'(x) = 1 / cos^2(x)";
+                        }
+                        return "tg'(f) = f' / cos^2(f)";
+                    case "ctg":
+                        if (Left.Value == "x")
+                        {
+                            return "ctg'(x) = -1 / sin^2(x)";
+                        }
+                        return "ctg'(f) = (-1 * f') / sin^2(f)";
+                    case "arcsin":
+                        if (Left.Value == "x")
+                        {
+                            return "arcsin'(x) = 1 / (1 - x ^ 2) ^ (1 / 2)";
+                        }
+                        return "arcsin'(f) = f' / (1 - f ^ 2) ^ (1 / 2)";
+                    case "arccos":
+                        if (Left.Value == "x")
+                        {
+                            return "arccos'(x) = -1 / (1 - x ^ 2) ^ (1 / 2)";
+                        }
+                        return "arccos'(f) = (-1 * f') / (1 - f ^ 2) ^ (1 / 2)";
+                    case "arctg":
+                        if (Left.Value == "x")
+                        {
+                            return "arctg'(x) = 1 / (1 + x ^ 2)";
+                        }
+                        return "arctg'(f) = f' / (1 + f ^ 2)";
+                    case "arcctg":
+                        if (Left.Value == "x")
+                        {
+                            return "arcctg'(x) = -1 / (1 + x ^ 2)";
+                        }
+                        return "arcctg'(f) = (-1 * f') / (1 + f ^ 2)";
+                    case "sh":
+                        if (Left.Value == "x")
+                        {
+                            return "sh'(x) = ch(x)";
+                        }
+                        return "sh'(f) = ch(f) * f'";
+                    case "ch":
+                        if (Left.Value == "x")
+                        {
+                            return "ch'(x) = sh(x)";
+                        }
+                        return "ch'(f) = sh(f) * f'";
+                    case "th":
+                        if (Left.Value == "x")
+                        {
+                            return "th'(x) = 1 / ch^2(x)";
+                        }
+                        return "th'(f) = f' / ch^2(f)";
+                    case "cth":
+                        if (Left.Value == "x")
+                        {
+                            return "cth'(x) = -1 / sh^2(x)";
+                        }
+                        return "cth'(f) = (-1 * f') / sh^2(f)";
+                    case "arsh":
+                        if (Left.Value == "x")
+                        {
+                            return "arsh'(x) = 1 / (x ^ 2 + 1) ^ (1 / 2)";
+                        }
+                        return "arsh'(f) = f' / (f ^ 2 + 1) ^ (1 / 2)";
+                    case "arch":
+                        if (Left.Value == "x")
+                        {
+                            return "arch'(x) = 1 / (x ^ 2 - 1) ^ (1 / 2)";
+                        }
+                        return "arch'(f) = f' / (f ^ 2 - 1) ^ (1 / 2)";
+                    case "arth":
+                    case "arcth":
+                        if (Left.Value == "x")
+                        {
+                            return $"{Value}'(x) = 1 / (1 - x ^ 2)";
+                        }
+                        return $"{Value}'(f) = f' / (1 - f ^ 2)";
+                    default: return $"Can't differentiate node with value {Value}";
+                }
             }
         }
 
@@ -44,6 +217,14 @@ namespace DerivativeVisualizerModel
                 NeedsDifferentiation = NeedsDifferentiation,
                 Locator = Locator
             };
+        }
+
+        public static bool HasDifferentiationNode(ASTNode node)
+        {
+            if (node == null) return false;
+            if (node.NeedsDifferentiation) return true;
+
+            return HasDifferentiationNode(node.Left) || HasDifferentiationNode(node.Right);
         }
 
         // AI, Dokumentáció: mivel, prompt.

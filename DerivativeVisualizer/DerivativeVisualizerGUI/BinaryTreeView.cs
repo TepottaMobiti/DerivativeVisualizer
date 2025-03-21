@@ -14,6 +14,7 @@ namespace DerivativeVisualizerGUI
 {
     // TODO: Beállítani, hogy a maximális input méret 20 vagy 25 legyen, és ezzel az inputtal megnézni, hogy mekkora a legnagyobb lehetséges fa, és arra optimalizálni ezt az osztályt.
     // Legnagyobb input 20-ra: x^-1+x+x+x+x+x+x+x+x
+    // TODO: A modell hívásoknak az App.xaml-ben kéne lenniük, mint a macilaciban. De ezt majd elég a végén megcsinálnod, most a funkcionalitás legyen meg.
     public class BinaryTreeView : Canvas
     {
         private const double NodeSize = 60;
@@ -73,11 +74,14 @@ namespace DerivativeVisualizerGUI
                 IsEnabled = node.NeedsDifferentiation,
             };
 
-            ToolTip tooltip = new ToolTip { Content = node.DiffRule };
-            ToolTipService.SetShowOnDisabled(nodeButton, true);
-            ToolTipService.SetInitialShowDelay(nodeButton, 0);
-            ToolTipService.SetBetweenShowDelay(nodeButton, 0);
-            nodeButton.ToolTip = tooltip;
+            if (node.NeedsDifferentiation)
+            {
+                ToolTip tooltip = new ToolTip { Content = node.DiffRule };
+                ToolTipService.SetShowOnDisabled(nodeButton, true);
+                ToolTipService.SetInitialShowDelay(nodeButton, 0);
+                ToolTipService.SetBetweenShowDelay(nodeButton, 0);
+                nodeButton.ToolTip = tooltip;
+            }
 
             if (Application.Current.Resources.Contains("CircleButton"))
             {

@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DerivativeVisualizerGUI"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        WindowState="Maximized">
     <Window.DataContext>
         <local:ViewModel />
     </Window.DataContext>
@@ -15,37 +17,112 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <!-- Left Panel -->
+                <ColumnDefinition Width="*"/>
+                <!-- Right Panel (Tree View) -->
+            </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-             Width="200" Height="30"
-             MaxLength="20"
-             FontSize="20"
-             UndoLimit="98"/>
+            <!-- Left Panel -->
+            <StackPanel Grid.Column="0" Width="375" Margin="10">
 
-            <Border Width="30" Height="30" Margin="10,0,0,0"
-            Background="{Binding InputValid, Converter={StaticResource BooleanToBrushConverter}}"
-            CornerRadius="5">
-                <TextBlock Text="{Binding InputValid, Converter={StaticResource BooleanToCheckConverter}}"
-                   FontSize="16" FontWeight="Bold"
-                   Foreground="White" TextAlignment="Center"
-                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            </Border>
-            
-            <Button Content="?" Width="30" Height="30" Margin="5,0,0,0"
-            Visibility="{Binding InputValid, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=False}"
-            Command="{Binding ToggleErrorMessageCommand}"/>
+                <!-- Input Text, Validation, and Help Button -->
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Label Content="f(x) = " FontSize="20" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Width="235" Height="30"
+                MaxLength="20"
+                FontSize="20"/>
+                    </StackPanel>
 
-            <Label Content="{Binding ErrorMessage}"
+                    <!-- Validation Check or X -->
+                    <Border Width="30" Height="30" Margin="10,0,0,0"
+                Background="{Binding InputValid, Converter={StaticResource BooleanToBrushConverter}}"
+                CornerRadius="5">
+                        <TextBlock Text="{Binding InputValid, Converter={StaticResource BooleanToCheckConverter}}"
+                       FontSize="16" FontWeight="Bold"
+                       Foreground="White" TextAlignment="Center"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+
+                    <!-- "?" Button for Error Help -->
+                    <Button Content="?" Width="30" Height="30" Margin="5,0,0,0"
+                Visibility="{Binding InputValid, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=False}"
+                Command="{Binding ToggleErrorMessageCommand}"/>
+                </StackPanel>
+
+                <!-- Function Selector Buttons -->
+                <GroupBox Header="Function Selector" Margin="0,10,0,10">
+                    <UniformGrid Rows="4" Columns="5">
+                        <Button Content="log" Command="{Binding FunctionButtonCommand}" CommandParameter="log"/>
+                        <Button Content="ln" Command="{Binding FunctionButtonCommand}" CommandParameter="ln"/>
+                        <Button Content="sin" Command="{Binding FunctionButtonCommand}" CommandParameter="sin"/>
+                        <Button Content="cos" Command="{Binding FunctionButtonCommand}" CommandParameter="cos"/>
+                        <Button Content="tg" Command="{Binding FunctionButtonCommand}" CommandParameter="tg"/>
+
+                        <Button Content="ctg" Command="{Binding FunctionButtonCommand}" CommandParameter="ctg"/>
+                        <Button Content="arcsin" Command="{Binding FunctionButtonCommand}" CommandParameter="arcsin"/>
+                        <Button Content="arccos" Command="{Binding FunctionButtonCommand}" CommandParameter="arccos"/>
+                        <Button Content="arctg" Command="{Binding FunctionButtonCommand}" CommandParameter="arctg"/>
+                        <Button Content="arcctg" Command="{Binding FunctionButtonCommand}" CommandParameter="arcctg"/>
+
+                        <Button Content="sh" Command="{Binding FunctionButtonCommand}" CommandParameter="sh"/>
+                        <Button Content="ch" Command="{Binding FunctionButtonCommand}" CommandParameter="ch"/>
+                        <Button Content="th" Command="{Binding FunctionButtonCommand}" CommandParameter="th"/>
+                        <Button Content="cth" Command="{Binding FunctionButtonCommand}" CommandParameter="cth"/>
+                        <Button Content="arsh" Command="{Binding FunctionButtonCommand}" CommandParameter="arsh"/>
+
+                        <Button Content="arch" Command="{Binding FunctionButtonCommand}" CommandParameter="arch"/>
+                        <Button Content="arth" Command="{Binding FunctionButtonCommand}" CommandParameter="arth"/>
+                        <Button Content="arcth" Command="{Binding FunctionButtonCommand}" CommandParameter="arcth"/>
+                    </UniformGrid>
+                </GroupBox>
+
+                <!-- Error Message -->
+                <Label Content="{Binding ErrorMessage}"
+           Foreground="Red" Margin="5,0,0,0"
            Visibility="{Binding ShowErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"
-           Foreground="Red" Margin="5,0,0,0"/>
-        </StackPanel>
+           />
 
-        <ScrollViewer Grid.Row="1"
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Auto"
-                      Visibility="{Binding TreeToPresent, Converter={StaticResource NullToVisibilityConverter}}">
-            <local:BinaryTreeView TreeToPresent="{Binding TreeToPresent}" Background="White" DataContext="{Binding}"/>
-        </ScrollViewer>
+                <Button Content="Simplify"
+            Margin="5,10,0,0"
+            Visibility="{Binding SimplifyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Command="{Binding SimplifyCommand}"/>
+
+                <Label Content="{Binding DerivativeText}"
+            Margin="5,0,0,0"
+            Visibility="{Binding ShowDerivativeText, Converter={StaticResource BooleanToVisibilityConverter}}"
+            FontSize="20"/>
+            </StackPanel>
+
+            <!-- Right Panel (Tree View) -->
+            <ScrollViewer Grid.Column="1"
+              VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Auto"
+              Visibility="{Binding TreeToPresent, Converter={StaticResource NullToVisibilityConverter}}">
+                <local:BinaryTreeView TreeToPresent="{Binding TreeToPresent}" Background="White" DataContext="{Binding}"/>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Text="Interval:" VerticalAlignment="Center" FontSize="14"/>
+                <TextBox Width="50" Text="{Binding IntervalStart}" Margin="5" FontSize="14"/>
+                <TextBlock Text=" to " VerticalAlignment="Center" FontSize="14"/>
+                <TextBox Width="50" Text="{Binding IntervalEnd}" Margin="5" FontSize="14"/>
+                <Button Content="Plot Function" Command="{Binding PlotFunctionCommand}" Background="LightBlue" Margin="5,0,0,0"/>
+            </StackPanel>
+
+            <oxy:PlotView Grid.Column="1" Model="{Binding PlotModel}" Margin="10"/>
+        </Grid>
+
     </Grid>
 </Window>

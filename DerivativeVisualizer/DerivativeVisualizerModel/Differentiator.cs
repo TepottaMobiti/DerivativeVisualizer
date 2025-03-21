@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,6 @@ namespace DerivativeVisualizerModel
 {
     // TODO: Ellenőrizd, hogy a Deriváló függvényben biztosan nincsenek-e referencia miatti hibák: ahol nem új ASTNode-ot csinálsz, ott biztos nincs gyereke a használt Node-nak? Ha félsz,
     // csinálj mindenhol új ASTNode-ot
-    // TODO: Ha már majd az ID alapján történő keresést csinálod (kattintás vezérelt deriválás), akkor figyelj arra, hogy az ID-k is egyezzenek. Például a DeepCopy metódus mentse át az ID-kat is.
-    // Legyen egy statikus ID mezője az ASTNode-nak, ami új Node létrehozásakor automatikusan egy új, egyedi ID-t ad, de lehessen valahogy kívülről is felülírni az ID-t DeepCopy-hoz.
     public class Differentiator
     {
         private ASTNode root;
@@ -22,8 +21,6 @@ namespace DerivativeVisualizerModel
             FlagNode(root);
             differentiationSteps.Add(root);
         }
-
-        public List<ASTNode> GetSteps() => differentiationSteps;
 
         public ASTNode CurrentTree
         {
@@ -86,7 +83,7 @@ namespace DerivativeVisualizerModel
             string value = node.Value;
             ASTNode? left = node.Left;
             ASTNode? right = node.Right;
-            if (double.TryParse(value, out _) || value == "e") //a' = 0 (a is real)
+            if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || value == "e") //a' = 0 (a is real)
             {
                 return new ASTNode("0");
             }
@@ -119,7 +116,7 @@ namespace DerivativeVisualizerModel
                                        right),
                                    FlagNode(right.DeepCopy()));
                     }
-                    else if (double.TryParse(left.Value, out double a) && right.Value == "x") // (a^x)' = a^x*ln(a) (a>0)
+                    else if (double.TryParse(left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double a) && right.Value == "x") // (a^x)' = a^x*ln(a) (a>0)
                     {
                         if (a > 0)
                         {
@@ -132,7 +129,7 @@ namespace DerivativeVisualizerModel
                             throw new Exception($"Can't differentiate a^x if a <= 0 (a = {a})");
                         }
                     }
-                    else if ((double.TryParse(right.Value, out _) || right.Value == "e") && left.Value=="x") // (x^n)' =  n*x^(n-1)
+                    else if ((double.TryParse(right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || right.Value == "e") && left.Value=="x") // (x^n)' =  n*x^(n-1)
                     {
                         if (right.Value=="e")
                         {
@@ -148,7 +145,7 @@ namespace DerivativeVisualizerModel
                                        left,
                                        new ASTNode((double.Parse(right.Value) - 1).ToString())));
                     }
-                    else if (double.TryParse(right.Value, out _) || right.Value == "e") // (f^n)' = n*f^(n-1)*f'
+                    else if (double.TryParse(right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || right.Value == "e") // (f^n)' = n*f^(n-1)*f'
                     {
                         if (right.Value == "e")
                         {
@@ -181,7 +178,7 @@ namespace DerivativeVisualizerModel
                                            new ASTNode("ln", left))));
                     }
                 case "log":
-                    if (double.TryParse(left.Value, out double b) || left.Value == "e")
+                    if (double.TryParse(left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double b) || left.Value == "e")
                     {
                         if (left.Value == "e") // log_e'(f) = f'/f
                         {
@@ -426,7 +423,7 @@ namespace DerivativeVisualizerModel
                                    new ASTNode("sh",
                                        left),
                                    new ASTNode("2")));
-                case "arsh": // arsh'(f) = f'/(f^2+1)^1/2
+                case "arsh": // arsh'(f) = f'/(f^2+1)^(1/2)
                     if (left.Value == "x")
                     {
                         return new ASTNode("/",
@@ -452,7 +449,7 @@ namespace DerivativeVisualizerModel
                                    new ASTNode("/",
                                        new ASTNode("1"),
                                        new ASTNode("2"))));
-                case "arch": // arch'(f) = f'/(f^2-1)^1/2
+                case "arch": // arch'(f) = f'/(f^2-1)^(1/2)
                     if (left.Value == "x")
                     {
                         return new ASTNode("/",
@@ -544,7 +541,7 @@ namespace DerivativeVisualizerModel
             string value = node.Value;
             ASTNode? left = node.Left;
             ASTNode? right = node.Right;
-            if(double.TryParse(value, out _) || value == "e") //a' = 0 (a is real)
+            if(double.TryParse(value,  out _) || value == "e") //a' = 0 (a is real)
             {
                 return new ASTNode("0");
             }

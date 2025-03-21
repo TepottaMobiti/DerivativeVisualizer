@@ -126,7 +126,7 @@ namespace DerivativeVisualizerModel
             {
                 return (new Token(name, TokenType.Number),"");
             }
-            return (null,$"Unexpected identifier: {name}. Only variable 'x' and known functions are allowed"); // Legyen egyértelmű az appból, hogy mik az ismert függvények.
+            return (null,$"Unexpected identifier: {name}. Only variable 'x'\nand known functions are allowed"); // Legyen egyértelmű az appból, hogy mik az ismert függvények.
         }
     }
 }
