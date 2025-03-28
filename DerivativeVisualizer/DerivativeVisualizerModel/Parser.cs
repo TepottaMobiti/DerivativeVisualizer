@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DerivativeVisualizerModel
 {
-    // Hiba: Valamiért elfogadunk olyan inputot, hogy "x5". Ki kéne kényszeríteni, hogy minden szám vagy x után csak operátor jöhessen? Igazából igen, mert a levelek úgyis csak szám meg x lehet a fában.
+    // TODO: Improving Error Messages alapján írj bele új check-eket. De ne másold, mert kitörölt néhányat.
     public class Parser
     {
         private List<Token> tokens;
@@ -46,7 +46,7 @@ namespace DerivativeVisualizerModel
                 (right, msg) = ParseFactor();
                 if (right is null)
                 {
-                    return (null, msg);
+                    return (null, $"A(z) '{op}' bináris operátornak hiányzik a jobb oldali operandusa.");
                 }
                 node = new ASTNode(op, node, right);
             }
@@ -75,11 +75,11 @@ namespace DerivativeVisualizerModel
                 (right, msg) = ParseExponent();
                 if (right is null)
                 {
-                    return (null, msg);
+                    return (null, $"A(z) '{op}' bináris operátornak hiányzik a jobb oldali operandusa.");
                 }
                 if (op == "/" && right.Value == "0")
                 {
-                    return (null, "Division by zero is not allowed.");
+                    return (null, "Nullával való osztás nem engedélyezett.");
                 }
                 node = new ASTNode(op, node, right);
             }
@@ -108,11 +108,11 @@ namespace DerivativeVisualizerModel
                 (right, msg) = ParseExponent();
                 if (right is null)
                 {
-                    return (null, msg);
+                    return (null, "A '^' hatványozás operátornak hiányzik a kitevője.");
                 }
                 if (node.Value == "0" && right.Value == "0")
                 {
-                    return (null, "0^0 is undefined.");
+                    return (null, "A 0^0 nem értelmezett.");
                 }
                 node = new ASTNode(op, node, right);
             }
@@ -130,7 +130,7 @@ namespace DerivativeVisualizerModel
                 Consume();
                 if (!Match(TokenType.Number))
                 {
-                    return (null, "Negative sign must be followed by a number.");
+                    return (null, "A negatív előjelet '-' számnak kell követnie.");
                 }
                 (t, msg) = Consume();
                 if (t is null)
@@ -141,7 +141,7 @@ namespace DerivativeVisualizerModel
 
                 if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, $"Expected operator after {negativeValue}");
+                    return (null, $"Hiányzó operátor a {negativeValue} után.");
                 }
 
                 return (new ASTNode(negativeValue), "");
@@ -158,7 +158,7 @@ namespace DerivativeVisualizerModel
 
                 if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, $"Expected operator after {t.Value}");
+                    return (null, $"Hiányzó operátor a(z) {t.Value} után.");
                 }
 
                 return (node, "");
@@ -173,14 +173,29 @@ namespace DerivativeVisualizerModel
                     return (null, msg);
                 }
                 string functionName = t.Value;
+
+                if (!Match(TokenType.LeftParen))
+                    return (null, $"A '{functionName}' függvény után nyitó zárójelnek kell következnie: '('.");
+
                 Consume(TokenType.LeftParen);
+
+                if (Match(TokenType.RightParen))
+                {
+                    return (null, $"A(z) '{functionName}' függvénynek hiányzik az argumentuma.");
+                }
 
                 if (functionName == "log")
                 {
+                    if (Match(TokenType.Comma))
+                    {
+                        return (null, "A(z) 'log' függvényből hiányzik az alap.");
+                    }
+
                     if (!Match(TokenType.Number))
                     {
-                        return (null, $"{functionName} base must be a number.");
+                        return (null, $"Logaritmus alapjának pozitív számnak kell lennie.");
                     }
+
                     (t, msg) = Consume();
                     if (t is null)
                     {
@@ -190,13 +205,23 @@ namespace DerivativeVisualizerModel
 
                     if (baseNode.Value == "1")
                     {
-                        return (null, "Logarithm base cannot be 1.");
+                        return (null, "Logaritmus alapja nem lehet 1.");
+                    }
+
+                    if (baseNode.Value == "0")
+                    {
+                        return (null, "Logaritmus alapja nem lehet 0.");
                     }
 
                     var (comma, commaMsg) = Consume(TokenType.Comma);
                     if (comma is null)
                     {
-                        return (null, "Missing comma after log base.");
+                        return (null, "A logaritmus alapja után vesszőnek kell következnie: ','.");
+                    }
+
+                    if (Match(TokenType.RightParen))
+                    {
+                        return (null, "A(z) 'log' függvényből hiányzik az argumentum a vessző után.");
                     }
 
                     ASTNode? argumentNode;
@@ -209,12 +234,12 @@ namespace DerivativeVisualizerModel
                     (rightParen, msg) = Consume(TokenType.RightParen);
                     if (rightParen is null)
                     {
-                        return (null, "Missing closing parenthesis for function argument.");
+                        return (null, $"A {functionName} függvény argumentuma után bezáró zárójelnek kell következnie: ')'.");
                     }
 
                     if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                     {
-                        return (null, "Expected operator after function.");
+                        return (null, $"A {functionName} függvény bezáró zárójele után operátornak kell következnie.");
                     }
 
                     return (new ASTNode(functionName, baseNode, argumentNode), "");
@@ -230,12 +255,12 @@ namespace DerivativeVisualizerModel
                 (rightParen, msg) = Consume(TokenType.RightParen);
                 if (rightParen is null)
                 {
-                    return (null, "Missing closing parenthesis for function argument.");
+                    return (null, $"A {functionName} függvény argumentuma után bezáró zárójelnek kell következnie: ')'.");
                 }
 
                 if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, "Expected operator after function.");
+                    return (null, $"A {functionName} függvény bezáró zárójele után operátornak kell következnie.");
                 }
 
                 ASTNode node = new ASTNode(functionName, argument);
@@ -255,18 +280,18 @@ namespace DerivativeVisualizerModel
                 (Token? rightParen, msg) = Consume(TokenType.RightParen);
                 if (rightParen is null)
                 {
-                    return (null, "Missing closing parenthesis in expression.");
+                    return (null, "A kifejezésből hiányzik egy bezáró zárójel: ')'.");
                 }
 
                 if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, "Expected operator after closing parenthesis.");
+                    return (null, "A bezáró zárójel után operátornak kell következnie.");
                 }
 
                 return (expression, "");
             }
 
-            return (null, "Unexpected token in primary expression");
+            return (null, "Nem várt token a kifejezésben.");
         }
 
 
@@ -279,13 +304,13 @@ namespace DerivativeVisualizerModel
 
         private (Token?,string) Consume()
         {
-            if (IsAtEnd()) return (null,"Unexpected end of input");
+            if (IsAtEnd()) return (null,"A bemenet nem várt módon ért véget.");
             return (tokens[currentIndex++],"");
         }
 
         private (Token?,string) Consume(TokenType type)
         {
-            if (!Match(type)) return (null,$"Expected token type {type}");
+            if (!Match(type)) return (null,$"Elvárt token típusa: {type}.");
             return Consume();
         }
 

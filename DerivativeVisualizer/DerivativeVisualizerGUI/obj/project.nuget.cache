@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "9XN7ybQ7lSsYSLu/GeNTh3USJJskH0/esIIEChYo/uzw00hy/re8WnQ2dDh6+UPzRev5pK4CHJxQ75jdUvAEDw==",
+  "dgSpecHash": "xOQPs0Rf2ZgF1Br9896pje8cCr2eoX684+1R+67zmeO10sMYOuN/1wGjPYhmizv2QQ3woysPGO12osCs1ne7WA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Bálint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Bálint\\.nuget\\packages\\fractions\\8.3.1\\fractions.8.3.1.nupkg.sha512",
     "C:\\Users\\Bálint\\.nuget\\packages\\oxyplot.core\\2.2.0\\oxyplot.core.2.2.0.nupkg.sha512",
     "C:\\Users\\Bálint\\.nuget\\packages\\oxyplot.wpf\\2.2.0\\oxyplot.wpf.2.2.0.nupkg.sha512",
     "C:\\Users\\Bálint\\.nuget\\packages\\oxyplot.wpf.shared\\2.2.0\\oxyplot.wpf.shared.2.2.0.nupkg.sha512"

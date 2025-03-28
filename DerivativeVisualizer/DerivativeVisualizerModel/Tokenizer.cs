@@ -79,29 +79,44 @@ namespace DerivativeVisualizerModel
                         currentIndex++;
                         continue;
                 }
-                return (null, $"Unexpected character: {c}");
+                return (null, $"Nem várt karakter: {c}.");
             }
             return (tokens,"");
         }
 
-        private (Token?,string) TokenizeNumber()
+        private (Token?, string) TokenizeNumber()
         {
             string number = string.Empty;
             bool hasDecimal = false;
-            while(currentIndex < input.Length && (char.IsDigit(input[currentIndex]) || input[currentIndex] == '.'))
+            int digitsAfterDecimal = 0;
+
+            while (currentIndex < input.Length &&
+                   (char.IsDigit(input[currentIndex]) || input[currentIndex] == '.'))
             {
-                if (input[currentIndex] == '.')
+                char currentChar = input[currentIndex];
+
+                if (currentChar == '.')
                 {
-                    if(hasDecimal)
+                    if (hasDecimal)
                     {
-                        return (null,"Invalid number format: multiple decimal points.");
+                        return (null, "Több tizedespont nem lehet egy számban.");
                     }
                     hasDecimal = true;
                 }
-                number += input[currentIndex];
+                else if (hasDecimal)
+                {
+                    digitsAfterDecimal++;
+                    if (digitsAfterDecimal > 2)
+                    {
+                        return (null, "A tizedespont után csak 2 szám engedélyezett.");
+                    }
+                }
+
+                number += currentChar;
                 currentIndex++;
             }
-            return (new Token(number,TokenType.Number),"");
+
+            return (new Token(number, TokenType.Number), "");
         }
 
         private (Token?,string) TokenizeFunctionOrVariable()
@@ -126,7 +141,7 @@ namespace DerivativeVisualizerModel
             {
                 return (new Token(name, TokenType.Number),"");
             }
-            return (null,$"Unexpected identifier: {name}. Only variable 'x'\nand known functions are allowed"); // Legyen egyértelmű az appból, hogy mik az ismert függvények.
+            return (null,$"Ismeretlen azonosító: {name}. Csak az 'x' változó és az ismert függvények engedélyezettek."); // Legyen egyértelmű az appból, hogy mik az ismert függvények.
         }
     }
 }

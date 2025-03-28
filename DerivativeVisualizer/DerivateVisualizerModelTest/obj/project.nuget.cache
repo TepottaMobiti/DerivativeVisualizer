@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "TKIK6VJVRTPHOsbBb2pWEn6It6Q5CtQTvvGGlrOoJoou/vVKn6vDyzCdetJGorAVoEjQtBGqqOa9W/FKiiHHmw==",
+  "dgSpecHash": "/2kbLAJeFuxzOHPWqykRYRUKbDPpocYcrVIwhtEeQ/pYsliGxa51zVwjmIEuI/G82qmsrQE1q+4AtNnenfc+9g==",
   "success": true,
   "projectFilePath": "C:\\Users\\Bálint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Bálint\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
+    "C:\\Users\\Bálint\\.nuget\\packages\\fractions\\8.3.1\\fractions.8.3.1.nupkg.sha512",
     "C:\\Users\\Bálint\\.nuget\\packages\\microsoft.codecoverage\\17.8.0\\microsoft.codecoverage.17.8.0.nupkg.sha512",
     "C:\\Users\\Bálint\\.nuget\\packages\\microsoft.net.test.sdk\\17.8.0\\microsoft.net.test.sdk.17.8.0.nupkg.sha512",
     "C:\\Users\\Bálint\\.nuget\\packages\\microsoft.testplatform.objectmodel\\17.8.0\\microsoft.testplatform.objectmodel.17.8.0.nupkg.sha512",

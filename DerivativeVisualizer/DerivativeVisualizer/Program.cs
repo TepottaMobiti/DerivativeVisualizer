@@ -1,4 +1,5 @@
 ﻿using DerivativeVisualizerModel;
+using Fractions;
 namespace DerivativeVisualizer
 {
     // Általánosabb követelmények a kóddal: Ne legyenek felesleges sorok (kivétel függvények között 1, konvenció szerint),
@@ -7,6 +8,45 @@ namespace DerivativeVisualizer
     //Dokumentáció: A program jól kezeli a mínuszt zárójel kirakása nélkül is. Legalábbis az alapján amit eddig láttam.
     //Tehát pl. a 3+-2-t elfogadja, 3 + (-2) -nek értelmezi, ami okés. De például a 3++2 kiakasztja, ami nem baj.
     //ln és log(e,_) külön kezeltek.
+
+
+
+    /*
+     "Binary operator '{op}' missing right-hand side operand." - "A(z) '{op}' bináris operátornak hiányzik a jobb oldali operandusa."
+
+"Division by zero is not allowed." - "Nullával való osztás nem engedélyezett."
+
+"Exponent operator '^' missing exponent." - "A '^' hatványozó operátornak hiányzik a kitevője."
+
+"0^0 is undefined." - "A 0^0 nem értelmezett."
+
+"Negative sign '-' must be followed by a number." - "A negatív előjelet '-' számnak kell követnie."
+
+"Expected operator after {negativeValue}" - "Elvárt operátor a(z) {negativeValue} után."
+
+"Expected operator after {t.Value}" - "Elvárt operátor a(z) {t.Value} után."
+
+"Function '{functionName}' must be followed by '('." - "A(z) '{functionName}' függvényt zárójelnek '(' kell követnie."
+
+"{functionName} base must be a positive number." - "A(z) {functionName} alapjának pozitív számnak kell lennie."
+
+"Logarithm base cannot be 1." - "A logaritmus alapja nem lehet 1."
+
+"Logarithm base cannot be 0." - "A logaritmus alapja nem lehet 0."
+
+"Missing comma after log base." - "Hiányzó vessző a logaritmus alapja után."
+
+"Missing closing parenthesis for function argument." - "Hiányzó zárójel a függvény argumentuma után."
+
+"Expected operator after function." - "Elvárt operátor a függvény után."
+
+"Missing closing parenthesis in expression." - "Hiányzó zárójel a kifejezésben."
+
+"Expected operator after closing parenthesis." - "Elvárt operátor a zárójel bezárása után."
+
+"Unexpected token in primary expression" - "Váratlan token az elsődleges kifejezésben"
+
+     */
 
     internal class Program
     {
@@ -52,11 +92,8 @@ namespace DerivativeVisualizer
             //        Console.WriteLine($"Hiba: {e.Message}");
             //    }
             //}
-            ASTNode ast = new ASTNode("log",
-                              new ASTNode("4"),
-                              new ASTNode("x"));
-
-            Console.WriteLine(FunctionEvaluator.Evaluate(ast, 16));
+            Fraction fraction = Fraction.FromDoubleRounded(-1.15);
+            Console.WriteLine(fraction);
         }
     }
 }

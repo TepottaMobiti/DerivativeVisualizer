@@ -7,9 +7,8 @@ namespace DerivativeVisualizerModel
 {
     // TODO: Mivel ide is került azóta néhány függvény, amik elég fontosak, így ezt a classt is tesztelni kell.
     // TODO: Az egész alkalmazásban ne legyen sehol erőlködés, ! tilos, mindenhol legyen nullable ahol kell és legyenek null checkek. Clean code legyen.
-    // TODO: Ha kész a program, lesz benne egy csomó minden ami amúgy hasznos, de nem fog kelleni a program végén, például a teljes rekurzív deriválás. Ezeket mentsd el egy másik fájlba, tartsd meg őket magadnak,
-    // de a szakdogába ne add be, ne legyen olyan kód amit nem használ fel az app.
-    // TODO: Deriválás hívásnál kezelni az exceptionöket. Ott kell a messagebox.
+    // De amúgy lehet erőlködés, ahol indokolt.
+    // Az alkalmazás nyelve magyar legyen, de amúgy maga a kód angol.
     public class ASTNode
     {
         private static int counter = 0;
@@ -17,6 +16,8 @@ namespace DerivativeVisualizerModel
         public ASTNode Left { get; set; }
         public ASTNode Right { get; set; }
         public int Locator { get; private set; }
+
+        public bool NeedsDifferentiation { get; set; }
 
         public string DiffRule
         {
@@ -28,7 +29,7 @@ namespace DerivativeVisualizerModel
                 }
                 if (double.TryParse(Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Value == "e") //a' = 0 (a is real)
                 {
-                    return "a' = 0 (a is real)";
+                    return "a' = 0 (a valós szám)";
                 }
                 switch (Value)
                 {
@@ -57,7 +58,7 @@ namespace DerivativeVisualizerModel
                             }
                             else
                             {
-                                return $"Can't differentiate a^x if a <= 0 (a = {a})";
+                                return $"Ha a <= 0 (a = {a}), akkor a^x nem deriválható";
                             }
                         }
                         else if ((double.TryParse(Right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Right.Value == "e") && Left.Value == "x")
@@ -70,7 +71,7 @@ namespace DerivativeVisualizerModel
                         }
                         else
                         {
-                            return "(f ^ g)' = (f ^ g)*(f' * g / f + g' * ln(f)) (f>0, not checked)";
+                            return "(f ^ g)' = (f ^ g)*(f' * g / f + g' * ln(f)) (f>0, nem ellenőrzött)";
                         }
                     case "log":
                         if (double.TryParse(Left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double b) || Left.Value == "e")
@@ -85,7 +86,7 @@ namespace DerivativeVisualizerModel
                             }
                             if (b <= 0 || b == 1)
                             {
-                                return "The base of the logarithm should be a positive number other than 1.";
+                                return "A logaritmus alapja egy pozitív szám, kivéve 1.";
                             }
                             if (Right.Value == "x")
                             {
@@ -93,7 +94,7 @@ namespace DerivativeVisualizerModel
                             }
                             return "log'(a,f) = f' / (f * ln(a))";
                         }
-                        return "The base of the logarithm should be a positive number other than 1.";
+                        return "A logaritmus alapja egy pozitív szám, kivéve 1.";
                     case "ln":
                         if (Left.Value == "x")
                         {
@@ -191,12 +192,10 @@ namespace DerivativeVisualizerModel
                             return $"{Value}'(x) = 1 / (1 - x ^ 2)";
                         }
                         return $"{Value}'(f) = f' / (1 - f ^ 2)";
-                    default: return $"Can't differentiate node with value {Value}";
+                    default: return $"Nem deriválható: {Value}";
                 }
             }
         }
-
-        public bool NeedsDifferentiation { get; set; }
 
         public ASTNode(string value, ASTNode left = null!, ASTNode right = null!)
         {
@@ -227,19 +226,18 @@ namespace DerivativeVisualizerModel
             return HasDifferentiationNode(node.Left) || HasDifferentiationNode(node.Right);
         }
 
-        // AI, Dokumentáció: mivel, prompt.
-        public void Print(string indent = "", bool last = true)
+        public override string ToString()
         {
-            string displayValue = Value + (NeedsDifferentiation ? "'" : "");
 
-            Console.WriteLine(indent + (last ? "└── " : "├── ") + displayValue);
-            indent += last ? "    " : "│   ";
+            if (NeedsDifferentiation)
+            {
+                return $"({SubtreeToString()})'";
+            }
 
-            if (Left != null) Left.Print(indent, Right == null);
-            if (Right != null) Right.Print(indent, true);
+            return SubtreeToString();
         }
 
-        public override string ToString()
+        private string SubtreeToString()
         {
             if (Left == null && Right == null)
             {
@@ -264,13 +262,17 @@ namespace DerivativeVisualizerModel
 
         private string? AddParenthesesIfNeeded(ASTNode? node, string parentOp)
         {
-            if (node?.Left == null && node?.Right == null)
+            if (node == null) return null;
+
+            string nodeString = node.ToString(); // This will already apply differentiation if needed
+
+            if (node.Left == null && node.Right == null)
             {
-                return node?.ToString();
+                return nodeString;
             }
 
             bool needParens = NeedsParentheses(node, parentOp);
-            return needParens ? $"({node})" : node.ToString();
+            return needParens ? $"({nodeString})" : nodeString;
         }
 
         private bool NeedsParentheses(ASTNode node, string parentOp)
@@ -278,6 +280,12 @@ namespace DerivativeVisualizerModel
             string[] operators = { "+", "-", "*", "/", "^" };
             int parentPrecedence = Array.IndexOf(operators, parentOp);
             int childPrecedence = Array.IndexOf(operators, node.Value);
+
+            // Special handling for exponentiation right-associativity
+            if (parentOp == "^" && node.Value == "^")
+            {
+                return true;
+            }
 
             return childPrecedence != -1 && childPrecedence < parentPrecedence;
         }

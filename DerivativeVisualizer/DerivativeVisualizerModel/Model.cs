@@ -10,7 +10,6 @@ namespace DerivativeVisualizerModel
     // Egyetlen input mezőre van szüksége, ennyit fog kapni a viewtől, és utána csak eventeket vált ki. Minden többi classtól jövő exceptiont önmagában lekezel, csak eventekkel kommunikál kifelé.
     // Itt legyen minden üzleti logika, a viewmodelben semmilyen komolyabb számítás ne legyen.
     // Modellben nem try-catchelünk, majd az appban kezeljük az ilyen errorokat az App-ban felugró ablakokkal.
-    // TODO: Ha kész a deriválás, azaz nincs több NeedsDiff a fában, akkor küldjünk egy Complete Eventet, ami megjelenít egy egyszerűsítés gombot, ami visszaküldi az egyszerűsített deriváltat.
     public class Model
     {
         private Tokenizer tokenizer = null!;
@@ -35,6 +34,13 @@ namespace DerivativeVisualizerModel
         private void OnTreeUpdated(ASTNode? tree)
         {
             TreeUpdated?.Invoke(tree);
+        }
+
+        public event TreeUpdatedDelegate TreeReady = null!;
+
+        private void OnTreeReady(ASTNode? tree)
+        {
+            TreeReady?.Invoke(tree);
         }
 
         public delegate void DifferentiationFinishedDelegate(ASTNode? tree);
@@ -66,7 +72,7 @@ namespace DerivativeVisualizerModel
                 if (tree is not null) // Vagy így hozzuk létre a deriválót, és akkor sok felesleges deriváló fog létrejönni, vagy kell egy start differentiation process gomb, ami létrehozza ezt, és onnantól lehet kattintgatni.
                 {
                     differentiator = new Differentiator(tree);
-                    OnTreeUpdated(differentiator.CurrentTree);
+                    OnTreeReady(differentiator.CurrentTree);
                 }
                 OnInputProcessed(tree,msg);
             }

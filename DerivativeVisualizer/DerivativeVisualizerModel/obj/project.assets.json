@@ -1,11 +1,48 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "Fractions/8.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Fractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Fractions.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Fractions/8.3.1": {
+      "sha512": "lG/ErET98vkZx5sYiRkkDf9YdsBVwD6qT7CPpE8BmH0kdZDG2GiU2duri3OxmLf0Nn2kAOeNwaiA9VW4zPwdLQ==",
+      "type": "package",
+      "path": "fractions/8.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Fraction.png",
+        "Readme.md",
+        "fractions.8.3.1.nupkg.sha512",
+        "fractions.nuspec",
+        "lib/net8.0/Fractions.dll",
+        "lib/net8.0/Fractions.xml",
+        "lib/netstandard2.0/Fractions.dll",
+        "lib/netstandard2.0/Fractions.xml",
+        "lib/netstandard2.1/Fractions.dll",
+        "lib/netstandard2.1/Fractions.xml",
+        "license.txt"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "Fractions >= 8.3.1"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Bálint\\.nuget\\packages\\": {},
@@ -56,6 +93,12 @@
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
+        "dependencies": {
+          "Fractions": {
+            "target": "Package",
+            "version": "[8.3.1, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

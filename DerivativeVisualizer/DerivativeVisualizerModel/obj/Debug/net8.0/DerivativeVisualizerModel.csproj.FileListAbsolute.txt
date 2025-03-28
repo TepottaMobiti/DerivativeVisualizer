@@ -10,3 +10,4 @@ C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\Deriv
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Debug\net8.0\DerivativeVisualizerModel.pdb
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Debug\net8.0\ref\DerivativeVisualizerModel.dll
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Debug\net8.0\DerivativeVisualizerModel.sourcelink.json
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Debug\net8.0\DerivativeVisualizerModel.csproj.AssemblyReference.cache

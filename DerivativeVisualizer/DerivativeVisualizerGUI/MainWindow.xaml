@@ -6,123 +6,207 @@
         xmlns:local="clr-namespace:DerivativeVisualizerGUI"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        WindowState="Maximized">
+        Title="MainWindow" Height="700" Width="900"
+        MinHeight="700" MinWidth="900">
     <Window.DataContext>
         <local:ViewModel />
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="395"/>
                 <!-- Left Panel -->
                 <ColumnDefinition Width="*"/>
                 <!-- Right Panel (Tree View) -->
             </Grid.ColumnDefinitions>
 
             <!-- Left Panel -->
-            <StackPanel Grid.Column="0" Width="375" Margin="10">
+            <ScrollViewer Grid.Column="0"
+                          VerticalScrollBarVisibility="Auto" 
+                          HorizontalScrollBarVisibility="Disabled">
+                
+                <StackPanel Grid.Column="0" Width="375" Margin="10">
 
-                <!-- Input Text, Validation, and Help Button -->
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Label Content="f(x) = " FontSize="20" VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Width="235" Height="30"
-                MaxLength="20"
-                FontSize="20"/>
+                    <!-- Input Text, Validation, and Help Button -->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                        
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            
+                            <Label Content="f(x) = " FontSize="20" VerticalAlignment="Center"/>
+
+                            <TextBox Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="235" Height="30"
+                                     MaxLength="20"
+                                     FontSize="20"/>
+                            
+                        </StackPanel>
+
+                        <!-- Validation Check or X -->
+                        <Border Width="30" Height="30" Margin="10,0,0,0"
+                                Background="{Binding InputValid, Converter={StaticResource BooleanToBrushConverter}}"
+                                CornerRadius="5">
+                            
+                            <TextBlock Text="{Binding InputValid, Converter={StaticResource BooleanToCheckConverter}}"
+                                       FontSize="16" FontWeight="Bold"
+                                       Foreground="White" TextAlignment="Center"
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+
+                        <!-- "?" Button for Error Help -->
+                        <Button Content="?" Width="30" Height="30" Margin="5,0,0,0"
+                                Visibility="{Binding InputValid, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=False}"
+                                Command="{Binding ToggleErrorMessageCommand}"/>
+                        
                     </StackPanel>
 
-                    <!-- Validation Check or X -->
-                    <Border Width="30" Height="30" Margin="10,0,0,0"
-                Background="{Binding InputValid, Converter={StaticResource BooleanToBrushConverter}}"
-                CornerRadius="5">
-                        <TextBlock Text="{Binding InputValid, Converter={StaticResource BooleanToCheckConverter}}"
-                       FontSize="16" FontWeight="Bold"
-                       Foreground="White" TextAlignment="Center"
-                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Border>
+                    <!-- Function Selector Buttons -->
+                    <GroupBox Header="Függvények" Margin="0,10,0,10">
+                        <UniformGrid Rows="4" Columns="5">
+                            <Button Content="log" Command="{Binding FunctionButtonCommand}" CommandParameter="log"/>
+                            <Button Content="ln" Command="{Binding FunctionButtonCommand}" CommandParameter="ln"/>
+                            <Button Content="sin" Command="{Binding FunctionButtonCommand}" CommandParameter="sin"/>
+                            <Button Content="cos" Command="{Binding FunctionButtonCommand}" CommandParameter="cos"/>
+                            <Button Content="tg" Command="{Binding FunctionButtonCommand}" CommandParameter="tg"/>
 
-                    <!-- "?" Button for Error Help -->
-                    <Button Content="?" Width="30" Height="30" Margin="5,0,0,0"
-                Visibility="{Binding InputValid, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=False}"
-                Command="{Binding ToggleErrorMessageCommand}"/>
+                            <Button Content="ctg" Command="{Binding FunctionButtonCommand}" CommandParameter="ctg"/>
+                            <Button Content="arcsin" Command="{Binding FunctionButtonCommand}" CommandParameter="arcsin"/>
+                            <Button Content="arccos" Command="{Binding FunctionButtonCommand}" CommandParameter="arccos"/>
+                            <Button Content="arctg" Command="{Binding FunctionButtonCommand}" CommandParameter="arctg"/>
+                            <Button Content="arcctg" Command="{Binding FunctionButtonCommand}" CommandParameter="arcctg"/>
+
+                            <Button Content="sh" Command="{Binding FunctionButtonCommand}" CommandParameter="sh"/>
+                            <Button Content="ch" Command="{Binding FunctionButtonCommand}" CommandParameter="ch"/>
+                            <Button Content="th" Command="{Binding FunctionButtonCommand}" CommandParameter="th"/>
+                            <Button Content="cth" Command="{Binding FunctionButtonCommand}" CommandParameter="cth"/>
+                            <Button Content="arsh" Command="{Binding FunctionButtonCommand}" CommandParameter="arsh"/>
+
+                            <Button Content="arch" Command="{Binding FunctionButtonCommand}" CommandParameter="arch"/>
+                            <Button Content="arth" Command="{Binding FunctionButtonCommand}" CommandParameter="arth"/>
+                            <Button Content="arcth" Command="{Binding FunctionButtonCommand}" CommandParameter="arcth"/>
+                        </UniformGrid>
+                    </GroupBox>
+
+                    <!-- Error Message -->
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="Red"
+                               Margin="5,0,0,0"
+                               Visibility="{Binding ShowErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               FontSize="12"
+                               TextWrapping="Wrap"
+                               TextTrimming="None"/>
+
+                    <TextBlock Text="{Binding DerivativeText}"
+                               Margin="5,0,0,0"
+                               Visibility="{Binding ShowDerivativeText, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               FontSize="20"
+                               TextWrapping="Wrap"
+                               TextTrimming="None"/>
+                    
+                    <Button Content="Simplify"
+                            Margin="5,10,0,0"
+                            Visibility="{Binding SimplifyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Command="{Binding SimplifyCommand}"/>
+
                 </StackPanel>
-
-                <!-- Function Selector Buttons -->
-                <GroupBox Header="Function Selector" Margin="0,10,0,10">
-                    <UniformGrid Rows="4" Columns="5">
-                        <Button Content="log" Command="{Binding FunctionButtonCommand}" CommandParameter="log"/>
-                        <Button Content="ln" Command="{Binding FunctionButtonCommand}" CommandParameter="ln"/>
-                        <Button Content="sin" Command="{Binding FunctionButtonCommand}" CommandParameter="sin"/>
-                        <Button Content="cos" Command="{Binding FunctionButtonCommand}" CommandParameter="cos"/>
-                        <Button Content="tg" Command="{Binding FunctionButtonCommand}" CommandParameter="tg"/>
-
-                        <Button Content="ctg" Command="{Binding FunctionButtonCommand}" CommandParameter="ctg"/>
-                        <Button Content="arcsin" Command="{Binding FunctionButtonCommand}" CommandParameter="arcsin"/>
-                        <Button Content="arccos" Command="{Binding FunctionButtonCommand}" CommandParameter="arccos"/>
-                        <Button Content="arctg" Command="{Binding FunctionButtonCommand}" CommandParameter="arctg"/>
-                        <Button Content="arcctg" Command="{Binding FunctionButtonCommand}" CommandParameter="arcctg"/>
-
-                        <Button Content="sh" Command="{Binding FunctionButtonCommand}" CommandParameter="sh"/>
-                        <Button Content="ch" Command="{Binding FunctionButtonCommand}" CommandParameter="ch"/>
-                        <Button Content="th" Command="{Binding FunctionButtonCommand}" CommandParameter="th"/>
-                        <Button Content="cth" Command="{Binding FunctionButtonCommand}" CommandParameter="cth"/>
-                        <Button Content="arsh" Command="{Binding FunctionButtonCommand}" CommandParameter="arsh"/>
-
-                        <Button Content="arch" Command="{Binding FunctionButtonCommand}" CommandParameter="arch"/>
-                        <Button Content="arth" Command="{Binding FunctionButtonCommand}" CommandParameter="arth"/>
-                        <Button Content="arcth" Command="{Binding FunctionButtonCommand}" CommandParameter="arcth"/>
-                    </UniformGrid>
-                </GroupBox>
-
-                <!-- Error Message -->
-                <Label Content="{Binding ErrorMessage}"
-           Foreground="Red" Margin="5,0,0,0"
-           Visibility="{Binding ShowErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"
-           />
-
-                <Button Content="Simplify"
-            Margin="5,10,0,0"
-            Visibility="{Binding SimplifyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-            Command="{Binding SimplifyCommand}"/>
-
-                <Label Content="{Binding DerivativeText}"
-            Margin="5,0,0,0"
-            Visibility="{Binding ShowDerivativeText, Converter={StaticResource BooleanToVisibilityConverter}}"
-            FontSize="20"/>
-            </StackPanel>
+            </ScrollViewer>
 
             <!-- Right Panel (Tree View) -->
             <ScrollViewer Grid.Column="1"
-              VerticalScrollBarVisibility="Auto"
-              HorizontalScrollBarVisibility="Auto"
-              Visibility="{Binding TreeToPresent, Converter={StaticResource NullToVisibilityConverter}}">
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto"
+                          Visibility="{Binding TreeToPresent, Converter={StaticResource NullToVisibilityConverter}}">
+                
                 <local:BinaryTreeView TreeToPresent="{Binding TreeToPresent}" Background="White" DataContext="{Binding}"/>
             </ScrollViewer>
         </Grid>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <!-- Left Panel -->
+                <ColumnDefinition Width="395"/>
+                <!-- Right Panel -->
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            
+            <!-- Left Panel -->
+            <Grid Grid.Column="0" Margin="20" HorizontalAlignment="Left" VerticalAlignment="Top">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <TextBlock Text="Interval:" VerticalAlignment="Center" FontSize="14"/>
-                <TextBox Width="50" Text="{Binding IntervalStart}" Margin="5" FontSize="14"/>
-                <TextBlock Text=" to " VerticalAlignment="Center" FontSize="14"/>
-                <TextBox Width="50" Text="{Binding IntervalEnd}" Margin="5" FontSize="14"/>
-                <Button Content="Plot Function" Command="{Binding PlotFunctionCommand}" Background="LightBlue" Margin="5,0,0,0"/>
-            </StackPanel>
+                <!-- Interval Row -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                    
+                    <TextBlock Text="Intervallum: [" VerticalAlignment="Center" FontSize="20"/>
 
+                    <TextBox Width="50" Text="{Binding StartInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" MaxLength="5" Height="30"/>
+                    
+                    <TextBlock Text=" , " VerticalAlignment="Center" FontSize="20"/>
+
+                    <TextBox Width="50" Text="{Binding EndInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" MaxLength="5" Height="30"/>
+                    
+                    <TextBlock Text="]" VerticalAlignment="Center" FontSize="20"/>
+                    
+                </StackPanel>
+
+                <!-- Plot Buttons Row -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    
+                    <Button Content="Függvény rajzolás"
+                            Command="{Binding PlotFunctionCommand}"
+                            Background="LightBlue"
+                            Margin="0,0,10,0"
+                            FontSize="16"/>
+
+                    <Button Content="Deriváltfüggvény rajzolás"
+                            Command="{Binding PlotDerivativeCommand}"
+                            Background="LightGreen"
+                            Visibility="{Binding ShowPlotDerivativeButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            FontSize="16"/>
+                    
+                </StackPanel>
+
+                <!-- Derivative at a Point Row -->
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"
+                            Margin="0,10,10,10"
+                            Visibility="{Binding ShowDerivativeAtAPoint, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <TextBlock Text="Pontbeli deriválás: a = " VerticalAlignment="Center" FontSize="20"/>
+
+                    <TextBox Width="50" Text="{Binding DerivativeAtAPointText}" FontSize="20" MaxLength="5" Height="30"/>
+
+                    
+
+                </StackPanel>
+
+                <Button Content="Érintő rajzolás"
+                        Grid.Row="3"
+                        Command="{Binding PlotTangentCommand}"
+                        Background="Orange"
+                        Margin="0,0,10,10"
+                        FontSize="16"
+                        Visibility="{Binding ShowDerivativeAtAPoint, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Width="Auto"/>
+
+                <TextBlock Grid.Row="4" Text="{Binding ValueOfDerivativeAtAPointText}" FontSize="20" Height="30"
+                         Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         TextWrapping="Wrap"
+                         TextTrimming="None"/>
+            </Grid>
+            
+            <!-- Right Panel (Function Graph) -->
             <oxy:PlotView Grid.Column="1" Model="{Binding PlotModel}" Margin="10"/>
         </Grid>
-
     </Grid>
 </Window>

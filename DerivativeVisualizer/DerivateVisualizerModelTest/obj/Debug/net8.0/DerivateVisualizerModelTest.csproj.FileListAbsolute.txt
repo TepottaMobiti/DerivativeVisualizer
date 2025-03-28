@@ -113,3 +113,4 @@ C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\Deriv
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivateVisualizerModelTest\obj\Debug\net8.0\DerivateVisualizerModelTest.pdb
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivateVisualizerModelTest\obj\Debug\net8.0\DerivateVisualizerModelTest.genruntimeconfig.cache
 C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivateVisualizerModelTest\obj\Debug\net8.0\ref\DerivateVisualizerModelTest.dll
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivateVisualizerModelTest\bin\Debug\net8.0\Fractions.dll

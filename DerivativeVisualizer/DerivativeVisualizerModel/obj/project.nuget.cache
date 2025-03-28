@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "W+d/wKKHoC7CcHp69cNEFKAmzDPeqLJEMf/qgdRyqTxoxqSqOjjrwY0hWN/ejPuWRWuq27zI1KneixEp0hnZYA==",
+  "dgSpecHash": "HOaS0Gjf0r0TxplbD0VDWS2xopNq5Hf813xRXJPgOdPoDUOshV3WgWj0HPL1xYh0VWUVo8WQDr6Qj2tn156OHg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Bálint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerModel\\DerivativeVisualizerModel.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Bálint\\.nuget\\packages\\fractions\\8.3.1\\fractions.8.3.1.nupkg.sha512"
+  ],
   "logs": []
 }

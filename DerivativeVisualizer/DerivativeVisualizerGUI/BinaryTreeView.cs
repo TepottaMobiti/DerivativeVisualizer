@@ -12,9 +12,6 @@ using System.Windows.Shapes;
 
 namespace DerivativeVisualizerGUI
 {
-    // TODO: Beállítani, hogy a maximális input méret 20 vagy 25 legyen, és ezzel az inputtal megnézni, hogy mekkora a legnagyobb lehetséges fa, és arra optimalizálni ezt az osztályt.
-    // Legnagyobb input 20-ra: x^-1+x+x+x+x+x+x+x+x
-    // TODO: A modell hívásoknak az App.xaml-ben kéne lenniük, mint a macilaciban. De ezt majd elég a végén megcsinálnod, most a funkcionalitás legyen meg.
     public class BinaryTreeView : Canvas
     {
         private const double NodeSize = 60;
@@ -40,38 +37,86 @@ namespace DerivativeVisualizerGUI
             }
         }
 
+        private Dictionary<ASTNode, double> nodePositionsX = new Dictionary<ASTNode, double>();
+        private double currentX = 0;
+
         private void DrawTree()
         {
             if (TreeToPresent == null) return;
 
             Children.Clear();
+            nodePositionsX.Clear();
+            currentX = 0;
 
-            double minX = 0, maxX = 0;
-            double treeWidth, treeHeight;
-            CalculateTreeSize(TreeToPresent, 0, 0, out treeWidth, out treeHeight, ref minX, ref maxX);
+            // First pass: layout calculation
+            CalculateLayout(TreeToPresent);
 
-            Width = Math.Max(treeWidth, MinCanvasWidth) + 50;
+            // Calculate canvas size
+            double maxX = nodePositionsX.Values.Max();
+            double minX = nodePositionsX.Values.Min();
+            double treeWidth = (maxX - minX + 1) * HorizontalSpacing;
+            double treeHeight = GetHeight(TreeToPresent) * (NodeSize + VerticalSpacing) + 50;
+
+            Width = Math.Max(treeWidth, MinCanvasWidth) + 100;
             Height = treeHeight;
 
-            double centerX = (Width - treeWidth) / 2;
-
-            DrawNode(TreeToPresent, centerX + treeWidth / 2, 20, treeWidth / 4);
+            DrawNode(TreeToPresent, Width / 2, 20, minX, maxX);
         }
 
-        private void DrawNode(ASTNode node, double x, double y, double offset)
+        private double CalculateLayout(ASTNode node)
+        {
+            if (node == null) return 0;
+
+            double left = CalculateLayout(node.Left);
+            double right = CalculateLayout(node.Right);
+
+            double pos;
+            if (node.Left == null && node.Right == null)
+            {
+                pos = currentX++;
+            }
+            else if (node.Left != null && node.Right != null)
+            {
+                pos = (nodePositionsX[node.Left] + nodePositionsX[node.Right]) / 2;
+            }
+            else if (node.Left != null)
+            {
+                pos = nodePositionsX[node.Left] + 0.5;
+            }
+            else // only right
+            {
+                pos = nodePositionsX[node.Right!] - 0.5;
+            }
+
+            nodePositionsX[node] = pos;
+            return pos;
+        }
+
+        private void DrawNode(ASTNode node, double centerX, double y, double minX, double maxX)
         {
             if (node == null) return;
 
-            double NodeSize = 70;
+            double normalizedX;
+            if (Math.Abs(maxX - minX) < 0.0001)
+            {
+                // Only one node, center it
+                normalizedX = Width / 2;
+            }
+            else
+            {
+                normalizedX = ((nodePositionsX[node] - minX) / (maxX - minX)) * (Width - 100) + 50;
+            }
 
             Button nodeButton = new Button
             {
                 Width = NodeSize,
                 Height = NodeSize,
-                Background = node.NeedsDifferentiation ? Brushes.Blue : Brushes.LightGray,
+                Background = node.NeedsDifferentiation ? Brushes.LightSkyBlue : Brushes.LightGray,
                 Content = node.Value.ToString(),
                 Foreground = Brushes.Black,
                 IsEnabled = node.NeedsDifferentiation,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold
             };
 
             if (node.NeedsDifferentiation)
@@ -79,8 +124,8 @@ namespace DerivativeVisualizerGUI
                 ToolTip tooltip = new ToolTip { Content = node.DiffRule };
                 ToolTipService.SetShowOnDisabled(nodeButton, true);
                 ToolTipService.SetInitialShowDelay(nodeButton, 0);
-                ToolTipService.SetBetweenShowDelay(nodeButton, 0);
                 nodeButton.ToolTip = tooltip;
+                nodeButton.Foreground = Brushes.Navy;
             }
 
             if (Application.Current.Resources.Contains("CircleButton"))
@@ -96,22 +141,28 @@ namespace DerivativeVisualizerGUI
             nodeButton.SetBinding(Button.CommandProperty, binding);
 
             Children.Add(nodeButton);
-            SetLeft(nodeButton, x - NodeSize / 2);
+            SetLeft(nodeButton, normalizedX - NodeSize / 2);
             SetTop(nodeButton, y);
 
             if (node.Left != null)
             {
-                double newOffset = Math.Max(offset / 2, HorizontalSpacing);
-                DrawLine(x, y + NodeSize, x - newOffset, y + NodeSize + VerticalSpacing);
-                DrawNode(node.Left, x - newOffset, y + NodeSize + VerticalSpacing, newOffset);
+                double childX = ((nodePositionsX[node.Left] - minX) / (maxX - minX)) * (Width - 100) + 50;
+                DrawLine(normalizedX, y + NodeSize, childX, y + NodeSize + VerticalSpacing);
+                DrawNode(node.Left, centerX, y + NodeSize + VerticalSpacing, minX, maxX);
             }
 
             if (node.Right != null)
             {
-                double newOffset = Math.Max(offset / 2, HorizontalSpacing);
-                DrawLine(x, y + NodeSize, x + newOffset, y + NodeSize + VerticalSpacing);
-                DrawNode(node.Right, x + newOffset, y + NodeSize + VerticalSpacing, newOffset);
+                double childX = ((nodePositionsX[node.Right] - minX) / (maxX - minX)) * (Width - 100) + 50;
+                DrawLine(normalizedX, y + NodeSize, childX, y + NodeSize + VerticalSpacing);
+                DrawNode(node.Right, centerX, y + NodeSize + VerticalSpacing, minX, maxX);
             }
+        }
+
+        private int GetHeight(ASTNode node)
+        {
+            if (node == null) return 0;
+            return 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
         }
 
         private void DrawLine(double x1, double y1, double x2, double y2)
@@ -126,28 +177,6 @@ namespace DerivativeVisualizerGUI
                 StrokeThickness = 2
             };
             Children.Add(line);
-        }
-
-        private void CalculateTreeSize(ASTNode node, double x, double y, out double width, out double height, ref double minX, ref double maxX)
-        {
-            if (node == null)
-            {
-                width = 0;
-                height = 0;
-                return;
-            }
-
-            minX = Math.Min(minX, x);
-            maxX = Math.Max(maxX, x);
-
-            double leftWidth = 0, rightWidth = 0;
-            double leftHeight = 0, rightHeight = 0;
-
-            CalculateTreeSize(node.Left, x - HorizontalSpacing, y + VerticalSpacing, out leftWidth, out leftHeight, ref minX, ref maxX);
-            CalculateTreeSize(node.Right, x + HorizontalSpacing, y + VerticalSpacing, out rightWidth, out rightHeight, ref minX, ref maxX);
-
-            width = maxX - minX + NodeSize;
-            height = Math.Max(leftHeight, rightHeight) + NodeSize + VerticalSpacing + 10;
         }
     }
 }
