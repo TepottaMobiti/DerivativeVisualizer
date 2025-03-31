@@ -92,8 +92,13 @@ namespace DerivativeVisualizer
             //        Console.WriteLine($"Hiba: {e.Message}");
             //    }
             //}
-            Fraction fraction = Fraction.FromDoubleRounded(-1.15);
-            Console.WriteLine(fraction);
+            ASTNode node = new ASTNode("/",
+                               new ASTNode("x"),
+                               new ASTNode("-",
+                                   new ASTNode("x"),
+                                   new ASTNode("x")));
+
+            Console.WriteLine(ASTNode.Simplify(node));
         }
     }
 }

@@ -19,7 +19,16 @@ using System.Windows.Media;
 namespace DerivativeVisualizerGUI
 {
     /* Priority list
-    
+        
+        ÚJ: 0^0-ra is csinálj egy hasonlót, mint a 0-val való osztásra, az nagyon jó.
+        
+        0. Draggable Point: Amikor a pontbeli deriválás lehetősége megnyílik, inicializálódjon egy pont az intervallum közepén, ami draggelhető. Legyen egy input mező, ami egy x koordinátát vár, és oda ugrik a draggable
+        point, ha helyes a megadott érték. Ne legyen gomb, nem kell. Esetleg ki/be kapcsoló gombja lehet a gombnak, hogy feleslegesen ne jelenjen meg az érintő. Ja és ahova húzzuk a pontot, oda jelenjen meg az érintő, 
+        nyilván. Ezt foglald össze egy szép és érthető, tiszta promptba és pakkpakk. DoneZO
+        
+        Logika: deriválás egyszerűsítve van, függvény ábrázolva van -> megjelenik a pontbeli deriválás -> beír egy értéket, rákattint a gombra -> Tűnjön el a gomb, az értékmegadás mező
+        maradjon, meg a f'(a) = b szöveg is maradjon, és lehessen húzogatni a gombot, meg ha megadunk egy új értéket akkor ugorjon oda a pont.
+        
         1. Hiba: Pl. köbgyöknél nem jó a negatív rész, mert a Math.Pow rosszul kezeli. Valami olyasmit kéne csinálni, hogy áttérni ott sqrt-re, ha detektálni tudjuk. DoneZO
         2. TODO: Átírni magyarra a parser / tokenizer üzeneteit és ne hiba szerűek legyenek, hanem segítő hangnem. Legyenek újfajta üzenetek is, ahol lehet, küldjünk vissza valamit. Pl. ha felismerjük, hogy fv,
                  mondjuk "sin", de nincs utána nyitó zárójel. DoneZO
@@ -27,7 +36,8 @@ namespace DerivativeVisualizerGUI
         4. TODO: double-ök kerekítése 2 tizedesjegyre.
         5. TODO: Valahogy beállítani, hogy a function inputban csak 2 tizedesjegy lehessen. Ezt a Tokenizerben lehet elkapni a legegyszerűbben szerintem. DoneZO
         6. TODO: A falevelek néha összeérnek. Lehetne még javítani rajta valamit?
-        7. Hiba: elfogadunk ilyesmit, hogy x/(1-1) és lederiválja, 1 lesz a derivált. Mit lehet ezzel csinálni? Az egyszerűsítés sem működik jól itt. Ezt nézd végig, hogy mi történik pontosan.
+        7. Hiba: elfogadunk ilyesmit, hogy x/(1-1) és lederiválja, 1 lesz a derivált. Mit lehet ezzel csinálni? Az egyszerűsítés sem működik jól itt. Ezt nézd végig, hogy mi történik pontosan. DoneZO
+        8. Csak akkor jelenjen meg a fa, meg minden ami a fához kapcs (f'(x) felirat), ha elfogadtuk az inputot. Tehát ha az inputText változik, akkor a megjelenítő cuccaikat false-ra kell állítani.
 
      */
 
@@ -53,6 +63,10 @@ namespace DerivativeVisualizerGUI
     public class ViewModel : ViewModelBase
     {
         #region Private Fields
+
+        private ScatterSeries? draggablePoint;
+        private LineSeries? tangentLine;
+        private bool isDragging = false;
 
         private string inputText;
         private string errorMessage;
@@ -99,6 +113,10 @@ namespace DerivativeVisualizerGUI
                 derivativePlotted = false;
                 OnPropertyChanged(nameof(ShowDerivativeAtAPoint));
                 ShowValueOfDerivativeAtAPointText = false;
+                DerivativeAtAPointText = string.Empty;
+                draggablePoint = null;
+                tangentLine = null;
+                isDragging = false;
             }
         }
 
@@ -125,6 +143,9 @@ namespace DerivativeVisualizerGUI
                 OnPropertyChanged(nameof(ShowDerivativeAtAPoint));
                 ShowValueOfDerivativeAtAPointText = false;
                 DerivativeAtAPointText = string.Empty;
+                draggablePoint = null;
+                tangentLine = null;
+                isDragging = false;
             }
         }
 
@@ -141,6 +162,9 @@ namespace DerivativeVisualizerGUI
                 OnPropertyChanged(nameof(ShowDerivativeAtAPoint));
                 ShowValueOfDerivativeAtAPointText = false;
                 derivativeAtAPointText = string.Empty;
+                draggablePoint = null;
+                tangentLine = null;
+                isDragging = false;
             }
         }
 
@@ -460,35 +484,49 @@ namespace DerivativeVisualizerGUI
 
             try
             {
-                double functionValueAtPoint = FunctionEvaluator.Evaluate(InputFunction!, point, step);
+                double functionValueAtPoint = FunctionEvaluator.Evaluate(InputFunction!, point, 1e-10);
                 if (!double.IsFinite(functionValueAtPoint))
                 {
                     ErrorOccurred?.Invoke("A függvény nincs értelmezve a megadott pontban.");
                     return;
                 }
 
-                double derivativeValueAtPoint = FunctionEvaluator.Evaluate(SimplifiedTree!, point, step);
+                double derivativeValueAtPoint = FunctionEvaluator.Evaluate(SimplifiedTree!, point, 1e-10);
                 if (!double.IsFinite(derivativeValueAtPoint))
                 {
                     ErrorOccurred?.Invoke("A függvény nem deriválható a megadott pontban.");
                     return;
                 }
 
-                // Érintő létrehozása. y = f(a) + f'(a) * (x - a)
-                functionValueAtPoint = Math.Round(functionValueAtPoint, 2);
-                derivativeValueAtPoint = Math.Round(derivativeValueAtPoint, 2);
+                if (draggablePoint == null)
+                {
+                    draggablePoint = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = 5 };
+                    PlotModel!.Series.Add(draggablePoint);
 
-                ASTNode tangent = new ASTNode("+",
-                                      new ASTNode(functionValueAtPoint.ToString()),
-                                      new ASTNode("*",
-                                          new ASTNode(derivativeValueAtPoint.ToString()),
-                                          new ASTNode("-",
-                                              new ASTNode("x"),
-                                              new ASTNode(point.ToString()))));
+                    // Hook up dragging support
+                    PlotModel.MouseDown += OnMouseDown;
+                    PlotModel.MouseMove += OnMouseMove;
+                    PlotModel.MouseUp += OnMouseUp;
+                }
 
-                PlotSeries(tangent, xValues, step, OxyColors.Orange, tangent.ToString());
+                // Create tangent line if needed
+                if (tangentLine == null)
+                {
+                    tangentLine = new LineSeries
+                    {
+                        Color = OxyColors.Orange,
+                        LineStyle = LineStyle.Dash,
+                        StrokeThickness = 3
+                    };
+                    PlotModel!.Series.Add(tangentLine);
+                }
 
-                ValueOfDerivativeAtAPointText = $"f'({point}) = {derivativeValueAtPoint}";
+                // Move point and update tangent
+                UpdateDraggableAndTangent(point, functionValueAtPoint, derivativeValueAtPoint);
+
+                PlotModel!.InvalidatePlot(true);
+
+                ValueOfDerivativeAtAPointText = $"f'({point:0.00}) = {derivativeValueAtPoint:0.00}";
                 ShowValueOfDerivativeAtAPointText = true;
             }
             catch (Exception e)
@@ -497,6 +535,74 @@ namespace DerivativeVisualizerGUI
             }
 
         }
+
+        private void UpdateDraggableAndTangent(double x, double y, double slope)
+        {
+            var (startInterval, endInterval) = CheckInterval();
+            double r = (endInterval - startInterval) / 8;
+
+            // Move draggable point
+            draggablePoint!.Points.Clear();
+            draggablePoint.Points.Add(new ScatterPoint(x, y));
+
+            // Calculate tangent line
+            double x1 = x - r;
+            double x2 = x + r;
+            double y1 = slope * (x1 - x) + y;
+            double y2 = slope * (x2 - x) + y;
+
+            tangentLine!.Points.Clear();
+            tangentLine.Points.Add(new DataPoint(x1, y1));
+            tangentLine.Points.Add(new DataPoint(x2, y2));
+
+            // Set the equation of the tangent line as the title
+            double intercept = y - slope * x;
+            tangentLine.Title = $"y = {slope:0.00}x + {intercept:0.00}";
+        }
+
+        private void OnMouseDown(object? sender, OxyMouseDownEventArgs e)
+        {
+            var pos = e.Position;
+            var x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
+            var y = PlotModel.DefaultYAxis.InverseTransform(pos.Y);
+
+            var point = draggablePoint?.Points.FirstOrDefault();
+            if (point == null) return;
+
+            // Check if user clicked close to the point
+            if (Math.Abs(x - point.X) < 0.5 && Math.Abs(y - point.Y) < 0.5)
+            {
+                isDragging = true;
+                e.Handled = true;
+            }
+        }
+
+        private void OnMouseMove(object? sender, OxyMouseEventArgs e)
+        {
+            if (!isDragging) return;
+
+            var pos = e.Position;
+            double x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
+
+            var (startInterval, endInterval) = CheckInterval();
+            x = Math.Max(startInterval, Math.Min(endInterval, x)); // Clamp x
+
+            double y = FunctionEvaluator.Evaluate(InputFunction!, x, 0.01);
+            double slope = FunctionEvaluator.Evaluate(SimplifiedTree!, x, 0.01);
+
+            UpdateDraggableAndTangent(x, y, slope);
+
+            ValueOfDerivativeAtAPointText = $"f'({x:0.00}) = {slope:0.00}";
+            ShowValueOfDerivativeAtAPointText = true;
+
+            PlotModel.InvalidatePlot(false);
+        }
+
+        private void OnMouseUp(object? sender, OxyMouseEventArgs e)
+        {
+            isDragging = false;
+        }
+
 
         #endregion
 
@@ -536,6 +642,7 @@ namespace DerivativeVisualizerGUI
             if (Math.Abs(startInterval) > 50 || Math.Abs(endInterval) > 50)
             {
                 ErrorOccurred?.Invoke("Az intervallum nem részintervalluma a [-50, 50] intervallumnak.");
+                return (double.NaN, double.NaN);
             }
 
             return (startInterval, endInterval);
@@ -589,7 +696,7 @@ namespace DerivativeVisualizerGUI
 
         private (double[] xValues, double step) GenerateXValuesAndStep(double start, double end)
         {
-            int numPoints = 40 * (int)(end - start) + 1;
+            int numPoints = 40 * (int)(end - start) + 1; // Ne ilyen legyen
             double step = (end - start) / (numPoints - 1);
             double[] xValues = Enumerable.Range(0, numPoints).Select(i => start + step * i).ToArray();
             return (xValues, step);

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace DerivativeVisualizerModel
 {
-    // TODO: Improving Error Messages alapján írj bele új check-eket. De ne másold, mert kitörölt néhányat.
     public class Parser
     {
         private List<Token> tokens;
@@ -77,9 +76,14 @@ namespace DerivativeVisualizerModel
                 {
                     return (null, $"A(z) '{op}' bináris operátornak hiányzik a jobb oldali operandusa.");
                 }
-                if (op == "/" && right.Value == "0")
+                if (op == "/")
                 {
-                    return (null, "Nullával való osztás nem engedélyezett.");
+                    ASTNode simplifiedRight = ASTNode.Simplify(right);
+                    if (simplifiedRight.Value == "0")
+                    {
+                        return (null, "Nullával való osztás nem engedélyezett.");
+                    }
+                    
                 }
                 node = new ASTNode(op, node, right);
             }

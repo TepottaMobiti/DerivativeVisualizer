@@ -9,16 +9,18 @@ using System.Threading.Tasks;
 
 namespace DerivativeVisualizerModel
 {
+    // Dokumentáld majd le, hogy hogy működik, minden függvényt ami szóra érdemes. A matekról is ejts szót, az epszilonozásról, stb. TODO: Tear in Function Plot beszben van egy generált indoklás.
+    // Tangens dilemma: Mindenhogy rossz. Lehet megoldás, hogy csak -pista /2, pista /2-n értelmezzük? Az lenne még talán a legjobb. Ctg ugyanez. Ez mondjuk nem ideális. De pl. azt lehet
+    // biztosítani, hogy csak az egyik intervallumot értelmezzük, amit éppen célszerű.
+
+    // Dokumentáld le majd a hatványozást részletesen. Mindent dokumentálj le részletesen igazából. Térj ki arra, hogy a BigIntegert intté konvertálni miért szabad (mert a pontok generálása
+    // miatt nem lesznek olyan hú de nagy számok)
+
+    // ChatGPT beszélgetés: Dokumentáció: Racionális számok
+
     public static class FunctionEvaluator
     {
-        // Dokumentáld majd le, hogy hogy működik, minden függvényt ami szóra érdemes. A matekról is ejts szót, az epszilonozásról, stb. TODO: Tear in Function Plot beszben van egy generált indoklás.
-        // Tangens dilemma: Mindenhogy rossz. Lehet megoldás, hogy csak -pista /2, pista /2-n értelmezzük? Az lenne még talán a legjobb. Ctg ugyanez. Ez mondjuk nem ideális. De pl. azt lehet
-        // biztosítani, hogy csak az egyik intervallumot értelmezzük, amit éppen célszerű.
-
-        // Dokumentáld le majd a hatványozást részletesen. Mindent dokumentálj le részletesen igazából. Térj ki arra, hogy a BigIntegert intté konvertálni miért szabad (mert a pontok generálása
-        // miatt nem lesznek olyan hú de nagy számok)
-
-        // ChatGPT beszélgetés: Dokumentáció: Racionális számok
+        
         public static double Evaluate(ASTNode node, double xValue, double stepSize)
         {
             if (node == null)
@@ -64,7 +66,7 @@ namespace DerivativeVisualizerModel
                     n = Math.Round((argument - (pi / 2)) / pi);
                     discontinuity = (pi / 2) + n * pi;
 
-                    return Math.Abs(argument - discontinuity) <= 1e-10 /*epsilon*/ ? double.NaN : Math.Tan(argument);
+                    return Math.Abs(argument - discontinuity) <= epsilon /*1e-10*/ ? double.NaN : Math.Tan(argument);
                 }
                 if (node.Value == "ctg")
                 {

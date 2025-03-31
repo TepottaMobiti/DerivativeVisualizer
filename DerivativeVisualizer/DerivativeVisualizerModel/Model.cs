@@ -69,7 +69,7 @@ namespace DerivativeVisualizerModel
                 parser = new Parser(tokens);
                 ASTNode? tree;
                 (tree, msg) = parser.ParseExpression();
-                if (tree is not null) // Vagy így hozzuk létre a deriválót, és akkor sok felesleges deriváló fog létrejönni, vagy kell egy start differentiation process gomb, ami létrehozza ezt, és onnantól lehet kattintgatni.
+                if (tree is not null)
                 {
                     differentiator = new Differentiator(tree);
                     OnTreeReady(differentiator.CurrentTree);

@@ -340,7 +340,7 @@ namespace DerivativeVisualizerModel
             if (node.Value == "*" && node.Right.Value == "1") return SimplifyOnce(node.Left); // x * 1 = x
 
             // Division
-            if (node.Value == "/" && AreTreesEqual(node.Left, node.Right)) return new ASTNode("1"); // x / x = 1
+            if (node.Value == "/" && AreTreesEqual(node.Left, node.Right)) return new ASTNode("1"); // x / x = 1 0/0-ból 1-et csinál, az nem feltétlenül jó.
             if (node.Value == "/" && node.Left.Value == "0") return new ASTNode("0"); // 0 / x = 0
             if (node.Value == "/" && node.Right.Value == "1") return SimplifyOnce(node.Left); // x / 1 = x
 
