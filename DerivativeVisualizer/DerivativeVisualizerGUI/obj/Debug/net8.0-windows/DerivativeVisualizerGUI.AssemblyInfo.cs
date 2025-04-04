@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DerivativeVisualizerGUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c63c9b67f40004afe6eca693ecec77b7f7bb484d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ddb6b8509df9498140934d98b4f81183ac5b1a50")]
 [assembly: System.Reflection.AssemblyProductAttribute("DerivativeVisualizerGUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DerivativeVisualizerGUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

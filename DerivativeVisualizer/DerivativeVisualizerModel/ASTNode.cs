@@ -54,7 +54,18 @@ namespace DerivativeVisualizerModel
                         {
                             if (a > 0)
                             {
-                                return "(a ^ x)' = a ^ x * ln(a) (a>0)";
+                                return "(a ^ x)' = a ^ x * ln(a) (a > 0)";
+                            }
+                            else
+                            {
+                                return $"Ha a <= 0 (a = {a}), akkor a^x nem deriválható";
+                            }
+                        }
+                        else if (double.TryParse(Left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double c))
+                        {
+                            if (c > 0)
+                            {
+                                return "(a ^ f)' = a ^ f * ln(a) * f' (a > 0)";
                             }
                             else
                             {
@@ -67,11 +78,11 @@ namespace DerivativeVisualizerModel
                         }
                         else if (double.TryParse(Right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Right.Value == "e")
                         {
-                            return "(f ^ n)' = n * f ^ (n-1) * f'";
+                            return "(f ^ n)' = n * f ^ (n - 1) * f'";
                         }
                         else
                         {
-                            return "(f ^ g)' = (f ^ g)*(f' * g / f + g' * ln(f)) (f>0, nem ellenőrzött)";
+                            return "(f ^ g)' = (f ^ g)*(f' * g / f + g' * ln(f)) (f > 0, nem ellenőrzött)";
                         }
                     case "log":
                         if (double.TryParse(Left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double b) || Left.Value == "e")

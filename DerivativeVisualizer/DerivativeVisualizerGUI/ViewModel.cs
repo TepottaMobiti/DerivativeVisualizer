@@ -31,21 +31,8 @@ namespace DerivativeVisualizerGUI
         
         ÚJ: 0^0-ra is csinálj egy hasonlót, mint a 0-val való osztásra, az nagyon jó.
         
-        0. Draggable Point: Amikor a pontbeli deriválás lehetősége megnyílik, inicializálódjon egy pont az intervallum közepén, ami draggelhető. Legyen egy input mező, ami egy x koordinátát vár, és oda ugrik a draggable
-        point, ha helyes a megadott érték. Ne legyen gomb, nem kell. Esetleg ki/be kapcsoló gombja lehet a gombnak, hogy feleslegesen ne jelenjen meg az érintő. Ja és ahova húzzuk a pontot, oda jelenjen meg az érintő, 
-        nyilván. Ezt foglald össze egy szép és érthető, tiszta promptba és pakkpakk. DoneZO
-        
-        Logika: deriválás egyszerűsítve van, függvény ábrázolva van -> megjelenik a pontbeli deriválás -> beír egy értéket, rákattint a gombra -> Tűnjön el a gomb, az értékmegadás mező
-        maradjon, meg a f'(a) = b szöveg is maradjon, és lehessen húzogatni a gombot, meg ha megadunk egy új értéket akkor ugorjon oda a pont.
-        
-        1. Hiba: Pl. köbgyöknél nem jó a negatív rész, mert a Math.Pow rosszul kezeli. Valami olyasmit kéne csinálni, hogy áttérni ott sqrt-re, ha detektálni tudjuk. DoneZO
-        2. TODO: Átírni magyarra a parser / tokenizer üzeneteit és ne hiba szerűek legyenek, hanem segítő hangnem. Legyenek újfajta üzenetek is, ahol lehet, küldjünk vissza valamit. Pl. ha felismerjük, hogy fv,
-                 mondjuk "sin", de nincs utána nyitó zárójel. DoneZO
         3. TODO: Megnézni a modell hol dobhat exceptiönt és mindenhol lekezelni, MessageBox-okkal.
-        4. TODO: double-ök kerekítése 2 tizedesjegyre.
-        5. TODO: Valahogy beállítani, hogy a function inputban csak 2 tizedesjegy lehessen. Ezt a Tokenizerben lehet elkapni a legegyszerűbben szerintem. DoneZO
         6. TODO: A falevelek néha összeérnek. Lehetne még javítani rajta valamit?
-        7. Hiba: elfogadunk ilyesmit, hogy x/(1-1) és lederiválja, 1 lesz a derivált. Mit lehet ezzel csinálni? Az egyszerűsítés sem működik jól itt. Ezt nézd végig, hogy mi történik pontosan. DoneZO
         8. Csak akkor jelenjen meg a fa, meg minden ami a fához kapcs (f'(x) felirat), ha elfogadtuk az inputot. Tehát ha az inputText változik, akkor a megjelenítő cuccaikat false-ra kell állítani.
 
      */

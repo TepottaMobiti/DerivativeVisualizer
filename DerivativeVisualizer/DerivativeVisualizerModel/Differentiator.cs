@@ -107,6 +107,21 @@ namespace DerivativeVisualizerModel
                             throw new Exception($"Ha a <= 0 (a = {a}), akkor a^x nem deriválható");
                         }
                     }
+                    else if (double.TryParse(left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double c)) // (a^f)' = a^f*ln(a)*f' (a>0)
+                    {
+                        if (c > 0)
+                        {
+                            return new ASTNode("*",
+                                       new ASTNode("*",
+                                           UnFlagNode(node.DeepCopy()),
+                                           new ASTNode("ln", new ASTNode(left.Value))),
+                                       FlagNode(right));
+                        }
+                        else
+                        {
+                            throw new Exception($"Ha a <= 0 (a = {c}), akkor a^f nem deriválható");
+                        }
+                    }
                     else if ((double.TryParse(right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double num1) || right.Value == "e") && left.Value=="x") // (x^n)' =  n*x^(n-1)
                     {
                         if (right.Value=="e")

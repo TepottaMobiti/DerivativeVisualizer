@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace DerivativeVisualizerModel
 {
-    // TODO: Implementálni mindent. Ez vonja össze az összes többi class funkcionalitását. Itt vannak az eventek.
-    // Egyetlen input mezőre van szüksége, ennyit fog kapni a viewtől, és utána csak eventeket vált ki. Minden többi classtól jövő exceptiont önmagában lekezel, csak eventekkel kommunikál kifelé.
-    // Itt legyen minden üzleti logika, a viewmodelben semmilyen komolyabb számítás ne legyen.
-    // Modellben nem try-catchelünk, majd az appban kezeljük az ilyen errorokat az App-ban felugró ablakokkal.
+    // TODO: 0^0 Check parserben.
+    // TODO: a^f deriválási szabály.
     public class Model
     {
         private Tokenizer tokenizer = null!;
