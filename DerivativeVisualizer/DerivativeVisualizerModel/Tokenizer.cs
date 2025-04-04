@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace DerivativeVisualizerModel
@@ -114,6 +115,16 @@ namespace DerivativeVisualizerModel
 
                 number += currentChar;
                 currentIndex++;
+            }
+
+            if (number.EndsWith("."))
+            {
+                return (null, "A szám nem végződhet tizedesponttal.");
+            }
+
+            if (Math.Abs(double.Parse(number, NumberStyles.Float, CultureInfo.InvariantCulture)) > 99.99)
+            {
+                return (null, "A szám abszolút értékének maximuma 99.99 lehet.");
             }
 
             return (new Token(number, TokenType.Number), "");

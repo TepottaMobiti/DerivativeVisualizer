@@ -1,5 +1,6 @@
 ﻿using DerivativeVisualizerModel;
 using Fractions;
+using System.Globalization;
 namespace DerivativeVisualizer
 {
     // Általánosabb követelmények a kóddal: Ne legyenek felesleges sorok (kivétel függvények között 1, konvenció szerint),
@@ -99,6 +100,8 @@ namespace DerivativeVisualizer
                                    new ASTNode("x")));
 
             Console.WriteLine(ASTNode.Simplify(node));
+
+            Console.Write(double.Parse("12.24", System.Globalization.NumberStyles.Float, CultureInfo.InvariantCulture));
         }
     }
 }

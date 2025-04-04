@@ -19,6 +19,14 @@ using System.Windows.Media;
 
 namespace DerivativeVisualizerGUI
 {
+
+    /*
+     Dokumentáció:
+        Ismert hiba: ha egy fv, pl. arcsin-t egy bővebb intervallumon jelenítünk meg, mint az értelmezési tartománya, akkor a rajz az értelmezési tartományhoz fog igazodni, viszont a
+        mozgatható deriválási ponttal "le tudunk menni" a függvényről, mert ennek a pontnak a korlátjai a megadott intervallum. Nem javítom, mert ha el is engedjük a pontot kint, egy új, jó pont
+        beírásával vissza lehet hozni.
+     
+     */
     /* Priority list
         
         ÚJ: 0^0-ra is csinálj egy hasonlót, mint a 0-val való osztásra, az nagyon jó.
