@@ -20,7 +20,6 @@ namespace DerivativeVisualizerModel
 
     public static class FunctionEvaluator
     {
-        
         public static double Evaluate(ASTNode node, double xValue, double stepSize)
         {
             if (node == null)
@@ -86,7 +85,7 @@ namespace DerivativeVisualizerModel
                     "sh" => Math.Sinh(argument),
                     "ch" => Math.Cosh(argument),
                     "th" => Math.Tanh(argument),
-                    "cth" => Math.Abs(argument) <= epsilon ? 1 / Math.Tanh(argument): double.NaN,
+                    "cth" => Math.Abs(argument) <= epsilon ? 1 / Math.Tanh(argument) : double.NaN,
                     "arsh" => Math.Asinh(argument),
                     "arch" => Math.Acosh(argument),
                     "arth" => Math.Atanh(argument),
@@ -99,7 +98,7 @@ namespace DerivativeVisualizerModel
             throw new Exception($"Nem feldolgozható érték: {node.Value}");
         }
 
-        public static double SafePower(double baseValue, double exponent) // Ez dobhat OverFlowExceptiont.
+        public static double SafePower(double baseValue, double exponent)
         {
             double result = Math.Pow(baseValue, exponent);
             if (!double.IsNaN(result))
@@ -107,24 +106,37 @@ namespace DerivativeVisualizerModel
 
             if (baseValue < 0)
             {
-                // Use Fractions package to approximate exponent as a rational number
-                var fraction = Fraction.FromDoubleRounded(exponent); // Optional: tolerance
-
-                int numerator = (int)fraction.Numerator;
-                int denominator = (int)fraction.Denominator;
-
-                // Only proceed if denominator is odd (to allow real roots of negative numbers)
-                if (denominator % 2 == 1)
+                try
                 {
-                    double rootBase = Math.Pow(-baseValue, (double)Math.Abs(numerator) / denominator);
-                    double signedResult = numerator < 0 ? 1.0 / rootBase : rootBase;
+                    var fraction = Fraction.FromDoubleRounded(exponent); // Optional tolerance
+                    var numeratorBig = fraction.Numerator;
+                    var denominatorBig = fraction.Denominator;
 
-                    // Determine if result should be negative
-                    return (numerator % 2 == 0) ? signedResult : -signedResult;
+                    // Avoid overflow: refuse to process large fractions
+                    const int maxIntValue = 1000000;
+                    if (numeratorBig > maxIntValue || denominatorBig > maxIntValue)
+                        return double.NaN;
+
+                    int numerator = (int)numeratorBig;
+                    int denominator = (int)denominatorBig;
+
+                    if (denominator % 2 == 1) // Odd denominator → real result possible
+                    {
+                        double rootBase = Math.Pow(-baseValue, Math.Abs((double)numerator) / denominator);
+                        double signedResult = numerator < 0 ? 1.0 / rootBase : rootBase;
+
+                        return (numerator % 2 == 0) ? signedResult : -signedResult;
+                    }
+                }
+                catch
+                {
+                    // Conversion or pow failed
+                    return double.NaN;
                 }
             }
 
             return double.NaN;
         }
+
     }
 }

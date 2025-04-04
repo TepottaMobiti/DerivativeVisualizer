@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -75,6 +76,8 @@ namespace DerivativeVisualizerGUI
         private string derivativeText;
         private string derivativeAtAPointText;
         private string valueOfDerivativeAtAPointText;
+        private string valueOfFunctionAtAPointText;
+        private string equationOfTangentText;
 
         private bool? inputValid;
         private bool showErrorMessage;
@@ -161,7 +164,7 @@ namespace DerivativeVisualizerGUI
                 OnPropertyChanged(nameof(EndInterval));
                 OnPropertyChanged(nameof(ShowDerivativeAtAPoint));
                 ShowValueOfDerivativeAtAPointText = false;
-                derivativeAtAPointText = string.Empty;
+                DerivativeAtAPointText = string.Empty;
                 draggablePoint = null;
                 tangentLine = null;
                 isDragging = false;
@@ -195,6 +198,26 @@ namespace DerivativeVisualizerGUI
             {
                 valueOfDerivativeAtAPointText = value;
                 OnPropertyChanged(nameof(ValueOfDerivativeAtAPointText));
+            }
+        }
+
+        public string ValueOfFunctionAtAPointText
+        {
+            get => valueOfFunctionAtAPointText;
+            set
+            {
+                valueOfFunctionAtAPointText = value;
+                OnPropertyChanged(nameof(ValueOfFunctionAtAPointText));
+            }
+        }
+
+        public string EquationOfTangentText
+        {
+            get => equationOfTangentText;
+            set
+            {
+                equationOfTangentText = value;
+                OnPropertyChanged(nameof(EquationOfTangentText));
             }
         }
 
@@ -312,6 +335,8 @@ namespace DerivativeVisualizerGUI
             derivativeText = string.Empty;
             derivativeAtAPointText = string.Empty;
             valueOfDerivativeAtAPointText = string.Empty;
+            valueOfFunctionAtAPointText = string.Empty;
+            equationOfTangentText = string.Empty;
             startInterval = "-10";
             endInterval = "10";
             model = new DerivativeVisualizerModel.Model();
@@ -466,6 +491,16 @@ namespace DerivativeVisualizerGUI
                 return;
             }
 
+            if (DerivativeAtAPointText.Contains("."))
+            {
+                var parts = DerivativeAtAPointText.Split('.');
+                if (parts.Length == 2 && parts[1].Length > 2)
+                {
+                    ErrorOccurred?.Invoke("Legfeljebb 2 tizedesjegy megadása engedélyezett.");
+                    return;
+                }
+            }
+
             var (startInterval, endInterval) = CheckInterval();
             if (double.IsNaN(startInterval) || double.IsNaN(endInterval)) return;
 
@@ -515,7 +550,6 @@ namespace DerivativeVisualizerGUI
                     tangentLine = new LineSeries
                     {
                         Color = OxyColors.Orange,
-                        LineStyle = LineStyle.Dash,
                         StrokeThickness = 3
                     };
                     PlotModel!.Series.Add(tangentLine);
@@ -526,7 +560,12 @@ namespace DerivativeVisualizerGUI
 
                 PlotModel!.InvalidatePlot(true);
 
-                ValueOfDerivativeAtAPointText = $"f'({point:0.00}) = {derivativeValueAtPoint:0.00}";
+                ValueOfFunctionAtAPointText = $"f({point}) = {Math.Round(functionValueAtPoint, 2)}";
+
+                ValueOfDerivativeAtAPointText = $"f'({point}) = {derivativeValueAtPoint}";
+
+                EquationOfTangentText = tangentLine.Title;
+
                 ShowValueOfDerivativeAtAPointText = true;
             }
             catch (Exception e)
@@ -557,7 +596,8 @@ namespace DerivativeVisualizerGUI
 
             // Set the equation of the tangent line as the title
             double intercept = y - slope * x;
-            tangentLine.Title = $"y = {slope:0.00}x + {intercept:0.00}";
+            intercept = Math.Round(intercept, 2);
+            tangentLine.Title = $"y = {slope}x + {intercept}";
         }
 
         private void OnMouseDown(object? sender, OxyMouseDownEventArgs e)
@@ -590,9 +630,17 @@ namespace DerivativeVisualizerGUI
             double y = FunctionEvaluator.Evaluate(InputFunction!, x, 0.01);
             double slope = FunctionEvaluator.Evaluate(SimplifiedTree!, x, 0.01);
 
+            x = Math.Round(x, 2);
+            y = Math.Round(y, 2);
+            slope = Math.Round(slope, 2);
+
             UpdateDraggableAndTangent(x, y, slope);
 
-            ValueOfDerivativeAtAPointText = $"f'({x:0.00}) = {slope:0.00}";
+            DerivativeAtAPointText = x.ToString();
+
+            ValueOfFunctionAtAPointText = $"f({x}) = {y}";
+            ValueOfDerivativeAtAPointText = $"f'({x}) = {slope}";
+            EquationOfTangentText = tangentLine?.Title ?? "";
             ShowValueOfDerivativeAtAPointText = true;
 
             PlotModel.InvalidatePlot(false);
