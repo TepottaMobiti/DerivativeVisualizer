@@ -25,6 +25,9 @@ namespace DerivativeVisualizerGUI
         Ismert hiba: ha egy fv, pl. arcsin-t egy bővebb intervallumon jelenítünk meg, mint az értelmezési tartománya, akkor a rajz az értelmezési tartományhoz fog igazodni, viszont a
         mozgatható deriválási ponttal "le tudunk menni" a függvényről, mert ennek a pontnak a korlátjai a megadott intervallum. Nem javítom, mert ha el is engedjük a pontot kint, egy új, jó pont
         beírásával vissza lehet hozni.
+
+    Javítási lehetőség: 0-val osztás, 0^0 detektálás javítása kiértékeléssel.
+    Javítási lehetőség: Szakadásos függvények rajzolásának javítása.
      
      */
     /* Priority list
@@ -60,10 +63,6 @@ namespace DerivativeVisualizerGUI
     {
         #region Private Fields
 
-        private ScatterSeries? draggablePoint;
-        private LineSeries? tangentLine;
-        private bool isDragging = false;
-
         private string inputText;
         private string errorMessage;
         private string startInterval;
@@ -82,10 +81,13 @@ namespace DerivativeVisualizerGUI
         private bool functionPlotted;
         private bool derivativePlotted;
         private bool showValueOfDerivativeAtAPointText;
+        private bool isDragging = false;
 
         private DerivativeVisualizerModel.Model model;
         private ASTNode? treeToPresent;
         private PlotModel? plotModel;
+        private ScatterSeries? draggablePoint;
+        private LineSeries? tangentLine;
 
         #endregion
 
@@ -557,7 +559,7 @@ namespace DerivativeVisualizerGUI
 
                 ValueOfFunctionAtAPointText = $"f({point}) = {Math.Round(functionValueAtPoint, 2)}";
 
-                ValueOfDerivativeAtAPointText = $"f'({point}) = {derivativeValueAtPoint}";
+                ValueOfDerivativeAtAPointText = $"f'({point}) = {Math.Round(derivativeValueAtPoint,2)}";
 
                 EquationOfTangentText = tangentLine.Title;
 
@@ -569,84 +571,6 @@ namespace DerivativeVisualizerGUI
             }
 
         }
-
-        private void UpdateDraggableAndTangent(double x, double y, double slope)
-        {
-            var (startInterval, endInterval) = CheckInterval();
-            double r = (endInterval - startInterval) / 8;
-
-            // Move draggable point
-            draggablePoint!.Points.Clear();
-            draggablePoint.Points.Add(new ScatterPoint(x, y));
-
-            // Calculate tangent line
-            double x1 = x - r;
-            double x2 = x + r;
-            double y1 = slope * (x1 - x) + y;
-            double y2 = slope * (x2 - x) + y;
-
-            tangentLine!.Points.Clear();
-            tangentLine.Points.Add(new DataPoint(x1, y1));
-            tangentLine.Points.Add(new DataPoint(x2, y2));
-
-            // Set the equation of the tangent line as the title
-            double intercept = y - slope * x;
-            intercept = Math.Round(intercept, 2);
-            tangentLine.Title = $"y = {slope}x + {intercept}";
-        }
-
-        private void OnMouseDown(object? sender, OxyMouseDownEventArgs e)
-        {
-            var pos = e.Position;
-            var x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
-            var y = PlotModel.DefaultYAxis.InverseTransform(pos.Y);
-
-            var point = draggablePoint?.Points.FirstOrDefault();
-            if (point == null) return;
-
-            // Check if user clicked close to the point
-            if (Math.Abs(x - point.X) < 0.5 && Math.Abs(y - point.Y) < 0.5)
-            {
-                isDragging = true;
-                e.Handled = true;
-            }
-        }
-
-        private void OnMouseMove(object? sender, OxyMouseEventArgs e)
-        {
-            if (!isDragging) return;
-
-            var pos = e.Position;
-            double x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
-
-            var (startInterval, endInterval) = CheckInterval();
-            x = Math.Max(startInterval, Math.Min(endInterval, x)); // Clamp x
-
-            double y = FunctionEvaluator.Evaluate(InputFunction!, x, 0.01);
-            double slope = FunctionEvaluator.Evaluate(SimplifiedTree!, x, 0.01);
-
-            x = Math.Round(x, 2);
-            y = Math.Round(y, 2);
-            slope = Math.Round(slope, 2);
-
-            UpdateDraggableAndTangent(x, y, slope);
-
-            DerivativeAtAPointText = x.ToString();
-
-            ValueOfFunctionAtAPointText = $"f({x}) = {y}";
-            ValueOfDerivativeAtAPointText = $"f'({x}) = {slope}";
-            EquationOfTangentText = tangentLine?.Title ?? "";
-            ShowValueOfDerivativeAtAPointText = true;
-
-            PlotModel.InvalidatePlot(false);
-        }
-
-        private void OnMouseUp(object? sender, OxyMouseEventArgs e)
-        {
-            isDragging = false;
-        }
-
-
         #endregion
 
         #region Helper Functions
@@ -739,10 +663,87 @@ namespace DerivativeVisualizerGUI
 
         private (double[] xValues, double step) GenerateXValuesAndStep(double start, double end)
         {
-            int numPoints = 40 * (int)(end - start) + 1; // Ne ilyen legyen
+            int numPoints = Math.Max(40 * (int)(end - start) + 1, 201);
             double step = (end - start) / (numPoints - 1);
             double[] xValues = Enumerable.Range(0, numPoints).Select(i => start + step * i).ToArray();
             return (xValues, step);
+        }
+
+        private void UpdateDraggableAndTangent(double x, double y, double slope)
+        {
+            var (startInterval, endInterval) = CheckInterval();
+            double r = (endInterval - startInterval) / 8;
+
+            // Move draggable point
+            draggablePoint!.Points.Clear();
+            draggablePoint.Points.Add(new ScatterPoint(x, y));
+
+            // Calculate tangent line
+            double x1 = x - r;
+            double x2 = x + r;
+            double y1 = slope * (x1 - x) + y;
+            double y2 = slope * (x2 - x) + y;
+
+            tangentLine!.Points.Clear();
+            tangentLine.Points.Add(new DataPoint(x1, y1));
+            tangentLine.Points.Add(new DataPoint(x2, y2));
+
+            // Set the equation of the tangent line as the title
+            double intercept = y - slope * x;
+            intercept = Math.Round(intercept, 2);
+            slope = Math.Round(slope, 2);
+            tangentLine.Title = $"y = {slope}x + {intercept}";
+        }
+
+        private void OnMouseDown(object? sender, OxyMouseDownEventArgs e)
+        {
+            var pos = e.Position;
+            var x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
+            var y = PlotModel.DefaultYAxis.InverseTransform(pos.Y);
+
+            var point = draggablePoint?.Points.FirstOrDefault();
+            if (point == null) return;
+
+            // Check if user clicked close to the point
+            if (Math.Abs(x - point.X) < 0.5 && Math.Abs(y - point.Y) < 0.5)
+            {
+                isDragging = true;
+                e.Handled = true;
+            }
+        }
+
+        private void OnMouseMove(object? sender, OxyMouseEventArgs e)
+        {
+            if (!isDragging) return;
+
+            var pos = e.Position;
+            double x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
+
+            var (startInterval, endInterval) = CheckInterval();
+            x = Math.Max(startInterval, Math.Min(endInterval, x)); // Clamp x
+
+            double y = FunctionEvaluator.Evaluate(InputFunction!, x, 0.01);
+            double slope = FunctionEvaluator.Evaluate(SimplifiedTree!, x, 0.01);
+
+            x = Math.Round(x, 2);
+            y = Math.Round(y, 2);
+            slope = Math.Round(slope, 2);
+
+            UpdateDraggableAndTangent(x, y, slope);
+
+            DerivativeAtAPointText = x.ToString();
+
+            ValueOfFunctionAtAPointText = $"f({x}) = {y}";
+            ValueOfDerivativeAtAPointText = $"f'({x}) = {slope}";
+            EquationOfTangentText = tangentLine?.Title ?? "";
+            ShowValueOfDerivativeAtAPointText = true;
+
+            PlotModel.InvalidatePlot(false);
+        }
+
+        private void OnMouseUp(object? sender, OxyMouseEventArgs e)
+        {
+            isDragging = false;
         }
 
         private void PlotSeries(ASTNode expression, double[] xValues, double step, OxyColor color, string title)

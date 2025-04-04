@@ -114,7 +114,10 @@ namespace DerivativeVisualizerModel
                 {
                     return (null, "A '^' hatványozás operátornak hiányzik a kitevője.");
                 }
-                if (node.Value == "0" && right.Value == "0")
+                ASTNode simplifiedLeft = ASTNode.Simplify(node);
+                ASTNode simplifiedRight = ASTNode.Simplify(right);
+
+                if (simplifiedLeft.Value == "0" && simplifiedRight.Value == "0")
                 {
                     return (null, "A 0^0 nem értelmezett.");
                 }

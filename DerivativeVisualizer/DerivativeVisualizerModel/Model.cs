@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace DerivativeVisualizerModel
 {
-    // TODO: 0^0 Check parserben.
-    // TODO: a^f deriválási szabály.
     public class Model
     {
         private Tokenizer tokenizer = null!;

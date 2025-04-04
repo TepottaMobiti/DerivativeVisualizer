@@ -15,7 +15,7 @@ namespace DerivativeVisualizerGUI
     public class BinaryTreeView : Canvas
     {
         private const double NodeSize = 60;
-        private const double HorizontalSpacing = 100;
+        private const double HorizontalSpacing = 120;
         private const double VerticalSpacing = 80;
         private const double MinCanvasWidth = 400;
 
@@ -77,7 +77,20 @@ namespace DerivativeVisualizerGUI
             }
             else if (node.Left != null && node.Right != null)
             {
-                pos = (nodePositionsX[node.Left] + nodePositionsX[node.Right]) / 2;
+                double leftPos = nodePositionsX[node.Left];
+                double rightPos = nodePositionsX[node.Right];
+
+                // Ensure minimum spacing between left and right child
+                if (rightPos - leftPos < 1.0)
+                {
+                    double mid = (leftPos + rightPos) / 2;
+                    nodePositionsX[node.Left] = mid - 0.5;
+                    nodePositionsX[node.Right] = mid + 0.5;
+                    leftPos = nodePositionsX[node.Left];
+                    rightPos = nodePositionsX[node.Right];
+                }
+
+                pos = (leftPos + rightPos) / 2;
             }
             else if (node.Left != null)
             {
