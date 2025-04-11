@@ -1,0 +1,13 @@
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\bin\Release\net8.0\DerivativeVisualizerModel.deps.json
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\bin\Release\net8.0\DerivativeVisualizerModel.dll
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\bin\Release\net8.0\DerivativeVisualizerModel.pdb
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\DerivativeVisualizerModel.csproj.AssemblyReference.cache
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\DerivativeVisualizerModel.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\DerivativeVisualizerModel.AssemblyInfoInputs.cache
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\DerivativeVisualizerModel.AssemblyInfo.cs
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\DerivativeVisualizerModel.csproj.CoreCompileInputs.cache
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\DerivativeVisualizerModel.sourcelink.json
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\DerivativeVisualizerModel.dll
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\refint\DerivativeVisualizerModel.dll
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\DerivativeVisualizerModel.pdb
+C:\Users\Bálint\Documents\GitHub\KW9AM8_Szakdolgozat\DerivativeVisualizer\DerivativeVisualizerModel\obj\Release\net8.0\ref\DerivativeVisualizerModel.dll

@@ -1,0 +1,11 @@
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\DerivativeVisualizerGUI.exe
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\DerivativeVisualizerGUI.dll
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\DerivativeVisualizerGUI.deps.json
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\DerivativeVisualizerGUI.runtimeconfig.json
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\DerivativeVisualizerGUI.pdb
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\Fractions.dll
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\OxyPlot.dll
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\OxyPlot.Wpf.dll
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\OxyPlot.Wpf.Shared.dll
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\DerivativeVisualizerModel.dll
+C:\Users\Bálint\Desktop\Szakdoga_Publikalt\DerivativeVisualizerModel.pdb

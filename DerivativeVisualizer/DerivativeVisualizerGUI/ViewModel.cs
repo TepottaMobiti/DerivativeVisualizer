@@ -21,10 +21,6 @@ namespace DerivativeVisualizerGUI
 {
 
     /*
-     Dokumentáció:
-        Ismert hiba: ha egy fv, pl. arcsin-t egy bővebb intervallumon jelenítünk meg, mint az értelmezési tartománya, akkor a rajz az értelmezési tartományhoz fog igazodni, viszont a
-        mozgatható deriválási ponttal "le tudunk menni" a függvényről, mert ennek a pontnak a korlátjai a megadott intervallum. Nem javítom, mert ha el is engedjük a pontot kint, egy új, jó pont
-        beírásával vissza lehet hozni.
 
     Javítási lehetőség: 0-val osztás, 0^0 detektálás javítása kiértékeléssel.
     Javítási lehetőség: Szakadásos függvények rajzolásának javítása.
@@ -32,11 +28,8 @@ namespace DerivativeVisualizerGUI
      */
     /* Priority list
         
-        ÚJ: 0^0-ra is csinálj egy hasonlót, mint a 0-val való osztásra, az nagyon jó.
-        
+        1. TODO: Ha elmozgatod a helyéről egérrel a pontot, és utána jeleníted meg a deriváltfv-t, akkor rossz helyen fog megjelenni a deriváltfv-n a pont. Ott, ahol a kattintáskor megjelent.
         3. TODO: Megnézni a modell hol dobhat exceptiönt és mindenhol lekezelni, MessageBox-okkal.
-        6. TODO: A falevelek néha összeérnek. Lehetne még javítani rajta valamit?
-        8. Csak akkor jelenjen meg a fa, meg minden ami a fához kapcs (f'(x) felirat), ha elfogadtuk az inputot. Tehát ha az inputText változik, akkor a megjelenítő cuccaikat false-ra kell állítani.
 
      */
 
@@ -86,8 +79,11 @@ namespace DerivativeVisualizerGUI
         private DerivativeVisualizerModel.Model model;
         private ASTNode? treeToPresent;
         private PlotModel? plotModel;
-        private ScatterSeries? draggablePoint;
+        private ScatterSeries? draggablePointOnFunction;
+        private ScatterSeries? draggablePointOnDerivative;
         private LineSeries? tangentLine;
+
+        private double point;
 
         #endregion
 
@@ -114,7 +110,8 @@ namespace DerivativeVisualizerGUI
                 OnPropertyChanged(nameof(ShowDerivativeAtAPoint));
                 ShowValueOfDerivativeAtAPointText = false;
                 DerivativeAtAPointText = string.Empty;
-                draggablePoint = null;
+                draggablePointOnFunction = null;
+                draggablePointOnDerivative = null;
                 tangentLine = null;
                 isDragging = false;
             }
@@ -143,7 +140,8 @@ namespace DerivativeVisualizerGUI
                 OnPropertyChanged(nameof(ShowDerivativeAtAPoint));
                 ShowValueOfDerivativeAtAPointText = false;
                 DerivativeAtAPointText = string.Empty;
-                draggablePoint = null;
+                draggablePointOnFunction = null;
+                draggablePointOnDerivative = null;
                 tangentLine = null;
                 isDragging = false;
             }
@@ -162,7 +160,8 @@ namespace DerivativeVisualizerGUI
                 OnPropertyChanged(nameof(ShowDerivativeAtAPoint));
                 ShowValueOfDerivativeAtAPointText = false;
                 DerivativeAtAPointText = string.Empty;
-                draggablePoint = null;
+                draggablePointOnFunction = null;
+                draggablePointOnDerivative = null;
                 tangentLine = null;
                 isDragging = false;
             }
@@ -471,6 +470,14 @@ namespace DerivativeVisualizerGUI
             {
                 PlotSeries(SimplifiedTree!, xValues, step, OxyColors.Green, SimplifiedTree!.ToString());
                 derivativePlotted = true;
+                if (functionPlotted && draggablePointOnFunction is not null)
+                {
+                    draggablePointOnDerivative?.Points.Clear();
+                    double slope = FunctionEvaluator.Evaluate(SimplifiedTree, point, 0.01);
+                    draggablePointOnDerivative?.Points.Add(new ScatterPoint(point, slope));
+                    PlotModel!.InvalidatePlot(true);
+
+                }
             }
             catch (Exception e)
             {
@@ -487,6 +494,8 @@ namespace DerivativeVisualizerGUI
                 ErrorOccurred?.Invoke("A pont megadásához írjon be egy számot.");
                 return;
             }
+
+            this.point = point;
 
             if (DerivativeAtAPointText.Contains("."))
             {
@@ -507,7 +516,7 @@ namespace DerivativeVisualizerGUI
                 return;
             }
 
-            double r = (endInterval - startInterval) / 8; // Az érintő hosszának a fele
+            double r = (endInterval - startInterval) / 8;
 
             double intervalStart = point - r;
             double intervalEnd = point + r;
@@ -530,18 +539,18 @@ namespace DerivativeVisualizerGUI
                     return;
                 }
 
-                if (draggablePoint == null)
+                if (draggablePointOnFunction == null)
                 {
-                    draggablePoint = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = 5 };
-                    PlotModel!.Series.Add(draggablePoint);
+                    draggablePointOnFunction = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = 5 };
+                    PlotModel!.Series.Add(draggablePointOnFunction);
+                    draggablePointOnDerivative = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = 5 };
+                    PlotModel.Series.Add(draggablePointOnDerivative);
 
-                    // Hook up dragging support
                     PlotModel.MouseDown += OnMouseDown;
                     PlotModel.MouseMove += OnMouseMove;
                     PlotModel.MouseUp += OnMouseUp;
                 }
 
-                // Create tangent line if needed
                 if (tangentLine == null)
                 {
                     tangentLine = new LineSeries
@@ -552,7 +561,6 @@ namespace DerivativeVisualizerGUI
                     PlotModel!.Series.Add(tangentLine);
                 }
 
-                // Move point and update tangent
                 UpdateDraggableAndTangent(point, functionValueAtPoint, derivativeValueAtPoint);
 
                 PlotModel!.InvalidatePlot(true);
@@ -589,6 +597,25 @@ namespace DerivativeVisualizerGUI
 
         private (double, double) CheckInterval()
         {
+            if (StartInterval.Contains("."))
+            {
+                var parts = StartInterval.Split('.');
+                if (parts.Length == 2 && parts[1].Length > 2)
+                {
+                    ErrorOccurred?.Invoke("Legfeljebb 2 tizedesjegy megadása engedélyezett.");
+                    return(double.NaN, double.NaN);
+                }
+            }
+            if (EndInterval.Contains("."))
+            {
+                var parts = EndInterval.Split('.');
+                if (parts.Length == 2 && parts[1].Length > 2)
+                {
+                    ErrorOccurred?.Invoke("Legfeljebb 2 tizedesjegy megadása engedélyezett.");
+                    return (double.NaN, double.NaN);
+                }
+            }
+
             bool startParsed = double.TryParse(StartInterval, NumberStyles.Float, CultureInfo.InvariantCulture, out double startInterval);
             bool endParsed = double.TryParse(EndInterval, NumberStyles.Float, CultureInfo.InvariantCulture, out double endInterval);
             if (InputFunction is null)
@@ -675,8 +702,8 @@ namespace DerivativeVisualizerGUI
             double r = (endInterval - startInterval) / 8;
 
             // Move draggable point
-            draggablePoint!.Points.Clear();
-            draggablePoint.Points.Add(new ScatterPoint(x, y));
+            draggablePointOnFunction!.Points.Clear();
+            draggablePointOnFunction.Points.Add(new ScatterPoint(x, y));
 
             // Calculate tangent line
             double x1 = x - r;
@@ -692,6 +719,13 @@ namespace DerivativeVisualizerGUI
             double intercept = y - slope * x;
             intercept = Math.Round(intercept, 2);
             slope = Math.Round(slope, 2);
+
+            if (derivativePlotted)
+            {
+                draggablePointOnDerivative?.Points.Clear();
+                draggablePointOnDerivative?.Points.Add(new ScatterPoint(x,slope));
+            }
+
             tangentLine.Title = $"y = {slope}x + {intercept}";
         }
 
@@ -701,7 +735,7 @@ namespace DerivativeVisualizerGUI
             var x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
             var y = PlotModel.DefaultYAxis.InverseTransform(pos.Y);
 
-            var point = draggablePoint?.Points.FirstOrDefault();
+            var point = draggablePointOnFunction?.Points.FirstOrDefault();
             if (point == null) return;
 
             // Check if user clicked close to the point

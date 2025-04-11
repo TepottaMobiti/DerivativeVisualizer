@@ -152,7 +152,7 @@ namespace DerivativeVisualizerModel
             {
                 return (new Token(name, TokenType.Number),"");
             }
-            return (null,$"Ismeretlen azonosító: {name}. Csak az 'x' változó és az ismert függvények engedélyezettek.");
+            return (null,$"Ismeretlen token: {name}. Csak az 'x' változó és az ismert függvények engedélyezettek.");
         }
     }
 }

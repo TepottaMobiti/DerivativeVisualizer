@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "Ck+Mol7fZH0dCwUeiR0mkQqsTcTXcrnJTC0OQu466muutYlWYj4lds6M1lFWg5FJcNckhj3I+rUdmaWZmme9wQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Bálint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Bálint\\.nuget\\packages\\fractions\\8.3.1\\fractions.8.3.1.nupkg.sha512",
+    "C:\\Users\\Bálint\\.nuget\\packages\\oxyplot.core\\2.2.0\\oxyplot.core.2.2.0.nupkg.sha512",
+    "C:\\Users\\Bálint\\.nuget\\packages\\oxyplot.wpf\\2.2.0\\oxyplot.wpf.2.2.0.nupkg.sha512",
+    "C:\\Users\\Bálint\\.nuget\\packages\\oxyplot.wpf.shared\\2.2.0\\oxyplot.wpf.shared.2.2.0.nupkg.sha512",
+    "C:\\Users\\Bálint\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.3\\microsoft.netcore.app.runtime.win-x64.8.0.3.nupkg.sha512",
+    "C:\\Users\\Bálint\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.3\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.3.nupkg.sha512",
+    "C:\\Users\\Bálint\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.3\\microsoft.aspnetcore.app.runtime.win-x64.8.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

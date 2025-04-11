@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         Title="Deriválási szabályok alkalmazása és szemléltetése"
         Height="700" Width="900"
-        MinHeight="700" MinWidth="900">
+        MinHeight="700" MinWidth="900"
+        >
     <Window.DataContext>
         <local:ViewModel />
     </Window.DataContext>
@@ -109,7 +110,7 @@
                                TextWrapping="Wrap"
                                TextTrimming="None"/>
 
-                    <Button Content="Simplify"
+                    <Button Content="Egyszerűsítés"
                             Margin="5,10,0,0"
                             Visibility="{Binding SimplifyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Command="{Binding SimplifyCommand}"/>
@@ -150,15 +151,15 @@
                 </Grid.RowDefinitions>
 
                 <!-- Interval Row -->
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10" Visibility="{Binding TreeToPresent, Converter={StaticResource NullToVisibilityConverter}}">
 
                     <TextBlock Text="Intervallum: [" VerticalAlignment="Center" FontSize="20"/>
 
-                    <TextBox Width="50" Text="{Binding StartInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" MaxLength="5" Height="30"/>
+                    <TextBox Width="65" Text="{Binding StartInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" MaxLength="6" Height="30"/>
 
                     <TextBlock Text=" , " VerticalAlignment="Center" FontSize="20"/>
 
-                    <TextBox Width="50" Text="{Binding EndInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" MaxLength="5" Height="30"/>
+                    <TextBox Width="65" Text="{Binding EndInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" MaxLength="6" Height="30"/>
 
                     <TextBlock Text="]" VerticalAlignment="Center" FontSize="20"/>
 
@@ -167,13 +168,14 @@
                 <!-- Plot Buttons Row -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
 
-                    <Button Content="Függvény rajzolás"
+                    <Button Content="Függvényrajzolás"
                             Command="{Binding PlotFunctionCommand}"
                             Background="LightBlue"
                             Margin="0,0,10,0"
-                            FontSize="16"/>
+                            FontSize="16"
+                            Visibility="{Binding TreeToPresent, Converter={StaticResource NullToVisibilityConverter}}"/>
 
-                    <Button Content="Deriváltfüggvény rajzolás"
+                    <Button Content="Deriváltfüggvény-rajzolás"
                             Command="{Binding PlotDerivativeCommand}"
                             Background="LightGreen"
                             Visibility="{Binding ShowPlotDerivativeButton, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -208,10 +210,12 @@
                            Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
                            TextWrapping="Wrap"
                            TextTrimming="None"/>
+                
                 <TextBlock Grid.Row="5" Text="{Binding ValueOfDerivativeAtAPointText}" FontSize="20" Height="30"
                            Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
                            TextWrapping="Wrap"
                            TextTrimming="None"/>
+                
                 <TextBlock Grid.Row="6" Text="{Binding EquationOfTangentText}" FontSize="20" Height="30"
                            Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
                            TextWrapping="Wrap"

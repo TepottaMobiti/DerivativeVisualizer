@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DerivativeVisualizer", "DerivativeVisualizer\DerivativeVisualizer.csproj", "{F36CF27F-4AD4-43B7-906B-87F8722CE5B0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DerivativeVisualizerModel", "DerivativeVisualizerModel\DerivativeVisualizerModel.csproj", "{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DerivateVisualizerModelTest", "DerivateVisualizerModelTest\DerivateVisualizerModelTest.csproj", "{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DerivativeVisualizerGUI", "DerivativeVisualizerGUI\DerivativeVisualizerGUI.csproj", "{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DerivativeVisualizerGUI", "DerivativeVisualizerGUI\DerivativeVisualizerGUI.csproj", "{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F36CF27F-4AD4-43B7-906B-87F8722CE5B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F36CF27F-4AD4-43B7-906B-87F8722CE5B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F36CF27F-4AD4-43B7-906B-87F8722CE5B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F36CF27F-4AD4-43B7-906B-87F8722CE5B0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}.Release|Any CPU.ActiveCfg = Release|Any CPU

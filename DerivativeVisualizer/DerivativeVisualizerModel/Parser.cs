@@ -137,7 +137,7 @@ namespace DerivativeVisualizerModel
                 Consume();
                 if (!Match(TokenType.Number))
                 {
-                    return (null, "A negatív előjelet '-' számnak kell követnie.");
+                    return (null, "A negatív előjelet ('-') számnak kell követnie.");
                 }
                 (t, msg) = Consume();
                 if (t is null)
@@ -182,7 +182,7 @@ namespace DerivativeVisualizerModel
                 string functionName = t.Value;
 
                 if (!Match(TokenType.LeftParen))
-                    return (null, $"A '{functionName}' függvény után nyitó zárójelnek kell következnie: '('.");
+                    return (null, $"A(z) '{functionName}' függvény után nyitó zárójelnek kell következnie: '('.");
 
                 Consume(TokenType.LeftParen);
 
@@ -195,12 +195,12 @@ namespace DerivativeVisualizerModel
                 {
                     if (Match(TokenType.Comma))
                     {
-                        return (null, "A(z) 'log' függvényből hiányzik az alap.");
+                        return (null, "A logaritmus függvényből hiányzik az alap.");
                     }
 
                     if (!Match(TokenType.Number))
                     {
-                        return (null, $"Logaritmus alapjának pozitív számnak kell lennie.");
+                        return (null, $"A logaritmus alapjának pozitív számnak kell lennie.");
                     }
 
                     (t, msg) = Consume();
@@ -212,12 +212,12 @@ namespace DerivativeVisualizerModel
 
                     if (baseNode.Value == "1")
                     {
-                        return (null, "Logaritmus alapja nem lehet 1.");
+                        return (null, "A logaritmus alapja nem lehet 1.");
                     }
 
                     if (baseNode.Value == "0")
                     {
-                        return (null, "Logaritmus alapja nem lehet 0.");
+                        return (null, "A logaritmus alapja nem lehet 0.");
                     }
 
                     var (comma, commaMsg) = Consume(TokenType.Comma);
@@ -228,7 +228,7 @@ namespace DerivativeVisualizerModel
 
                     if (Match(TokenType.RightParen))
                     {
-                        return (null, "A(z) 'log' függvényből hiányzik az argumentum a vessző után.");
+                        return (null, "A logaritmus függvényből hiányzik az argumentum a vessző után.");
                     }
 
                     ASTNode? argumentNode;
@@ -241,12 +241,12 @@ namespace DerivativeVisualizerModel
                     (rightParen, msg) = Consume(TokenType.RightParen);
                     if (rightParen is null)
                     {
-                        return (null, $"A {functionName} függvény argumentuma után bezáró zárójelnek kell következnie: ')'.");
+                        return (null, $"A {functionName} függvény argumentuma után berekesztő zárójelnek kell következnie: ')'.");
                     }
 
                     if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                     {
-                        return (null, $"A {functionName} függvény bezáró zárójele után operátornak kell következnie.");
+                        return (null, $"A {functionName} függvény berekesztő zárójele után operátornak kell következnie.");
                     }
 
                     return (new ASTNode(functionName, baseNode, argumentNode), "");
@@ -262,12 +262,12 @@ namespace DerivativeVisualizerModel
                 (rightParen, msg) = Consume(TokenType.RightParen);
                 if (rightParen is null)
                 {
-                    return (null, $"A {functionName} függvény argumentuma után bezáró zárójelnek kell következnie: ')'.");
+                    return (null, $"A {functionName} függvény argumentuma után berekesztő zárójelnek kell következnie: ')'.");
                 }
 
                 if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, $"A {functionName} függvény bezáró zárójele után operátornak kell következnie.");
+                    return (null, $"A {functionName} függvény berekesztő zárójele után operátornak kell következnie.");
                 }
 
                 ASTNode node = new ASTNode(functionName, argument);
@@ -287,12 +287,12 @@ namespace DerivativeVisualizerModel
                 (Token? rightParen, msg) = Consume(TokenType.RightParen);
                 if (rightParen is null)
                 {
-                    return (null, "A kifejezésből hiányzik egy bezáró zárójel: ')'.");
+                    return (null, "A kifejezésből hiányzik egy berekesztő zárójel: ')'.");
                 }
 
                 if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, "A bezáró zárójel után operátornak kell következnie.");
+                    return (null, "A berekesztő zárójel után operátornak kell következnie.");
                 }
 
                 return (expression, "");
