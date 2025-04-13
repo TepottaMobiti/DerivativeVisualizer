@@ -18,11 +18,20 @@ namespace DerivativeVisualizerModel
             currentIndex = 0;
         }
 
+
+        /// <summary>
+        /// Begins the parsing process by calling ParseTerm() to interpret the input as an expression.
+        /// </summary>
+        /// <returns></returns>
         public (ASTNode?, string) ParseExpression()
         {
             return ParseTerm();
         }
 
+        /// <summary>
+        /// Parses addition and subtraction expressions by combining factors using + and - operators.
+        /// </summary>
+        /// <returns></returns>
         private (ASTNode?, string) ParseTerm()
         {
             ASTNode? node;
@@ -52,6 +61,10 @@ namespace DerivativeVisualizerModel
             return (node,"");
         }
 
+        /// <summary>
+        /// Parses multiplication and division expressions by combining exponents using * and /, while checking for division by zero.
+        /// </summary>
+        /// <returns></returns>
         private (ASTNode?,string) ParseFactor()
         {
             ASTNode? node;
@@ -90,6 +103,10 @@ namespace DerivativeVisualizerModel
             return (node,"");
         }
 
+        /// <summary>
+        /// Parses exponentiation expressions (^), handling right-associative power operations and edge cases like 0^0.
+        /// </summary>
+        /// <returns></returns>
         private (ASTNode?,string) ParseExponent()
         {
             ASTNode? node;
@@ -126,7 +143,10 @@ namespace DerivativeVisualizerModel
             return (node,"");
         }
 
-
+        /// <summary>
+        /// Parses primary elements of an expression, including numbers, variables, functions (like log, sin, etc.), parentheses, and unary minus, while performing thorough syntax validation.
+        /// </summary>
+        /// <returns></returns>
         private (ASTNode?, string) ParsePrimary()
         {
             Token? t;
@@ -301,31 +321,50 @@ namespace DerivativeVisualizerModel
             return (null, "Nem várt token a kifejezésben.");
         }
 
-
-
-
+        /// <summary>
+        /// Checks whether the current token matches the expected type without consuming it.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private bool Match(TokenType type)
         {
             return !IsAtEnd() && tokens[currentIndex].Type == type;
         }
 
+        /// <summary>
+        ///  Consumes and returns the current token if available, or returns an error if the input has ended unexpectedly.
+        /// </summary>
+        /// <returns></returns>
         private (Token?,string) Consume()
         {
             if (IsAtEnd()) return (null,"A bemenet nem várt módon ért véget.");
             return (tokens[currentIndex++],"");
         }
 
+        /// <summary>
+        /// Consumes and returns the current token only if it matches the expected type, or returns an error if it doesn't.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private (Token?,string) Consume(TokenType type)
         {
             if (!Match(type)) return (null,$"Elvárt token típusa: {type}.");
             return Consume();
         }
 
+        /// <summary>
+        /// Retrieves the current token from the token list without consuming it.
+        /// </summary>
+        /// <returns></returns>
         private Token CurrentToken()
         {
             return tokens[currentIndex];
         }
 
+        /// <summary>
+        /// Returns true if the parser has reached the end of the token list.
+        /// </summary>
+        /// <returns></returns>
         private bool IsAtEnd()
         {
             return currentIndex >= tokens.Count;

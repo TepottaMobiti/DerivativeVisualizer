@@ -20,6 +20,14 @@ namespace DerivativeVisualizerModel
 
     public static class FunctionEvaluator
     {
+        /// <summary>
+        /// Recursively evaluates the abstract syntax tree at a specific x value, handling arithmetic operations, mathematical functions, and special cases like discontinuities and division by zero.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="xValue"></param>
+        /// <param name="stepSize"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static double Evaluate(ASTNode node, double xValue, double stepSize)
         {
             if (node == null)
@@ -98,6 +106,12 @@ namespace DerivativeVisualizerModel
             throw new Exception($"Nem feldolgozható érték: {node.Value}");
         }
 
+        /// <summary>
+        /// Safely computes the power function, especially for negative bases with fractional exponents, returning NaN if the result is not a real number or the exponent is too complex to process.
+        /// </summary>
+        /// <param name="baseValue"></param>
+        /// <param name="exponent"></param>
+        /// <returns></returns>
         public static double SafePower(double baseValue, double exponent)
         {
             double result = Math.Pow(baseValue, exponent);

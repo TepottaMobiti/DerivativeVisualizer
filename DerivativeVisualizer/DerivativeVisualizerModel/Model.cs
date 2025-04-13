@@ -48,6 +48,11 @@ namespace DerivativeVisualizerModel
             DifferentiationFinished?.Invoke(tree);
         }
 
+        /// <summary>
+        /// Tokenizes and parses the user’s input string into an abstract syntax tree, initializes the differentiator if parsing is successful,
+        /// and triggers corresponding events based on success or failure.
+        /// </summary>
+        /// <param name="input"></param>
         public void ProcessInput(string input)
         {
             Input = input;
@@ -74,6 +79,11 @@ namespace DerivativeVisualizerModel
             }
         }
 
+        /// <summary>
+        /// Performs one differentiation step at the specified locator in the syntax tree, triggers an update event, and if no further differentiation is needed,
+        /// signals that differentiation is finished with a simplified tree.
+        /// </summary>
+        /// <param name="locator"></param>
         public void DifferentiateByLocator(int locator)
         {
             ASTNode differentiatedTree = differentiator.Differentiate(locator);

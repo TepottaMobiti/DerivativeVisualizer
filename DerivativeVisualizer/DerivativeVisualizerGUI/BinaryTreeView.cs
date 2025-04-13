@@ -124,15 +124,15 @@ namespace DerivativeVisualizerGUI
             {
                 Width = NodeSize,
                 Height = NodeSize,
-                Background = node.NeedsDifferentiation ? Brushes.LightSkyBlue : Brushes.LightGray,
+                Background = node.ToBeDifferentiated ? Brushes.LightSkyBlue : Brushes.LightGray,
                 Content = node.Value.ToString(),
                 Foreground = Brushes.Black,
-                IsEnabled = node.NeedsDifferentiation,
+                IsEnabled = node.ToBeDifferentiated,
                 FontSize = 16,
                 FontWeight = FontWeights.Bold
             };
 
-            if (node.NeedsDifferentiation)
+            if (node.ToBeDifferentiated)
             {
                 ToolTip tooltip = new ToolTip { Content = node.DiffRule };
                 ToolTipService.SetShowOnDisabled(nodeButton, true);

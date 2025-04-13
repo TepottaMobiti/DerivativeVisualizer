@@ -359,6 +359,11 @@ namespace DerivativeVisualizerGUI
 
         #region Event Handlers
 
+        /// <summary>
+        /// Updates InputValid and displays error messages based on whether the input expression was successfully parsed.
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <param name="msg"></param>
         private void Model_OnInputProcessed(ASTNode? tree, string msg)
         {
             InputValid = inputText.Length == 0 ? null : tree is not null;
@@ -374,6 +379,10 @@ namespace DerivativeVisualizerGUI
             }
         }
 
+        /// <summary>
+        /// Updates the UI with the new derivative tree and makes the derivative text visible.
+        /// </summary>
+        /// <param name="tree"></param>
         private void Model_OnTreeUpdated(ASTNode? tree)
         {
             if (tree is null)
@@ -385,6 +394,10 @@ namespace DerivativeVisualizerGUI
             ShowDerivativeText = true;
         }
 
+        /// <summary>
+        /// Stores the initial parsed function, updates the tree to present, and shows its derivative.
+        /// </summary>
+        /// <param name="tree"></param>
         private void Model_OnTreeReady(ASTNode? tree)
         {
             if (tree is null)
@@ -397,6 +410,10 @@ namespace DerivativeVisualizerGUI
             ShowDerivativeText = true;
         }
 
+        /// <summary>
+        /// Stores the final simplified derivative and makes the simplify button visible.
+        /// </summary>
+        /// <param name="tree"></param>
         private void Model_OnDifferentiationFinished(ASTNode? tree)
         {
             SimplifyButtonVisible = true;
@@ -407,6 +424,10 @@ namespace DerivativeVisualizerGUI
 
         #region Delegate Functions
 
+        /// <summary>
+        /// Adds the selected function syntax (e.g. sin(), log(,)) to the input field, respecting length constraints.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void AddFunctionText(object? parameter)
         {
             if (parameter is string buttonText)
@@ -422,6 +443,10 @@ namespace DerivativeVisualizerGUI
             }
         }
 
+        /// <summary>
+        /// Sets the displayed tree to the simplified version, updates the derivative text, and enables plotting the derivative.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void SimplifyTree(object? parameter)
         {
             TreeToPresent = SimplifiedTree;
@@ -432,6 +457,10 @@ namespace DerivativeVisualizerGUI
             OnPropertyChanged(nameof(ShowDerivativeAtAPoint));
         }
 
+        /// <summary>
+        /// Plots the original function over the given interval and enables derivative interaction if successful.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void PlotFunction(object? parameter)
         {
             if (functionPlotted)
@@ -455,6 +484,10 @@ namespace DerivativeVisualizerGUI
             }
         }
 
+        /// <summary>
+        /// Plots the simplified derivative function and, if possible, adds a draggable point showing its slope.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void PlotDerivative(object? parameter)
         {
             if (derivativePlotted)
@@ -485,6 +518,10 @@ namespace DerivativeVisualizerGUI
             }
         }
 
+        /// <summary>
+        /// Calculates and draws the tangent line to the original function at a user-specified point, with validation and slope display.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void PlotTangent(object? parameter)
         {
             bool pointParsed = double.TryParse(DerivativeAtAPointText, NumberStyles.Float, CultureInfo.InvariantCulture, out double point);
@@ -583,6 +620,10 @@ namespace DerivativeVisualizerGUI
 
         #region Helper Functions
 
+        /// <summary>
+        /// Requests a differentiation step for the clicked node in the syntax tree.
+        /// </summary>
+        /// <param name="node"></param>
         private void OnNodeClick(ASTNode node)
         {
             try
@@ -595,6 +636,10 @@ namespace DerivativeVisualizerGUI
             }
         }
 
+        /// <summary>
+        /// Validates and parses the user-specified interval for plotting, returning (NaN, NaN) if invalid.
+        /// </summary>
+        /// <returns></returns>
         private (double, double) CheckInterval()
         {
             if (StartInterval.Contains("."))
@@ -642,6 +687,10 @@ namespace DerivativeVisualizerGUI
             return (startInterval, endInterval);
         }
 
+        /// <summary>
+        /// Initializes and returns the PlotModel with configured axes if it hasn’t been created yet.
+        /// </summary>
+        /// <returns></returns>
         private PlotModel EnsurePlotModel()
         {
             if (PlotModel == null)
@@ -678,6 +727,10 @@ namespace DerivativeVisualizerGUI
             return PlotModel;
         }
 
+        /// <summary>
+        /// Recursively assigns click commands to syntax tree nodes for triggering differentiation.
+        /// </summary>
+        /// <param name="node"></param>
         private void InitializeCommands(ASTNode? node)
         {
             if (node == null) return;
@@ -688,6 +741,12 @@ namespace DerivativeVisualizerGUI
             InitializeCommands(node.Right);
         }
 
+        /// <summary>
+        /// Generates evenly spaced X values and step size for plotting within a given interval.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         private (double[] xValues, double step) GenerateXValuesAndStep(double start, double end)
         {
             int numPoints = Math.Max(40 * (int)(end - start) + 1, 201);
@@ -696,6 +755,12 @@ namespace DerivativeVisualizerGUI
             return (xValues, step);
         }
 
+        /// <summary>
+        /// Updates the draggable point and tangent line on the plot at the given point with its function value and slope.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="slope"></param>
         private void UpdateDraggableAndTangent(double x, double y, double slope)
         {
             var (startInterval, endInterval) = CheckInterval();
@@ -729,6 +794,11 @@ namespace DerivativeVisualizerGUI
             tangentLine.Title = $"y = {slope}x + {intercept}";
         }
 
+        /// <summary>
+        /// Starts dragging if the mouse is clicked near the draggable point.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMouseDown(object? sender, OxyMouseDownEventArgs e)
         {
             var pos = e.Position;
@@ -746,6 +816,11 @@ namespace DerivativeVisualizerGUI
             }
         }
 
+        /// <summary>
+        /// Updates the draggable point and tangent line position as the mouse moves during dragging.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMouseMove(object? sender, OxyMouseEventArgs e)
         {
             if (!isDragging) return;
@@ -775,11 +850,24 @@ namespace DerivativeVisualizerGUI
             PlotModel.InvalidatePlot(false);
         }
 
+        /// <summary>
+        /// Stops the dragging interaction when the mouse button is released.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMouseUp(object? sender, OxyMouseEventArgs e)
         {
             isDragging = false;
         }
 
+        /// <summary>
+        /// Plots a mathematical expression by evaluating it over the given X values and adds the series to the plot model.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="xValues"></param>
+        /// <param name="step"></param>
+        /// <param name="color"></param>
+        /// <param name="title"></param>
         private void PlotSeries(ASTNode expression, double[] xValues, double step, OxyColor color, string title)
         {
             var model = EnsurePlotModel();

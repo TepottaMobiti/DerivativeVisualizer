@@ -4,15 +4,7 @@ using System.Xml.Linq;
 
 namespace DerivativeVisualizerModel
 {
-    /*
-     Tokeneket csinál az inputból.
-     A whitespaceket törli.
-     Elfogad az inputban: whitespaceket, x-et mint változó, függvényeket, +, -, *, /, ^, (, ), számokat, e-t mint szimbólum.
-     Függvények: "log", "ln", "sin", "cos", "tg", "ctg", "arcsin", "arccos", "arctg", "arcctg", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth"
-     Szekánsékat kihagyjuk, nem szeretnék abszolútértékkel szórakozni, azok lesznek, amik voltak az egyetemen.
-     Kérdés: Legyen pi? Most még nem lesz, aztán ha kell, majd lesz.
-     */
-
+    // TODO: Ennél jobban dokumentáld, pontosan definiáld mikor jó az input, a number, a function, stb.
     public class Tokenizer
     {
         private string input;
@@ -24,6 +16,15 @@ namespace DerivativeVisualizerModel
             currentIndex = 0;
         }
 
+
+        /// <summary>
+        /// Scans the input string character by character and returns a list of tokens representing numbers,
+        /// variables, functions, operators, parentheses, or commas, or an error message if an unexpected character is found.
+        /// </summary>
+        /// <returns>
+        /// Returns the list of tokens and an empty string if the input is correct.
+        /// Returns null and an error message if the input is incorrect.
+        /// </returns>
         public (List<Token>?,string) Tokenize()
         {
             Token? t;
@@ -49,7 +50,7 @@ namespace DerivativeVisualizerModel
                 }
                 if (char.IsLetter(c))
                 {
-                    (t, msg) = TokenizeFunctionOrVariable();
+                    (t, msg) = TokenizeFunctionOrVariableOrE();
                     if (t is null)
                     {
                         return (null, msg);
@@ -85,6 +86,13 @@ namespace DerivativeVisualizerModel
             return (tokens,"");
         }
 
+        /// <summary>
+        /// Extracts a numeric token from the input, validating that it contains at most one decimal point and no more than two digits after it, and that its absolute value does not exceed 99.99.
+        /// </summary>
+        /// <returns>
+        /// Returns the number token and an empty string if the input is correct.
+        /// Returns null and an error message if the input is incorrect.
+        /// </returns>
         private (Token?, string) TokenizeNumber()
         {
             string number = string.Empty;
@@ -130,7 +138,14 @@ namespace DerivativeVisualizerModel
             return (new Token(number, TokenType.Number), "");
         }
 
-        private (Token?,string) TokenizeFunctionOrVariable()
+        /// <summary>
+        /// Extracts a token representing a known mathematical function, the variable x, or the constant e, and returns an error message if the name is not recognized.
+        /// </summary>
+        /// <returns>
+        /// Returns the variable or the function and an empty string if the input is correct.
+        /// Returns null and an error message if the input is incorrect.
+        /// </returns>
+        private (Token?,string) TokenizeFunctionOrVariableOrE()
         {
             string name = string.Empty;
             while(currentIndex < input.Length && char.IsLetter(input[currentIndex]))
@@ -142,16 +157,17 @@ namespace DerivativeVisualizerModel
             string[] functions = {"log", "ln", "sin", "cos", "tg", "ctg", "arcsin", "arccos", "arctg", "arcctg", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth"};
             if (Array.Exists(functions, func => func == name))
             {
-                return (new Token(name, TokenType.Function),"");
+                return (new Token(name, TokenType.Function), "");
             }
             if (name == "x")
             {
-                return (new Token(name, TokenType.Variable),"");
+                return (new Token(name, TokenType.Variable), "");
             }
             if (name == "e")
             {
-                return (new Token(name, TokenType.Number),"");
+                return (new Token(name, TokenType.Number), "");
             }
+
             return (null,$"Ismeretlen token: {name}. Csak az 'x' változó és az ismert függvények engedélyezettek.");
         }
     }

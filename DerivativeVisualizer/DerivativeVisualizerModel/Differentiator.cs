@@ -25,6 +25,11 @@ namespace DerivativeVisualizerModel
             get => differentiationSteps.Last();
         }
 
+        /// <summary>
+        /// Finds the node marked for differentiation by its locator, differentiates it once, replaces the original in the expression tree, and adds the new tree to the list of differentiation steps.
+        /// </summary>
+        /// <param name="locator"></param>
+        /// <returns></returns>
         public ASTNode Differentiate(int locator)
         {
             ASTNode lastTree = differentiationSteps.Last().DeepCopy();
@@ -39,16 +44,28 @@ namespace DerivativeVisualizerModel
             return newTree;
         }
 
-        public ASTNode FindDifferentiationNode(ASTNode node, int locator)
+        /// <summary>
+        /// Recursively searches the expression tree to find the node that needs differentiation based on a unique locator.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="locator"></param>
+        /// <returns></returns>
+        private ASTNode FindDifferentiationNode(ASTNode node, int locator)
         {
             if (node == null) return null!;
-            if (node.NeedsDifferentiation && node.Locator == locator) return node;
+            if (node.ToBeDifferentiated && node.Locator == locator) return node;
 
             ASTNode found = FindDifferentiationNode(node.Left, locator);
             return found ?? FindDifferentiationNode(node.Right, locator);
         }
 
-        public ASTNode DifferentiateOnce(ASTNode? node)
+        /// <summary>
+        /// Applies a single symbolic differentiation rule to the given node based on standard calculus rules for various mathematical operations and functions.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private ASTNode DifferentiateOnce(ASTNode? node)
         {
             if (node is null)
             {
@@ -84,7 +101,7 @@ namespace DerivativeVisualizerModel
                 case "^":
                     if (left.Value == "e" && right.Value == "x") // (e^x)' = e^x
                     {
-                        return UnFlagNode(node.DeepCopy());
+                        return UnflagNode(node.DeepCopy());
                     }
                     else if (left.Value == "e") // (e^f)' = e^f*f'
                     {
@@ -99,7 +116,7 @@ namespace DerivativeVisualizerModel
                         if (a > 0)
                         {
                             return new ASTNode("*",
-                                       UnFlagNode(node.DeepCopy()),
+                                       UnflagNode(node.DeepCopy()),
                                        new ASTNode("ln", new ASTNode(left.Value)));
                         }
                         else
@@ -113,7 +130,7 @@ namespace DerivativeVisualizerModel
                         {
                             return new ASTNode("*",
                                        new ASTNode("*",
-                                           UnFlagNode(node.DeepCopy()),
+                                           UnflagNode(node.DeepCopy()),
                                            new ASTNode("ln", new ASTNode(left.Value))),
                                        FlagNode(right));
                         }
@@ -161,7 +178,7 @@ namespace DerivativeVisualizerModel
                     else // (f^g)' = (f^g)*(f'*g/f+g'*ln(f)) (f>0, not checked)
                     {
                         return new ASTNode("*",
-                                   UnFlagNode(node.DeepCopy()),
+                                   UnflagNode(node.DeepCopy()),
                                    new ASTNode("+",
                                        new ASTNode("*",
                                            FlagNode(left.DeepCopy()),
@@ -509,24 +526,41 @@ namespace DerivativeVisualizerModel
             }
         }
 
-        private ASTNode UnFlagNode(ASTNode node)
+        /// <summary>
+        /// Sets the NeedsDifferentiation flag of the node to false.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private ASTNode UnflagNode(ASTNode node)
         {
             if (node != null)
             {
-                node.NeedsDifferentiation = false;
+                node.ToBeDifferentiated = false;
             }
             return node!;
         }
 
+        /// <summary>
+        /// Sets the NeedsDifferentiation flag of the node to true.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private ASTNode FlagNode(ASTNode node)
         {
             if (node != null)
             {
-                node.NeedsDifferentiation = true;
+                node.ToBeDifferentiated = true;
             }
             return node!;
         }
 
+        /// <summary>
+        /// Recursively traverses the tree and replaces the target node with a new node while preserving the overall structure.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="target"></param>
+        /// <param name="replacement"></param>
+        /// <returns></returns>
         private ASTNode ReplaceNode(ASTNode root, ASTNode target, ASTNode replacement)
         {
             if (root == null || target == null || replacement == null) return root!;

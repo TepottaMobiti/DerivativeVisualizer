@@ -6,28 +6,32 @@ using System.Xml.Linq;
 namespace DerivativeVisualizerModel
 {
     // TODO: Mivel ide is került azóta néhány függvény, amik elég fontosak, így ezt a classt is tesztelni kell.
-    // TODO: Az egész alkalmazásban ne legyen sehol erőlködés, ! tilos, mindenhol legyen nullable ahol kell és legyenek null checkek. Clean code legyen.
-    // De amúgy lehet erőlködés, ahol indokolt.
-    // Az alkalmazás nyelve magyar legyen, de amúgy maga a kód angol.
     public class ASTNode
     {
         private static int counter = 0;
         public string Value { get; }
         public ASTNode Left { get; set; }
         public ASTNode Right { get; set; }
+
+        /// <summary>
+        /// Used to locate nodes for differentiation.
+        /// </summary>
         public int Locator { get; private set; }
 
-        public bool NeedsDifferentiation { get; set; }
+        public bool ToBeDifferentiated { get; set; }
 
+        /// <summary>
+        /// Represents the differentiation rule of a node in human-readable format.
+        /// </summary>
         public string DiffRule
         {
             get
             {
-                if (!NeedsDifferentiation)
+                if (!ToBeDifferentiated)
                 {
                     return "";
                 }
-                if (double.TryParse(Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Value == "e") //a' = 0 (a is real)
+                if (double.TryParse(Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Value == "e")
                 {
                     return "a' = 0 (a valós szám)";
                 }
@@ -217,6 +221,10 @@ namespace DerivativeVisualizerModel
             counter++;
         }
 
+        /// <summary>
+        /// Deep copies a tree keeping the NeedsDifferentiation and Locator values.
+        /// </summary>
+        /// <returns></returns>
         public ASTNode DeepCopy()
         {
             ASTNode? leftCopy = Left?.DeepCopy();
@@ -224,23 +232,33 @@ namespace DerivativeVisualizerModel
 
             return new ASTNode(Value, leftCopy!, rightCopy!)
             {
-                NeedsDifferentiation = NeedsDifferentiation,
+                ToBeDifferentiated = ToBeDifferentiated,
                 Locator = Locator
             };
         }
 
+        /// <summary>
+        /// Determines if a tree contains any node with true NeedsDifferentiation value.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public static bool HasDifferentiationNode(ASTNode node)
         {
             if (node == null) return false;
-            if (node.NeedsDifferentiation) return true;
+            if (node.ToBeDifferentiated) return true;
 
             return HasDifferentiationNode(node.Left) || HasDifferentiationNode(node.Right);
         }
 
+        /// <summary>
+        /// Adds "( )'" around a subtree's ToString() if it needs differentiation.
+        /// AI Generated
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
 
-            if (NeedsDifferentiation)
+            if (ToBeDifferentiated)
             {
                 return $"({SubtreeToString()})'";
             }
@@ -248,6 +266,11 @@ namespace DerivativeVisualizerModel
             return SubtreeToString();
         }
 
+        /// <summary>
+        /// Converts the current subtree of the expression into a human-readable string representation, adding parentheses and formatting based on the type of operation.
+        /// AI Generated
+        /// </summary>
+        /// <returns></returns>
         private string SubtreeToString()
         {
             if (Left == null && Right == null)
@@ -271,11 +294,18 @@ namespace DerivativeVisualizerModel
             return $"{leftStr} {Value} {rightStr}";
         }
 
+        /// <summary>
+        /// Returns the string representation of a node, wrapping it in parentheses if needed based on operator precedence.
+        /// AI Generated
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="parentOp"></param>
+        /// <returns></returns>
         private string? AddParenthesesIfNeeded(ASTNode? node, string parentOp)
         {
             if (node == null) return null;
 
-            string nodeString = node.ToString(); // This will already apply differentiation if needed
+            string nodeString = node.ToString();
 
             if (node.Left == null && node.Right == null)
             {
@@ -286,13 +316,19 @@ namespace DerivativeVisualizerModel
             return needParens ? $"({nodeString})" : nodeString;
         }
 
+        /// <summary>
+        /// Determines whether parentheses are required around a child node based on the precedence of the child's and parent’s operators.
+        /// AI Generated
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="parentOp"></param>
+        /// <returns></returns>
         private bool NeedsParentheses(ASTNode node, string parentOp)
         {
             string[] operators = { "+", "-", "*", "/", "^" };
             int parentPrecedence = Array.IndexOf(operators, parentOp);
             int childPrecedence = Array.IndexOf(operators, node.Value);
 
-            // Special handling for exponentiation right-associativity
             if (parentOp == "^" && node.Value == "^")
             {
                 return true;
@@ -315,6 +351,11 @@ namespace DerivativeVisualizerModel
             return AreTreesEqual(a.Left, b.Left) && AreTreesEqual(a.Right, b.Right);
         }
 
+        /// <summary>
+        /// Simplifies a tree until it can't be simplified anymore.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public static ASTNode Simplify(ASTNode? node)
         {
             if (node is null) return null!;
@@ -331,6 +372,11 @@ namespace DerivativeVisualizerModel
             return current;
         }
 
+        /// <summary>
+        /// Simplifies a tree top-down once based on some basic mathematical rules.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public static ASTNode SimplifyOnce(ASTNode? node)
         {
             if (node is null) return null!;
@@ -351,8 +397,8 @@ namespace DerivativeVisualizerModel
             if (node.Value == "*" && node.Right.Value == "1") return SimplifyOnce(node.Left); // x * 1 = x
 
             // Division
-            if (node.Value == "/" && AreTreesEqual(node.Left, node.Right)) return new ASTNode("1"); // x / x = 1 0/0-ból 1-et csinál, az nem feltétlenül jó.
-            if (node.Value == "/" && node.Left.Value == "0") return new ASTNode("0"); // 0 / x = 0
+            if (node.Value == "/" && AreTreesEqual(node.Left, node.Right) && node.Right.Value != "0") return new ASTNode("1"); // x / x = 1 (x not 0)
+            if (node.Value == "/" && node.Left.Value == "0" && node.Right.Value != "0") return new ASTNode("0"); // 0 / x = 0
             if (node.Value == "/" && node.Right.Value == "1") return SimplifyOnce(node.Left); // x / 1 = x
 
             //Exponentiation
@@ -361,14 +407,22 @@ namespace DerivativeVisualizerModel
             if (node.Value == "^" && node.Right.Value == "0" && node.Left.Value != "0") return new ASTNode("1"); // x ^ 0 = 1 (x not 0)
             if (node.Value == "^" && node.Left.Value == "0" && node.Right.Value != "0") return new ASTNode("0"); // 0 ^ x = 0 (x not 0)   
 
-            return new ASTNode(node.Value, SimplifyOnce(node.Left), SimplifyOnce(node.Right)) { NeedsDifferentiation = node.NeedsDifferentiation};
+            return new ASTNode(node.Value, SimplifyOnce(node.Left), SimplifyOnce(node.Right)) { ToBeDifferentiated = node.ToBeDifferentiated};
         }
 
+        /// <summary>
+        /// Determines if a node represents an operator.
+        /// </summary>
+        /// <returns></returns>
         public bool IsOperator()
         {
             return Value is "+" or "-" or "*" or "/" or "^";
         }
 
+        /// <summary>
+        /// Determines if a node represents a function.
+        /// </summary>
+        /// <returns></returns>
         public bool IsFunction()
         {
             return Value is "sin" or "cos" or "tg" or "ctg" or "arcsin" or "arccos" or "arctg" or "arcctg" or
