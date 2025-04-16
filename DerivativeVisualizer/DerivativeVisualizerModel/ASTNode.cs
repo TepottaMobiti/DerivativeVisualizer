@@ -42,6 +42,14 @@ namespace DerivativeVisualizerModel
                     case "-":
                         return $"(f {Value} g)' = f' {Value} g'";
                     case "*":
+                        if (double.TryParse(Left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double _))
+                        {
+                            return "(c * f)' = c * f'";
+                        }
+                        else if (double.TryParse(Right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double _))
+                        {
+                            return "(f * c)' = f' * c";
+                        }
                         return "(f * g)' = f' * g + f * g'";
                     case "/":
                         return "(f / g)' = (f' * g - f * g') / (g ^ 2)";
@@ -238,7 +246,7 @@ namespace DerivativeVisualizerModel
         }
 
         /// <summary>
-        /// Determines if a tree contains any node with true NeedsDifferentiation value.
+        /// Determines if a tree contains any node with true ToBeDifferentiated value.
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
@@ -338,7 +346,7 @@ namespace DerivativeVisualizerModel
         }
 
         /// <summary>
-        /// Determines if two trees are equal.
+        /// Determines if two trees are equal based on the Value and Left, Right property.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -377,7 +385,7 @@ namespace DerivativeVisualizerModel
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public static ASTNode SimplifyOnce(ASTNode? node)
+        private static ASTNode SimplifyOnce(ASTNode? node)
         {
             if (node is null) return null!;
 

@@ -131,33 +131,66 @@ namespace DerivateVisualizerModelTest
         }
 
         /// <summary>
-        /// Tests if an exception is thrown if there are multiple decimal points in a number.
+        /// Tests if the error message is correct if there are multiple decimal points in a number.
         /// </summary>
         [TestMethod]
         public void TestMultipleDecimalPointsInput()
         {
-            input = "3.5.15";
-            Assert.ThrowsException<Exception>(() => tokenizer.Tokenize());
+            IsErrorMessageCorrect("2.3.4", "Több tizedespont nem lehet egy számban.");
         }
 
         /// <summary>
-        /// Tests if an exception is thrown if a function is unknown.
+        /// Tests if the error message is correct if there are more than 2 decimal places in a number.
+        /// </summary>
+        [TestMethod]
+        public void TestMorethan2DecimalPlacesInANumber()
+        {
+            IsErrorMessageCorrect("2.354", "A tizedespont után csak 2 szám engedélyezett.");
+        }
+
+        /// <summary>
+        /// Tests if the error message is correct if a number ends with a decimal point.
+        /// </summary>
+        [TestMethod]
+        public void TestNumberEndsWithDecimalPoint()
+        {
+            IsErrorMessageCorrect("2.", "A szám nem végzõdhet tizedesponttal.");
+        }
+
+        /// <summary>
+        /// Tests if the error message is correct if a number's absolute value is larger than 100.
+        /// </summary>
+        [TestMethod]
+        public void TestNumberWithAbsoluteValueGreaterThanOrEqualTo100()
+        {
+            IsErrorMessageCorrect("100", "A szám abszolút értékének maximuma 99.99 lehet.");
+        }
+
+        /// <summary>
+        /// Tests if the error message is correct if the tokenizer encounters an unexpected character.
+        /// </summary>
+        [TestMethod]
+        public void TestUnexpectedCharacter()
+        {
+            IsErrorMessageCorrect("&", "Nem várt karakter: &.");
+        }
+
+        /// <summary>
+        /// Tests if the error message is correct if a function is unknown.
         /// </summary>
         [TestMethod]
         public void TestUnknownFunctionInput()
         {
-            input = "sec(x)";
-            Assert.ThrowsException<Exception>(() => tokenizer.Tokenize());
+            IsErrorMessageCorrect("sec(x)", "Ismeretlen token: sec. Csak az 'x' változó és az ismert függvények engedélyezettek.");
         }
 
         /// <summary>
-        /// Tests if an exception is thrown if the variable of an input is not x.
+        /// Tests if the error message is correct if the variable of an input is not x.
         /// </summary>
         [TestMethod]
         public void TestInvalidVariableInput()
         {
-            input = "y^2+2y+1";
-            Assert.ThrowsException<Exception>(() => tokenizer.Tokenize());
+            IsErrorMessageCorrect("y^2", "Ismeretlen token: y. Csak az 'x' változó és az ismert függvények engedélyezettek.");
         }
 
         /// <summary>
@@ -177,6 +210,17 @@ namespace DerivateVisualizerModelTest
             }
             Assert.AreEqual(actualTokens.Length, tokenizedTokens.Count);
             Assert.AreEqual(actualTokens.Length, count);
+        }
+
+        /// <summary>
+        /// Determines if the error message of an incorrect input is correct.
+        /// </summary>
+        /// <param name="expectedErrorMsg"></param>
+        private void IsErrorMessageCorrect(string incorrectInput, string expectedErrorMsg)
+        {
+            input = incorrectInput;
+            var (tokenlist, msg) = tokenizer.Tokenize();
+            Assert.IsTrue(tokenlist is null && msg == expectedErrorMsg);
         }
     }
 }

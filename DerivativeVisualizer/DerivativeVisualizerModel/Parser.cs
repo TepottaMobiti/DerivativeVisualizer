@@ -138,6 +138,11 @@ namespace DerivativeVisualizerModel
                 {
                     return (null, "A 0^0 nem értelmezett.");
                 }
+
+                if (double.TryParse(simplifiedLeft.Value, out double baseValue) && baseValue <= 0)
+                {
+                    return (null, $"A hatványozás alapja nem lehet negatív szám vagy 0.");
+                }
                 node = new ASTNode(op, node, right);
             }
             return (node,"");
@@ -166,6 +171,7 @@ namespace DerivativeVisualizerModel
                 }
                 string negativeValue = "-" + t.Value;
 
+                // CHECK: Kell ez, befutunk ide valaha is? Ha nem, töröld ki és a táblázatból is töröld ki latexben
                 if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
                     return (null, $"Hiányzó operátor a {negativeValue} után.");
@@ -261,12 +267,12 @@ namespace DerivativeVisualizerModel
                     (rightParen, msg) = Consume(TokenType.RightParen);
                     if (rightParen is null)
                     {
-                        return (null, $"A {functionName} függvény argumentuma után berekesztő zárójelnek kell következnie: ')'.");
+                        return (null, $"A(z) {functionName} függvény argumentuma után berekesztő zárójelnek kell következnie: ')'.");
                     }
 
                     if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                     {
-                        return (null, $"A {functionName} függvény berekesztő zárójele után operátornak kell következnie.");
+                        return (null, $"A(z) {functionName} függvény berekesztő zárójele után operátornak kell következnie.");
                     }
 
                     return (new ASTNode(functionName, baseNode, argumentNode), "");
@@ -282,12 +288,12 @@ namespace DerivativeVisualizerModel
                 (rightParen, msg) = Consume(TokenType.RightParen);
                 if (rightParen is null)
                 {
-                    return (null, $"A {functionName} függvény argumentuma után berekesztő zárójelnek kell következnie: ')'.");
+                    return (null, $"A(z) {functionName} függvény argumentuma után berekesztő zárójelnek kell következnie: ')'.");
                 }
 
                 if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
                 {
-                    return (null, $"A {functionName} függvény berekesztő zárójele után operátornak kell következnie.");
+                    return (null, $"A(z) {functionName} függvény berekesztő zárójele után operátornak kell következnie.");
                 }
 
                 ASTNode node = new ASTNode(functionName, argument);

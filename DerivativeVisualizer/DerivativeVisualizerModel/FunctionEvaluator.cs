@@ -57,7 +57,7 @@ namespace DerivativeVisualizerModel
                     "-" => left - right,
                     "*" => left * right,
                     "/" => Math.Abs(right) <= epsilon ? double.NaN : left / right,
-                    "^" => SafePower(left, right),
+                    "^" => SafeExponentiation(left, right),
                     _ => throw new Exception($"Ismeretlen operátor: {node.Value}")
                 };
             }
@@ -112,7 +112,7 @@ namespace DerivativeVisualizerModel
         /// <param name="baseValue"></param>
         /// <param name="exponent"></param>
         /// <returns></returns>
-        public static double SafePower(double baseValue, double exponent)
+        private static double SafeExponentiation(double baseValue, double exponent)
         {
             double result = Math.Pow(baseValue, exponent);
             if (!double.IsNaN(result))

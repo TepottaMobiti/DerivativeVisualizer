@@ -197,7 +197,7 @@
 
                 </StackPanel>
 
-                <Button Content="Érintő rajzolás"
+                <Button Content="Érintőrajzolás"
                         Grid.Row="3"
                         Command="{Binding PlotTangentCommand}"
                         Background="Orange"

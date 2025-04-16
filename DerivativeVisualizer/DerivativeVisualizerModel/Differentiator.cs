@@ -10,12 +10,10 @@ namespace DerivativeVisualizerModel
 {
     public class Differentiator
     {
-        private ASTNode root;
         private List<ASTNode> differentiationSteps = new List<ASTNode>();
 
         public Differentiator(ASTNode root)
         {
-            this.root = root;
             FlagNode(root);
             differentiationSteps.Add(root);
         }
@@ -32,7 +30,7 @@ namespace DerivativeVisualizerModel
         /// <returns></returns>
         public ASTNode Differentiate(int locator)
         {
-            ASTNode lastTree = differentiationSteps.Last().DeepCopy();
+            ASTNode lastTree = CurrentTree.DeepCopy();
 
             ASTNode nodeToDifferentiate = FindDifferentiationNode(lastTree, locator);
 
@@ -86,12 +84,27 @@ namespace DerivativeVisualizerModel
                 case "-": // (f-g)' = f' - g'
                     return new ASTNode(value, FlagNode(left.DeepCopy()), FlagNode(right.DeepCopy()));
 
-                case "*": // (f*g)' = f'*g+f*g'
+                case "*": 
+                    // (c*f)' = c*f'
+                    if (double.TryParse(left.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double _))
+                    {
+                        return new ASTNode("*",
+                                   left.DeepCopy(),
+                                   FlagNode(right.DeepCopy()));
+                    }
+                    // (f*c)' = f'*c
+                    else if (double.TryParse(right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double _))
+                    {
+                        return new ASTNode("*",
+                                   FlagNode(left.DeepCopy()),
+                                   right.DeepCopy());
+                    }
+                    // (f*g)' = f'*g+f*g'
                     return new ASTNode("+",
                                new ASTNode("*", FlagNode(left.DeepCopy()), right.DeepCopy()),
                                new ASTNode("*", left.DeepCopy(), FlagNode(right.DeepCopy())));
 
-                case "/": // (f/g)' / (f'g-f*g')/g^2
+                case "/": // (f/g)' = (f'g-f*g')/g^2
                     return new ASTNode("/",
                                new ASTNode("-",
                                    new ASTNode("*", FlagNode(left.DeepCopy()), right.DeepCopy()),
@@ -200,7 +213,7 @@ namespace DerivativeVisualizerModel
                                            new ASTNode("x"));
                             }
                             return new ASTNode("/",
-                                       FlagNode(right),
+                                       FlagNode(right.DeepCopy()),
                                        right.DeepCopy());
                         }
                         if (b <= 0 || b == 1)
@@ -218,7 +231,7 @@ namespace DerivativeVisualizerModel
                         }
                         // log_a'(f) = f'/(f*ln(a))
                         return new ASTNode("/",
-                                   FlagNode(right),
+                                   FlagNode(right.DeepCopy()),
                                    new ASTNode("*",
                                        right.DeepCopy(),
                                        new ASTNode("ln",
@@ -234,7 +247,7 @@ namespace DerivativeVisualizerModel
                                    new ASTNode("x"));
                     }
                     return new ASTNode("/",
-                                       FlagNode(left),
+                                       FlagNode(left.DeepCopy()),
                                        left.DeepCopy());
 
                 case "sin": // sin'(f) = cos(f)*f'
