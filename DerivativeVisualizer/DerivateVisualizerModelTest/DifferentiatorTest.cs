@@ -786,10 +786,10 @@ namespace DerivateVisualizerModelTest
         }
 
         /// <summary>
-        /// Tests if the correct exception is thrown when the base of the log is negative.
+        /// Tests if the correct exception is thrown when the base of the log is not positive.
         /// </summary>
         [TestMethod]
-        public void TestNegativeLogBase()
+        public void TestNotPositiveLogBase()
         {
             function = new ASTNode("log",
                            new ASTNode("-1"),
@@ -812,13 +812,13 @@ namespace DerivateVisualizerModelTest
         }
 
         /// <summary>
-        /// Tests if the correct exception is thrown when the base of the log is 0.
+        /// Tests if the correct exception is thrown when the base of the log is 1.
         /// </summary>
         [TestMethod]
-        public void TestZeroLogBase()
+        public void TestOneLogBase()
         {
             function = new ASTNode("log",
-                           new ASTNode("-1"),
+                           new ASTNode("1"),
                            new ASTNode("x"));
 
             Assert.ThrowsException<Exception>(() =>
@@ -955,7 +955,7 @@ namespace DerivateVisualizerModelTest
         }
 
         /// <summary>
-        /// ln'(f) = f'/f
+        /// Tests is ln'(f) = f'/f
         /// </summary>
         [TestMethod]
         public void TestLnComposition()
@@ -1252,7 +1252,7 @@ namespace DerivateVisualizerModelTest
         }
 
         /// <summary>
-        /// Tests if arcsin'(f) = 1/(1-x^2)^(1/2).
+        /// Tests if arcsin'(x) = 1/(1-x^2)^(1/2).
         /// </summary>
         [TestMethod]
         public void TestSimpleArcsin()
@@ -1821,7 +1821,7 @@ namespace DerivateVisualizerModelTest
         }
 
         /// <summary>
-        /// Tests if arsh'(f) = 1/(x^2+1)^(1/2).
+        /// Tests if arsh'(x) = 1/(x^2+1)^(1/2).
         /// </summary>
         [TestMethod]
         public void TestSimpleArsh()
@@ -1903,7 +1903,7 @@ namespace DerivateVisualizerModelTest
         }
 
         /// <summary>
-        /// Tests if arch'(f) = 1/(x^2-1)^(1/2).
+        /// Tests if arch'(x) = 1/(x^2-1)^(1/2).
         /// </summary>
         [TestMethod]
         public void TestSimpleArch()

@@ -81,7 +81,7 @@ namespace DerivativeVisualizerModel
                             }
                             else
                             {
-                                return $"Ha a <= 0 (a = {a}), akkor a^x nem deriválható";
+                                return $"Ha a <= 0 (a = {a}), akkor a^f nem deriválható";
                             }
                         }
                         else if ((double.TryParse(Right.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Right.Value == "e") && Left.Value == "x")

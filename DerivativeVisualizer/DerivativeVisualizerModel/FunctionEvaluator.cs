@@ -18,6 +18,11 @@ namespace DerivativeVisualizerModel
 
     // ChatGPT beszélgetés: Dokumentáció: Racionális számok
 
+    
+    // TODO: Ezt magyaráztasd el a ChatGPT-vel ezt az osztályt.
+
+    
+
     public static class FunctionEvaluator
     {
         /// <summary>
@@ -93,7 +98,7 @@ namespace DerivativeVisualizerModel
                     "sh" => Math.Sinh(argument),
                     "ch" => Math.Cosh(argument),
                     "th" => Math.Tanh(argument),
-                    "cth" => Math.Abs(argument) <= epsilon ? 1 / Math.Tanh(argument) : double.NaN,
+                    "cth" => Math.Abs(argument) <= epsilon ? double.NaN : 1 / Math.Tanh(argument),
                     "arsh" => Math.Asinh(argument),
                     "arch" => Math.Acosh(argument),
                     "arth" => Math.Atanh(argument),
@@ -151,6 +156,5 @@ namespace DerivativeVisualizerModel
 
             return double.NaN;
         }
-
     }
 }
