@@ -119,11 +119,27 @@ namespace DerivateVisualizerModelTest
         }
 
         [TestMethod]
+        public void Test_Function_Tan_Valid()
+        {
+            var node = Func("tg", Num(Math.PI / 4));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(1.0, result);
+        }
+
+        [TestMethod]
         public void Test_Function_Tan_Discontinuity()
         {
             var node = Func("tg", Num(Math.PI / 2));
             var result = FunctionEvaluator.Evaluate(node, 0, Step);
             Assert.IsTrue(double.IsNaN(result));
+        }
+
+        [TestMethod]
+        public void Test_Function_Cot_Valid()
+        {
+            var node = Func("ctg", Num(Math.PI / 4));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(1.0, result);
         }
 
         [TestMethod]
@@ -167,11 +183,43 @@ namespace DerivateVisualizerModelTest
         }
 
         [TestMethod]
+        public void Test_Function_ArcTg()
+        {
+            var node = Func("arctg", Num(1));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(Math.Atan(1), result);
+        }
+
+        [TestMethod]
         public void Test_Function_ArcCtg()
         {
             var node = Func("arcctg", Num(1));
             var result = FunctionEvaluator.Evaluate(node, 0, Step);
             AssertNear(Math.PI / 4, result);
+        }
+
+        [TestMethod]
+        public void Test_Function_Sh()
+        {
+            var node = Func("sh", Num(1));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(Math.Sinh(1), result);
+        }
+
+        [TestMethod]
+        public void Test_Function_Ch()
+        {
+            var node = Func("ch", Num(1));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(Math.Cosh(1), result);
+        }
+
+        [TestMethod]
+        public void Test_Function_Th()
+        {
+            var node = Func("th", Num(1));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(Math.Tanh(1), result);
         }
 
         [TestMethod]
@@ -183,11 +231,35 @@ namespace DerivateVisualizerModelTest
         }
 
         [TestMethod]
+        public void Test_Function_Arsh()
+        {
+            var node = Func("arsh", Num(1));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(Math.Asinh(1), result);
+        }
+
+        [TestMethod]
+        public void Test_Function_Arch()
+        {
+            var node = Func("arch", Num(2));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(Math.Acosh(2), result);
+        }
+
+        [TestMethod]
+        public void Test_Function_Arth()
+        {
+            var node = Func("arth", Num(0.5));
+            var result = FunctionEvaluator.Evaluate(node, 0, Step);
+            AssertNear(Math.Atanh(0.5), result);
+        }
+
+        [TestMethod]
         public void Test_Function_Arcth_InsideDomain()
         {
             var node = Func("arcth", Num(0.5));
             var result = FunctionEvaluator.Evaluate(node, 0, Step);
-            Assert.IsTrue(double.IsNaN(result)); // Outside domain (|x| < 1)
+            Assert.IsTrue(double.IsNaN(result));
         }
 
         [TestMethod]

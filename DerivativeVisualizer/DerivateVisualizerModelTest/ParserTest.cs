@@ -123,7 +123,7 @@ namespace DerivateVisualizerModelTest
         /// Tests if negative expressions are parsed correctly.
         /// </summary>
         [TestMethod]
-        public void TestNegation()
+        public void TestNegativeNumber()
         {
             tokens = new List<Token>()
             {

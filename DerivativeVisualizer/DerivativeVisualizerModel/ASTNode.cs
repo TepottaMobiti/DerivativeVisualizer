@@ -382,6 +382,8 @@ namespace DerivativeVisualizerModel
 
         /// <summary>
         /// Simplifies a tree top-down once based on some basic mathematical rules.
+        /// Does not preserve ToBeDifferentiated status, but it will only be used
+        /// before differentiation (in Parser) and once there's no more ToBeDifferentiated nodes.
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
@@ -415,7 +417,7 @@ namespace DerivativeVisualizerModel
             if (node.Value == "^" && node.Right.Value == "0" && node.Left.Value != "0") return new ASTNode("1"); // x ^ 0 = 1 (x not 0)
             if (node.Value == "^" && node.Left.Value == "0" && node.Right.Value != "0") return new ASTNode("0"); // 0 ^ x = 0 (x not 0)   
 
-            return new ASTNode(node.Value, SimplifyOnce(node.Left), SimplifyOnce(node.Right)) { ToBeDifferentiated = node.ToBeDifferentiated};
+            return new ASTNode(node.Value, SimplifyOnce(node.Left), SimplifyOnce(node.Right));
         }
 
         /// <summary>

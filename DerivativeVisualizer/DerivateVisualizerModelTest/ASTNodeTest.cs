@@ -14,6 +14,356 @@ namespace DerivateVisualizerModelTest
         private ASTNode? function;
         private string? expectedText;
 
+        #region AI Generated Tests for ToString()
+
+        [TestMethod]
+        public void TestLeafNodeToString()
+        {
+            var node = new ASTNode("x");
+            Assert.AreEqual("x", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestUnaryFunctionToString()
+        {
+            var node = new ASTNode("sin") { Left = new ASTNode("x") };
+            Assert.AreEqual("sin(x)", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestBinaryAdditionToString()
+        {
+            var node = new ASTNode("+")
+            {
+                Left = new ASTNode("x"),
+                Right = new ASTNode("1")
+            };
+            Assert.AreEqual("x + 1", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestBinaryMultiplicationWithAdditionInsideToString()
+        {
+            var node = new ASTNode("*")
+            {
+                Left = new ASTNode("+")
+                {
+                    Left = new ASTNode("x"),
+                    Right = new ASTNode("1")
+                },
+                Right = new ASTNode("2")
+            };
+            Assert.AreEqual("(x + 1) * 2", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestExponentiationRightAssociativeToString()
+        {
+            var node = new ASTNode("^")
+            {
+                Left = new ASTNode("x"),
+                Right = new ASTNode("^")
+                {
+                    Left = new ASTNode("y"),
+                    Right = new ASTNode("z")
+                }
+            };
+            Assert.AreEqual("x ^ (y ^ z)", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestLogFunctionToString()
+        {
+            var node = new ASTNode("log")
+            {
+                Left = new ASTNode("2"),
+                Right = new ASTNode("x")
+            };
+            Assert.AreEqual("log(2, x)", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestDifferentiatedSimpleNodeToString()
+        {
+            var node = new ASTNode("x") { ToBeDifferentiated = true };
+            Assert.AreEqual("(x)'", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestDifferentiatedComplexSubtreeToString()
+        {
+            var node = new ASTNode("*")
+            {
+                Left = new ASTNode("x"),
+                Right = new ASTNode("x"),
+                ToBeDifferentiated = true
+            };
+            Assert.AreEqual("(x * x)'", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestNestedUnaryWithPrecedenceToString()
+        {
+            var node = new ASTNode("sin")
+            {
+                Left = new ASTNode("+")
+                {
+                    Left = new ASTNode("x"),
+                    Right = new ASTNode("1")
+                }
+            };
+            Assert.AreEqual("sin(x + 1)", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestParenthesesOnlyIfNeededToString()
+        {
+            var node = new ASTNode("+")
+            {
+                Left = new ASTNode("x"),
+                Right = new ASTNode("*")
+                {
+                    Left = new ASTNode("y"),
+                    Right = new ASTNode("z")
+                }
+            };
+            Assert.AreEqual("x + y * z", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestDifferentiatedLeafNodeToString()
+        {
+            var node = new ASTNode("x") { ToBeDifferentiated = true };
+            Assert.AreEqual("(x)'", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestDifferentiatedAdditionToString()
+        {
+            var node = new ASTNode("+")
+            {
+                Left = new ASTNode("x"),
+                Right = new ASTNode("1"),
+                ToBeDifferentiated = true
+            };
+            Assert.AreEqual("(x + 1)'", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestDifferentiatedProductWithParenthesesToString()
+        {
+            var node = new ASTNode("*")
+            {
+                Left = new ASTNode("+")
+                {
+                    Left = new ASTNode("x"),
+                    Right = new ASTNode("1")
+                },
+                Right = new ASTNode("2"),
+                ToBeDifferentiated = true
+            };
+            Assert.AreEqual("((x + 1) * 2)'", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestDifferentiatedUnaryFunctionToString()
+        {
+            var node = new ASTNode("cos")
+            {
+                Left = new ASTNode("x"),
+                ToBeDifferentiated = true
+            };
+            Assert.AreEqual("(cos(x))'", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestDifferentiatedExponentWithNestedRightToString()
+        {
+            var node = new ASTNode("^")
+            {
+                Left = new ASTNode("x"),
+                Right = new ASTNode("^")
+                {
+                    Left = new ASTNode("y"),
+                    Right = new ASTNode("z")
+                },
+                ToBeDifferentiated = true
+            };
+            Assert.AreEqual("(x ^ (y ^ z))'", node.ToString());
+        }
+
+        [TestMethod]
+        public void TestNestedDifferentiationInSubtreeOnlyToString()
+        {
+            var inner = new ASTNode("*")
+            {
+                Left = new ASTNode("x"),
+                Right = new ASTNode("x"),
+                ToBeDifferentiated = true
+            };
+
+            var outer = new ASTNode("+")
+            {
+                Left = inner,
+                Right = new ASTNode("1")
+            };
+
+            Assert.AreEqual("(x * x)' + 1", outer.ToString());
+        }
+
+        #endregion
+
+        #region AI Generated Tests for Simplify()
+
+        private static ASTNode BinOp(string op, string left, string right) =>
+            new ASTNode(op) { Left = new ASTNode(left), Right = new ASTNode(right) };
+
+        [TestMethod]
+        public void Test_Add_Zero_Zero() =>
+            Assert.AreEqual("0", ASTNode.Simplify(BinOp("+", "0", "0")).ToString());
+
+        [TestMethod]
+        public void Test_Add_Zero_X() =>
+            Assert.AreEqual("x", ASTNode.Simplify(BinOp("+", "0", "x")).ToString());
+
+        [TestMethod]
+        public void Test_Add_X_Zero() =>
+            Assert.AreEqual("x", ASTNode.Simplify(BinOp("+", "x", "0")).ToString());
+
+        [TestMethod]
+        public void Test_Sub_X_X() =>
+            Assert.AreEqual("0", ASTNode.Simplify(BinOp("-", "x", "x")).ToString());
+
+        [TestMethod]
+        public void Test_Sub_X_Zero() =>
+            Assert.AreEqual("x", ASTNode.Simplify(BinOp("-", "x", "0")).ToString());
+
+        [TestMethod]
+        public void Test_Mul_Zero_X() =>
+            Assert.AreEqual("0", ASTNode.Simplify(BinOp("*", "0", "x")).ToString());
+
+        [TestMethod]
+        public void Test_Mul_X_Zero() =>
+            Assert.AreEqual("0", ASTNode.Simplify(BinOp("*", "x", "0")).ToString());
+
+        [TestMethod]
+        public void Test_Mul_One_X() =>
+            Assert.AreEqual("x", ASTNode.Simplify(BinOp("*", "1", "x")).ToString());
+
+        [TestMethod]
+        public void Test_Mul_X_One() =>
+            Assert.AreEqual("x", ASTNode.Simplify(BinOp("*", "x", "1")).ToString());
+
+        [TestMethod]
+        public void Test_Div_X_X() =>
+            Assert.AreEqual("1", ASTNode.Simplify(BinOp("/", "x", "x")).ToString());
+
+        [TestMethod]
+        public void Test_Div_Zero_X() =>
+            Assert.AreEqual("0", ASTNode.Simplify(BinOp("/", "0", "x")).ToString());
+
+        [TestMethod]
+        public void Test_Div_X_One() =>
+            Assert.AreEqual("x", ASTNode.Simplify(BinOp("/", "x", "1")).ToString());
+
+        [TestMethod]
+        public void Test_Exp_One_X() =>
+            Assert.AreEqual("1", ASTNode.Simplify(BinOp("^", "1", "x")).ToString());
+
+        [TestMethod]
+        public void Test_Exp_X_One() =>
+            Assert.AreEqual("x", ASTNode.Simplify(BinOp("^", "x", "1")).ToString());
+
+        [TestMethod]
+        public void Test_Exp_X_Zero() =>
+            Assert.AreEqual("1", ASTNode.Simplify(BinOp("^", "x", "0")).ToString());
+
+        [TestMethod]
+        public void Test_Exp_Zero_X() =>
+            Assert.AreEqual("0", ASTNode.Simplify(BinOp("^", "0", "x")).ToString());
+
+        [TestMethod]
+        public void Test_ChainedSimplification_Mul_Add()
+        {
+            // ((x + 0) * 1) -> x
+            var node = new ASTNode("*")
+            {
+                Left = new ASTNode("+") { Left = new ASTNode("x"), Right = new ASTNode("0") },
+                Right = new ASTNode("1")
+            };
+            var simplified = ASTNode.Simplify(node);
+            Assert.AreEqual("x", simplified.ToString());
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Tests if AreTreesEqual returns true when the trees are equal.
+        /// </summary>
+        [TestMethod]
+        public void TestEqualityOfEqualTrees()
+        {
+            function = new ASTNode("*",
+                           new ASTNode("5"),
+                           new ASTNode("x"));
+
+            ASTNode same = new ASTNode("*",
+                               new ASTNode("5"),
+                               new ASTNode("x"));
+
+            Assert.IsTrue(ASTNode.AreTreesEqual(function,same));
+        }
+
+        /// <summary>
+        /// Tests if AreTreesEqual returns false when the trees have different structure.
+        /// </summary>
+        [TestMethod]
+        public void TestEqualityOfDifferentStructureTrees()
+        {
+            function = new ASTNode("*",
+                           new ASTNode("5"),
+                           new ASTNode("x"));
+
+            ASTNode same = new ASTNode("*",
+                       new ASTNode("5"));
+
+            Assert.IsFalse(ASTNode.AreTreesEqual(function, same));
+        }
+
+        /// <summary>
+        /// Tests if AreTreesEqual returns false when the trees have different values.
+        /// </summary>
+        [TestMethod]
+        public void TestEqualityOfDifferentValueTrees()
+        {
+            function = new ASTNode("*",
+                           new ASTNode("5"),
+                           new ASTNode("x"));
+
+            ASTNode same = new ASTNode("*",
+                       new ASTNode("6"),
+                       new ASTNode("x"));
+
+            Assert.IsFalse(ASTNode.AreTreesEqual(function, same));
+        }
+
+        /// <summary>
+        /// Tests if DeepCopy works correctly.
+        /// </summary>
+        [TestMethod]
+        public void TestDeepCopy()
+        {
+            function = new ASTNode("*",
+                           new ASTNode("5"),
+                           new ASTNode("x"));
+
+            ASTNode copy = function.DeepCopy();
+
+            Assert.IsTrue(ASTNode.AreTreesEqual(function,copy));
+            Assert.IsTrue(function.ToBeDifferentiated == copy.ToBeDifferentiated);
+            Assert.IsTrue(function.Locator == copy.Locator);
+        }
+
         /// <summary>
         /// Tests if a node's ToBeDifferentiated value is false then the DiffRule is empty.
         /// </summary>
