@@ -707,7 +707,7 @@ namespace DerivativeVisualizerGUI
                     MajorGridlineStyle = LineStyle.None,
                     MinorGridlineStyle = LineStyle.None,
                     IsPanEnabled = true,
-                    IsZoomEnabled = true
+                    IsZoomEnabled = true,
                 });
 
                 PlotModel.Axes.Add(new LinearAxis
@@ -720,8 +720,10 @@ namespace DerivativeVisualizerGUI
                     MajorGridlineStyle = LineStyle.None,
                     MinorGridlineStyle = LineStyle.None,
                     IsPanEnabled = true,
-                    IsZoomEnabled = true
+                    IsZoomEnabled = true,
                 });
+
+                PlotModel.PlotType = PlotType.Cartesian;
             }
 
             return PlotModel;

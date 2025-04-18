@@ -189,7 +189,7 @@ namespace DerivativeVisualizerModel
                 }
                 ASTNode node = new ASTNode(t.Value);
 
-                if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen))
+                if (!IsAtEnd() && !Match(TokenType.Operator) && !Match(TokenType.RightParen)) // Nincs vége az inputnak, nem operátor és nem is berekesztő zárójel következik a szám után
                 {
                     return (null, $"Hiányzó operátor a(z) {t.Value} után.");
                 }
