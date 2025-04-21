@@ -9,20 +9,6 @@ using System.Threading.Tasks;
 
 namespace DerivativeVisualizerModel
 {
-    // Dokumentáld majd le, hogy hogy működik, minden függvényt ami szóra érdemes. A matekról is ejts szót, az epszilonozásról, stb. TODO: Tear in Function Plot beszben van egy generált indoklás.
-    // Tangens dilemma: Mindenhogy rossz. Lehet megoldás, hogy csak -pista /2, pista /2-n értelmezzük? Az lenne még talán a legjobb. Ctg ugyanez. Ez mondjuk nem ideális. De pl. azt lehet
-    // biztosítani, hogy csak az egyik intervallumot értelmezzük, amit éppen célszerű.
-
-    // Dokumentáld le majd a hatványozást részletesen. Mindent dokumentálj le részletesen igazából. Térj ki arra, hogy a BigIntegert intté konvertálni miért szabad (mert a pontok generálása
-    // miatt nem lesznek olyan hú de nagy számok)
-
-    // ChatGPT beszélgetés: Dokumentáció: Racionális számok
-
-    
-    // TODO: Ezt magyaráztasd el a ChatGPT-vel ezt az osztályt.
-
-    
-
     public static class FunctionEvaluator
     {
         /// <summary>
@@ -40,9 +26,9 @@ namespace DerivativeVisualizerModel
 
             double epsilon = stepSize * 0.5;
 
-            // Floating point aritmetikai hibák korrigálása.
-            epsilon = Math.Round(epsilon, 6, MidpointRounding.AwayFromZero);
-            xValue = Math.Round(xValue, 6, MidpointRounding.AwayFromZero);
+            // Floating point arithmetic correction
+            epsilon = Math.Round(epsilon, 6);
+            xValue = Math.Round(xValue, 6);
 
             if (double.TryParse(node.Value, out double number))
             {
@@ -68,7 +54,6 @@ namespace DerivativeVisualizerModel
             }
             else if (node.IsFunction())
             {
-                // TODO: Ennek a matekját majd azért írd majd még le, hogy biztos értelmes-e, meg majd a dokumentációban is fejtegesd meg. Thetawise biztos segít. Írj neki körítést is.
                 double argument = Evaluate(node.Left, xValue, stepSize);
                 double pi = Math.PI;
                 double n;
@@ -78,14 +63,14 @@ namespace DerivativeVisualizerModel
                     n = Math.Round((argument - (pi / 2)) / pi);
                     discontinuity = (pi / 2) + n * pi;
 
-                    return Math.Abs(argument - discontinuity) <= epsilon /*1e-10*/ ? double.NaN : Math.Tan(argument);
+                    return Math.Abs(argument - discontinuity) <= epsilon ? double.NaN : Math.Tan(argument);
                 }
                 if (node.Value == "ctg")
                 {
                     n = Math.Round(argument / pi);
                     discontinuity = n * pi;
 
-                    return Math.Abs(argument - discontinuity) <= epsilon /*1e-10*/? double.NaN : 1 / Math.Tan(argument);
+                    return Math.Abs(argument - discontinuity) <= epsilon ? double.NaN : 1 / Math.Tan(argument);
                 }
                 return node.Value switch
                 {
@@ -127,11 +112,11 @@ namespace DerivativeVisualizerModel
             {
                 try
                 {
-                    var fraction = Fraction.FromDoubleRounded(exponent); // Optional tolerance
-                    var numeratorBig = fraction.Numerator;
+                    var fraction = Fraction.FromDoubleRounded(exponent);
+                    var numeratorBig = fraction.Numerator; // Stores the negative if the fraction is negative
                     var denominatorBig = fraction.Denominator;
 
-                    // Avoid overflow: refuse to process large fractions
+                    // Avoid overflow
                     const int maxIntValue = 1000000;
                     if (numeratorBig > maxIntValue || denominatorBig > maxIntValue)
                         return double.NaN;
@@ -139,21 +124,18 @@ namespace DerivativeVisualizerModel
                     int numerator = (int)numeratorBig;
                     int denominator = (int)denominatorBig;
 
-                    if (denominator % 2 == 1) // Odd denominator → real result possible
+                    if (denominator % 2 == 1) // Real result possible
                     {
-                        double rootBase = Math.Pow(-baseValue, Math.Abs((double)numerator) / denominator);
-                        double signedResult = numerator < 0 ? 1.0 / rootBase : rootBase;
+                        double signedResult = Math.Pow(-baseValue, (double)numerator / denominator);
 
                         return (numerator % 2 == 0) ? signedResult : -signedResult;
                     }
                 }
                 catch
                 {
-                    // Conversion or pow failed
                     return double.NaN;
                 }
             }
-
             return double.NaN;
         }
     }

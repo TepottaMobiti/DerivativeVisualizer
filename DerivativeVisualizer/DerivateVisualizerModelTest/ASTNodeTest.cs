@@ -10,12 +10,14 @@ namespace DerivateVisualizerModelTest
     [TestClass]
     public class ASTNodeTest
     {
-        //TODO: Simplify, többi fv tesztelése
         private ASTNode? function;
         private string? expectedText;
 
         #region AI Generated Tests for ToString()
 
+        /// <summary>
+        /// Verifies that a leaf node returns its value as a string.
+        /// </summary>
         [TestMethod]
         public void TestLeafNodeToString()
         {
@@ -23,6 +25,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("x", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies that a unary function like sin(x) is correctly formatted.
+        /// </summary>
         [TestMethod]
         public void TestUnaryFunctionToString()
         {
@@ -30,6 +35,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("sin(x)", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies that a binary addition is formatted as "x + 1".
+        /// </summary>
         [TestMethod]
         public void TestBinaryAdditionToString()
         {
@@ -41,6 +49,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("x + 1", node.ToString());
         }
 
+        /// <summary>
+        /// Ensures proper parentheses for addition inside multiplication.
+        /// </summary>
         [TestMethod]
         public void TestBinaryMultiplicationWithAdditionInsideToString()
         {
@@ -56,6 +67,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("(x + 1) * 2", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies that exponentiation is right-associative in string output.
+        /// </summary>
         [TestMethod]
         public void TestExponentiationRightAssociativeToString()
         {
@@ -71,6 +85,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("x ^ (y ^ z)", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies correct formatting for log functions with base and argument.
+        /// </summary>
         [TestMethod]
         public void TestLogFunctionToString()
         {
@@ -82,6 +99,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("log(2, x)", node.ToString());
         }
 
+        /// <summary>
+        /// Ensures that differentiation marker is added to a simple leaf node.
+        /// </summary>
         [TestMethod]
         public void TestDifferentiatedSimpleNodeToString()
         {
@@ -89,6 +109,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("(x)'", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies differentiation marker applies to an entire expression subtree.
+        /// </summary>
         [TestMethod]
         public void TestDifferentiatedComplexSubtreeToString()
         {
@@ -101,6 +124,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("(x * x)'", node.ToString());
         }
 
+        /// <summary>
+        /// Ensures unary functions apply to binary expressions without extra parentheses.
+        /// </summary>
         [TestMethod]
         public void TestNestedUnaryWithPrecedenceToString()
         {
@@ -115,6 +141,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("sin(x + 1)", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies that parentheses are used only when required by precedence.
+        /// </summary>
         [TestMethod]
         public void TestParenthesesOnlyIfNeededToString()
         {
@@ -130,6 +159,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("x + y * z", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies differentiation marker on a leaf node is shown as expected.
+        /// </summary>
         [TestMethod]
         public void TestDifferentiatedLeafNodeToString()
         {
@@ -137,6 +169,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("(x)'", node.ToString());
         }
 
+        /// <summary>
+        /// Ensures proper formatting of a differentiated binary addition.
+        /// </summary>
         [TestMethod]
         public void TestDifferentiatedAdditionToString()
         {
@@ -149,6 +184,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("(x + 1)'", node.ToString());
         }
 
+        /// <summary>
+        /// Ensures parentheses are added around a complex product when differentiated.
+        /// </summary>
         [TestMethod]
         public void TestDifferentiatedProductWithParenthesesToString()
         {
@@ -165,6 +203,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("((x + 1) * 2)'", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies that unary function differentiation is formatted correctly.
+        /// </summary>
         [TestMethod]
         public void TestDifferentiatedUnaryFunctionToString()
         {
@@ -176,6 +217,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("(cos(x))'", node.ToString());
         }
 
+        /// <summary>
+        /// Ensures proper right-associative formatting for differentiated exponentiation.
+        /// </summary>
         [TestMethod]
         public void TestDifferentiatedExponentWithNestedRightToString()
         {
@@ -192,6 +236,9 @@ namespace DerivateVisualizerModelTest
             Assert.AreEqual("(x ^ (y ^ z))'", node.ToString());
         }
 
+        /// <summary>
+        /// Verifies that only a subtree is marked and formatted as differentiated.
+        /// </summary>
         [TestMethod]
         public void TestNestedDifferentiationInSubtreeOnlyToString()
         {
@@ -215,77 +262,134 @@ namespace DerivateVisualizerModelTest
 
         #region AI Generated Tests for Simplify()
 
+        /// <summary>
+        /// Creates a binary operation ASTNode with the specified operator and two operands.
+        /// </summary>
+        /// <param name="op">The operator (e.g., "+", "-", "*", "/", "^").</param>
+        /// <param name="left">The left operand as a string.</param>
+        /// <param name="right">The right operand as a string.</param>
+        /// <returns>A new ASTNode representing the binary operation.</returns>
         private static ASTNode BinOp(string op, string left, string right) =>
             new ASTNode(op) { Left = new ASTNode(left), Right = new ASTNode(right) };
 
+        /// <summary>
+        /// Verifies that adding zero to zero simplifies to "0".
+        /// </summary>
         [TestMethod]
-        public void Test_Add_Zero_Zero() =>
+        public void TestAddZeroZero() =>
             Assert.AreEqual("0", ASTNode.Simplify(BinOp("+", "0", "0")).ToString());
 
+        /// <summary>
+        /// Verifies that adding zero to a variable simplifies to the variable.
+        /// </summary>
         [TestMethod]
-        public void Test_Add_Zero_X() =>
+        public void TestAddZeroX() =>
             Assert.AreEqual("x", ASTNode.Simplify(BinOp("+", "0", "x")).ToString());
 
+        /// <summary>
+        /// Verifies that adding a variable to zero simplifies to the variable.
+        /// </summary>
         [TestMethod]
-        public void Test_Add_X_Zero() =>
+        public void TestAddXZero() =>
             Assert.AreEqual("x", ASTNode.Simplify(BinOp("+", "x", "0")).ToString());
 
+        /// <summary>
+        /// Verifies that subtracting a variable from itself simplifies to "0".
+        /// </summary>
         [TestMethod]
-        public void Test_Sub_X_X() =>
+        public void TestSubXX() =>
             Assert.AreEqual("0", ASTNode.Simplify(BinOp("-", "x", "x")).ToString());
 
+        /// <summary>
+        /// Verifies that subtracting zero from a variable simplifies to the variable.
+        /// </summary>
         [TestMethod]
-        public void Test_Sub_X_Zero() =>
+        public void TestSubXZero() =>
             Assert.AreEqual("x", ASTNode.Simplify(BinOp("-", "x", "0")).ToString());
 
+        /// <summary>
+        /// Verifies that multiplying zero by a variable simplifies to "0".
+        /// </summary>
         [TestMethod]
-        public void Test_Mul_Zero_X() =>
+        public void TestMulZeroX() =>
             Assert.AreEqual("0", ASTNode.Simplify(BinOp("*", "0", "x")).ToString());
 
+        /// <summary>
+        /// Verifies that multiplying a variable by zero simplifies to "0".
+        /// </summary>
         [TestMethod]
-        public void Test_Mul_X_Zero() =>
+        public void TestMulXZero() =>
             Assert.AreEqual("0", ASTNode.Simplify(BinOp("*", "x", "0")).ToString());
 
+        /// <summary>
+        /// Verifies that multiplying one by a variable simplifies to the variable.
+        /// </summary>
         [TestMethod]
-        public void Test_Mul_One_X() =>
+        public void TestMulOneX() =>
             Assert.AreEqual("x", ASTNode.Simplify(BinOp("*", "1", "x")).ToString());
 
+        /// <summary>
+        /// Verifies that multiplying a variable by one simplifies to the variable.
+        /// </summary>
         [TestMethod]
-        public void Test_Mul_X_One() =>
+        public void TestMulXOne() =>
             Assert.AreEqual("x", ASTNode.Simplify(BinOp("*", "x", "1")).ToString());
 
+        /// <summary>
+        /// Verifies that dividing a variable by itself simplifies to "1".
+        /// </summary>
         [TestMethod]
-        public void Test_Div_X_X() =>
+        public void TestDivXX() =>
             Assert.AreEqual("1", ASTNode.Simplify(BinOp("/", "x", "x")).ToString());
 
+        /// <summary>
+        /// Verifies that dividing zero by a variable simplifies to "0".
+        /// </summary>
         [TestMethod]
-        public void Test_Div_Zero_X() =>
+        public void TestDivZeroX() =>
             Assert.AreEqual("0", ASTNode.Simplify(BinOp("/", "0", "x")).ToString());
 
+        /// <summary>
+        /// Verifies that dividing a variable by one simplifies to the variable.
+        /// </summary>
         [TestMethod]
-        public void Test_Div_X_One() =>
+        public void TestDivXOne() =>
             Assert.AreEqual("x", ASTNode.Simplify(BinOp("/", "x", "1")).ToString());
 
+        /// <summary>
+        /// Verifies that exponentiating one by a variable simplifies to "1".
+        /// </summary>
         [TestMethod]
-        public void Test_Exp_One_X() =>
+        public void TestExpOneX() =>
             Assert.AreEqual("1", ASTNode.Simplify(BinOp("^", "1", "x")).ToString());
 
+        /// <summary>
+        /// Verifies that exponentiating a variable by one simplifies to the variable.
+        /// </summary>
         [TestMethod]
-        public void Test_Exp_X_One() =>
+        public void TestExpXOne() =>
             Assert.AreEqual("x", ASTNode.Simplify(BinOp("^", "x", "1")).ToString());
 
+        /// <summary>
+        /// Verifies that exponentiating a variable by zero simplifies to "1".
+        /// </summary>
         [TestMethod]
-        public void Test_Exp_X_Zero() =>
+        public void TestExpXZero() =>
             Assert.AreEqual("1", ASTNode.Simplify(BinOp("^", "x", "0")).ToString());
 
+        /// <summary>
+        /// Verifies that exponentiating zero by a variable simplifies to "0".
+        /// </summary>
         [TestMethod]
-        public void Test_Exp_Zero_X() =>
+        public void TestExpZeroX() =>
             Assert.AreEqual("0", ASTNode.Simplify(BinOp("^", "0", "x")).ToString());
 
+        /// <summary>
+        /// Verifies the simplification of a chained expression involving multiplication and addition.
+        /// </summary>
         [TestMethod]
-        public void Test_ChainedSimplification_Mul_Add()
+        public void TestChainedSimplificationMulAdd()
         {
-            // ((x + 0) * 1) -> x
             var node = new ASTNode("*")
             {
                 Left = new ASTNode("+") { Left = new ASTNode("x"), Right = new ASTNode("0") },

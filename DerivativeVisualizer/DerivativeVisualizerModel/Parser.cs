@@ -18,7 +18,6 @@ namespace DerivativeVisualizerModel
             currentIndex = 0;
         }
 
-
         /// <summary>
         /// Begins the parsing process by calling ParseTerm() to interpret the input as an expression.
         /// </summary>

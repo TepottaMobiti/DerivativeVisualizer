@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace DerivateVisualizerModelTest
 {
     // Entire class is AI generated.
-
     [TestClass]
     public class ModelTest
     {
@@ -17,25 +16,22 @@ namespace DerivateVisualizerModelTest
         /// and an appropriate error message.
         /// </summary>
         [TestMethod]
-        public void ProcessInput_InvalidTokenization_TriggersInputProcessedWithNullTree()
+        public void ProcessInputInvalidTokenizationTriggersInputProcessedWithNullTree()
         {
             // Arrange
             var model = new Model();
             bool called = false;
-            ASTNode? resultTree = null;
             string resultMsg = "";
 
-            model.InputProcessed += (tree, msg) =>
+            model.InputProcessed += (msg) =>
             {
                 called = true;
-                resultTree = tree;
                 resultMsg = msg;
             };
 
             model.ProcessInput("@@@");
 
             Assert.IsTrue(called);
-            Assert.IsNull(resultTree);
             Assert.IsFalse(string.IsNullOrEmpty(resultMsg));
         }
 
@@ -44,19 +40,17 @@ namespace DerivateVisualizerModelTest
         /// and that they refer to the same syntax tree.
         /// </summary>
         [TestMethod]
-        public void ProcessInput_ValidInput_TriggersInputProcessedAndTreeReady()
+        public void ProcessInputValidInputTriggersInputProcessedAndTreeReady()
         {
             var model = new Model();
             bool processed = false;
             bool treeReady = false;
 
-            ASTNode? processedTree = null;
             ASTNode? readyTree = null;
 
-            model.InputProcessed += (tree, msg) =>
+            model.InputProcessed += (msg) =>
             {
                 processed = true;
-                processedTree = tree;
             };
 
             model.TreeReady += (tree) =>
@@ -68,9 +62,7 @@ namespace DerivateVisualizerModelTest
             model.ProcessInput("x^2");
 
             Assert.IsTrue(processed);
-            Assert.IsNotNull(processedTree);
             Assert.IsTrue(treeReady);
-            Assert.AreSame(processedTree, readyTree);
         }
 
         /// <summary>
@@ -78,7 +70,7 @@ namespace DerivateVisualizerModelTest
         /// when no further differentiation is required after the step.
         /// </summary>
         [TestMethod]
-        public void DifferentiateByLocator_TriggersTreeUpdated_AndDifferentiationFinished_WhenDone()
+        public void DifferentiateByLocatorTriggersTreeUpdatedAndDifferentiationFinishedWhenDone()
         {
             var model = new Model();
             ASTNode? readyTree = null;
@@ -126,7 +118,7 @@ namespace DerivateVisualizerModelTest
         /// TreeUpdated is still triggered and DifferentiationFinished is also triggered immediately after.
         /// </summary>
         [TestMethod]
-        public void DifferentiateByLocator_OnlyTriggersTreeUpdated_IfDifferentiationNotFinished()
+        public void DifferentiateByLocatorOnlyTriggersTreeUpdatedIfDifferentiationNotFinished()
         {
             var model = new Model();
 
@@ -158,6 +150,5 @@ namespace DerivateVisualizerModelTest
             node.ToBeDifferentiated = true;
             return node;
         }
-
     }
 }

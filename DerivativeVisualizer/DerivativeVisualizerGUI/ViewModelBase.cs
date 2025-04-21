@@ -11,19 +11,19 @@ namespace DerivativeVisualizerGUI
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         /// <summary>
-        /// Nézetmodell ősosztály példányosítása.
+        /// Instantiates the base class for the ViewModel.
         /// </summary>
         protected ViewModelBase() { }
 
         /// <summary>
-        /// Tulajdonság változásának eseménye.
+        /// Event for property change.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
-        /// Tulajdonság változása ellenőrzéssel.
+        /// Property change notification with validation.
         /// </summary>
-        /// <param name="propertyName">Tulajdonság neve.</param>
+        /// <param name="propertyName">The name of the property.</param>
         protected virtual void OnPropertyChanged([CallerMemberName] String? propertyName = null)
         {
             if (PropertyChanged != null)

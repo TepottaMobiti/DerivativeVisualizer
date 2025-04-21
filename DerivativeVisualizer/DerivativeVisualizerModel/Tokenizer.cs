@@ -4,7 +4,6 @@ using System.Xml.Linq;
 
 namespace DerivativeVisualizerModel
 {
-    // TODO: Ennél jobban dokumentáld, pontosan definiáld mikor jó az input, a number, a function, stb.
     public class Tokenizer
     {
         private string input;
@@ -15,7 +14,6 @@ namespace DerivativeVisualizerModel
             this.input = input;
             currentIndex = 0;
         }
-
 
         /// <summary>
         /// Scans the input string character by character and returns a list of tokens representing numbers,

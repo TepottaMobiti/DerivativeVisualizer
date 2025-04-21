@@ -22,7 +22,7 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="395"/>
+                <ColumnDefinition Width="405"/>
                 <!-- Left Panel -->
                 <ColumnDefinition Width="*"/>
                 <!-- Right Panel (Tree View) -->
@@ -31,7 +31,7 @@
             <!-- Left Panel -->
             <ScrollViewer Grid.Column="0"
                           VerticalScrollBarVisibility="Auto" 
-                          HorizontalScrollBarVisibility="Disabled">
+                          HorizontalScrollBarVisibility="Auto">
 
                 <StackPanel Grid.Column="0" Width="375" Margin="10">
 
@@ -112,7 +112,7 @@
 
                     <Button Content="Egyszerűsítés"
                             Margin="5,10,0,0"
-                            Visibility="{Binding SimplifyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Visibility="{Binding ShowSimplifyButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Command="{Binding SimplifyCommand}"/>
 
                 </StackPanel>

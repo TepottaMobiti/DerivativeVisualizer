@@ -21,36 +21,12 @@ namespace DerivativeVisualizerGUI
 {
 
     /*
-
-    Javítási lehetőség: 0-val osztás, 0^0 detektálás javítása kiértékeléssel.
     Javítási lehetőség: Szakadásos függvények rajzolásának javítása.
-     
      */
     /* Priority list
         
         1. TODO: Ha elmozgatod a helyéről egérrel a pontot, és utána jeleníted meg a deriváltfv-t, akkor rossz helyen fog megjelenni a deriváltfv-n a pont. Ott, ahol a kattintáskor megjelent.
-        3. TODO: Megnézni a modell hol dobhat exceptiönt és mindenhol lekezelni, MessageBox-okkal.
-
      */
-
-    // UTOLSÓ LÉPÉSEK
-    // TODO: Átnevezni mindent konzisztensen, pl. show / visible a megjelenítendő dolgok, illetve egyfajta közölést használni, pl. hány tabot nyomsz, hol hagysz ki sorokat, stb.
-    // TODO: Átfogó CHECK: Minden exceptiont dobó függvényt try-catchben hívunk a modellből? És mindegyik kiír valami messageboxot?
-    // TODO: Majd a végén kérd meg a chadet hogy egyszerűsítsen a kódon, pl. a két plot function hasonló.
-    // Generáltass majd a chatGPT-vel különböző buta user storykat, és nézd meg, hogy valamelyikre rosszul reagál-e az app. Megkérdezheted tőle azt is, hogy lát-e valami problémát. Minden class-t
-    // ellenőriztess le vele.
-    // Kérd meg a ChatGPT-t, hogy minden sort kommenteljen, hogy mi történik ott. Ahol kell a magyarázat, ott hagyd meg. Ezt is minden classra játszd el. Pl. hogy melyik field mit csinál, nem trivi.
-    // TODO: Minden elnevezést egységesíts: UI elemek nevei tükrözzék, hogy milyen UI elemek pl Button név vége Button legyen.
-    // TODO: Átnevezések, hogy mindennek találó neve legyen.
-    // TODO: Minden fieldet átvizsgálni és dokumentálni, hogy mikor következik be változás rajta.
-    // Átnézni, hogy nincs-e felesleges ellenőrizni való, ami azért felesleges, mert az alkalmazás biztosítja, hogy nem kell ellenőrizni, pl. láthatóság miatt.
-    // Vagy inkább legyenek mindenhol felesleges ellenőrzések?
-
-    // Minden függvényt ellenőrizz, hogy dobhat-e exceptiont.
-
-    // Fractions-t, OxyPlot-ot mindenképpen dokumentáld majd le.
-
-    // Parser megértése: többféle függvényre nézd meg, hogy hogy működik.
 
     public class ViewModel : ViewModelBase
     {
@@ -68,12 +44,12 @@ namespace DerivativeVisualizerGUI
 
         private bool? inputValid;
         private bool showErrorMessage;
-        private bool simplifyButtonVisible;
+        private bool showSimplifyButton;
         private bool showDerivativeText;
         private bool showPlotDerivativeButton;
+        private bool showValueOfDerivativeAtAPointText;
         private bool functionPlotted;
         private bool derivativePlotted;
-        private bool showValueOfDerivativeAtAPointText;
         private bool isDragging = false;
 
         private DerivativeVisualizerModel.Model model;
@@ -101,7 +77,7 @@ namespace DerivativeVisualizerGUI
                 {
                     TreeToPresent = null;
                 }
-                SimplifyButtonVisible = false;
+                ShowSimplifyButton = false;
                 PlotModel = null;
                 ShowPlotDerivativeButton = false;
                 functionPlotted = false;
@@ -237,13 +213,13 @@ namespace DerivativeVisualizerGUI
             }
         }
 
-        public bool SimplifyButtonVisible
+        public bool ShowSimplifyButton
         {
-            get => simplifyButtonVisible;
+            get => showSimplifyButton;
             set
             {
-                simplifyButtonVisible = value;
-                OnPropertyChanged(nameof(SimplifyButtonVisible));
+                showSimplifyButton = value;
+                OnPropertyChanged(nameof(ShowSimplifyButton));
             }
         }
 
@@ -289,7 +265,7 @@ namespace DerivativeVisualizerGUI
             {
                 treeToPresent = value;
                 OnPropertyChanged(nameof(TreeToPresent));
-                InitializeCommands(TreeToPresent);
+                InitializeNodeCommands(TreeToPresent);
             }
         }
 
@@ -301,9 +277,9 @@ namespace DerivativeVisualizerGUI
 
         private ASTNode? InputFunction { get; set; }
 
-        public ASTNode? SimplifiedTree { get; private set; }
+        private ASTNode? SimplifiedTree { get; set; }
 
-        public Dictionary<int, DelegateCommand> NodeClickCommands { get; } = new();
+        public Dictionary<int, ICommand> NodeClickCommands { get; } = new();
 
         #endregion
 
@@ -364,9 +340,9 @@ namespace DerivativeVisualizerGUI
         /// </summary>
         /// <param name="tree"></param>
         /// <param name="msg"></param>
-        private void Model_OnInputProcessed(ASTNode? tree, string msg)
+        private void Model_OnInputProcessed(string msg)
         {
-            InputValid = inputText.Length == 0 ? null : tree is not null;
+            InputValid = inputText.Length == 0 ? null : msg.Length == 0;
 
             if (InputValid == true)
             {
@@ -377,21 +353,6 @@ namespace DerivativeVisualizerGUI
             {
                 ErrorMessage = msg;
             }
-        }
-
-        /// <summary>
-        /// Updates the UI with the new derivative tree and makes the derivative text visible.
-        /// </summary>
-        /// <param name="tree"></param>
-        private void Model_OnTreeUpdated(ASTNode? tree)
-        {
-            if (tree is null)
-            {
-                return;
-            }
-            TreeToPresent = tree;
-            DerivativeText = "f'(x) = " + TreeToPresent?.ToString() ?? "";
-            ShowDerivativeText = true;
         }
 
         /// <summary>
@@ -411,18 +372,49 @@ namespace DerivativeVisualizerGUI
         }
 
         /// <summary>
+        /// Updates the UI with the new derivative tree and makes the derivative text visible.
+        /// </summary>
+        /// <param name="tree"></param>
+        private void Model_OnTreeUpdated(ASTNode? tree)
+        {
+            if (tree is null)
+            {
+                return;
+            }
+            TreeToPresent = tree;
+            DerivativeText = "f'(x) = " + TreeToPresent?.ToString() ?? "";
+            ShowDerivativeText = true;
+        }
+
+        /// <summary>
         /// Stores the final simplified derivative and makes the simplify button visible.
         /// </summary>
         /// <param name="tree"></param>
         private void Model_OnDifferentiationFinished(ASTNode? tree)
         {
-            SimplifyButtonVisible = true;
+            ShowSimplifyButton = true;
             SimplifiedTree = tree;
         }
 
         #endregion
 
-        #region Delegate Functions
+        #region OnClick Handlers
+
+        /// <summary>
+        /// Requests a differentiation step for the clicked node in the syntax tree.
+        /// </summary>
+        /// <param name="node"></param>
+        private void OnNodeClick(ASTNode node)
+        {
+            try
+            {
+                model.DifferentiateByLocator(node.Locator);
+            }
+            catch (Exception e)
+            {
+                ErrorOccurred?.Invoke(e.Message);
+            }
+        }
 
         /// <summary>
         /// Adds the selected function syntax (e.g. sin(), log(,)) to the input field, respecting length constraints.
@@ -450,7 +442,7 @@ namespace DerivativeVisualizerGUI
         private void SimplifyTree(object? parameter)
         {
             TreeToPresent = SimplifiedTree;
-            SimplifyButtonVisible = false;
+            ShowSimplifyButton = false;
             DerivativeText = "f'(x) = " + SimplifiedTree?.ToString() ?? "";
             ShowDerivativeText = true;
             ShowPlotDerivativeButton = true;
@@ -458,7 +450,7 @@ namespace DerivativeVisualizerGUI
         }
 
         /// <summary>
-        /// Plots the original function over the given interval and enables derivative interaction if successful.
+        /// Plots the original function over the given interval.
         /// </summary>
         /// <param name="parameter"></param>
         private void PlotFunction(object? parameter)
@@ -614,27 +606,77 @@ namespace DerivativeVisualizerGUI
             {
                 ErrorOccurred?.Invoke(e.Message);
             }
-
         }
+
+        /// <summary>
+        /// Starts dragging if the mouse is clicked near the draggable point.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnMouseDown(object? sender, OxyMouseDownEventArgs e)
+        {
+            var pos = e.Position;
+            var x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
+            var y = PlotModel.DefaultYAxis.InverseTransform(pos.Y);
+
+            var point = draggablePointOnFunction?.Points.FirstOrDefault();
+            if (point == null) return;
+
+            // Check if user clicked close to the point
+            if (Math.Abs(x - point.X) < 0.5 && Math.Abs(y - point.Y) < 0.5)
+            {
+                isDragging = true;
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Updates the draggable point and tangent line position as the mouse moves during dragging.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnMouseMove(object? sender, OxyMouseEventArgs e)
+        {
+            if (!isDragging) return;
+
+            var pos = e.Position;
+            double x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
+
+            var (startInterval, endInterval) = CheckInterval();
+            x = Math.Max(startInterval, Math.Min(endInterval, x)); // Clamp x
+
+            double y = FunctionEvaluator.Evaluate(InputFunction!, x, 0.01);
+            double slope = FunctionEvaluator.Evaluate(SimplifiedTree!, x, 0.01);
+
+            x = Math.Round(x, 2);
+            y = Math.Round(y, 2);
+            slope = Math.Round(slope, 2);
+
+            UpdateDraggableAndTangent(x, y, slope);
+
+            DerivativeAtAPointText = x.ToString();
+
+            ValueOfFunctionAtAPointText = $"f({x}) = {y}";
+            ValueOfDerivativeAtAPointText = $"f'({x}) = {slope}";
+            EquationOfTangentText = tangentLine?.Title ?? "";
+            ShowValueOfDerivativeAtAPointText = true;
+
+            PlotModel.InvalidatePlot(false);
+        }
+
+        /// <summary>
+        /// Stops the dragging interaction when the mouse button is released.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnMouseUp(object? sender, OxyMouseEventArgs e)
+        {
+            isDragging = false;
+        }
+
         #endregion
 
         #region Helper Functions
-
-        /// <summary>
-        /// Requests a differentiation step for the clicked node in the syntax tree.
-        /// </summary>
-        /// <param name="node"></param>
-        private void OnNodeClick(ASTNode node)
-        {
-            try
-            {
-                model.DifferentiateByLocator(node.Locator);
-            }
-            catch (Exception e)
-            {
-                ErrorOccurred?.Invoke(e.Message);
-            }
-        }
 
         /// <summary>
         /// Validates and parses the user-specified interval for plotting, returning (NaN, NaN) if invalid.
@@ -733,14 +775,14 @@ namespace DerivativeVisualizerGUI
         /// Recursively assigns click commands to syntax tree nodes for triggering differentiation.
         /// </summary>
         /// <param name="node"></param>
-        private void InitializeCommands(ASTNode? node)
+        private void InitializeNodeCommands(ASTNode? node)
         {
             if (node == null) return;
 
             NodeClickCommands[node.Locator] = new DelegateCommand(param => OnNodeClick(node));
 
-            InitializeCommands(node.Left);
-            InitializeCommands(node.Right);
+            InitializeNodeCommands(node.Left);
+            InitializeNodeCommands(node.Right);
         }
 
         /// <summary>
@@ -758,7 +800,7 @@ namespace DerivativeVisualizerGUI
         }
 
         /// <summary>
-        /// Updates the draggable point and tangent line on the plot at the given point with its function value and slope.
+        /// Updates the position of a draggable point on a function graph and calculates the corresponding tangent line at that point.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -794,72 +836,6 @@ namespace DerivativeVisualizerGUI
             }
 
             tangentLine.Title = $"y = {slope}x + {intercept}";
-        }
-
-        /// <summary>
-        /// Starts dragging if the mouse is clicked near the draggable point.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnMouseDown(object? sender, OxyMouseDownEventArgs e)
-        {
-            var pos = e.Position;
-            var x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
-            var y = PlotModel.DefaultYAxis.InverseTransform(pos.Y);
-
-            var point = draggablePointOnFunction?.Points.FirstOrDefault();
-            if (point == null) return;
-
-            // Check if user clicked close to the point
-            if (Math.Abs(x - point.X) < 0.5 && Math.Abs(y - point.Y) < 0.5)
-            {
-                isDragging = true;
-                e.Handled = true;
-            }
-        }
-
-        /// <summary>
-        /// Updates the draggable point and tangent line position as the mouse moves during dragging.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnMouseMove(object? sender, OxyMouseEventArgs e)
-        {
-            if (!isDragging) return;
-
-            var pos = e.Position;
-            double x = PlotModel!.DefaultXAxis.InverseTransform(pos.X);
-
-            var (startInterval, endInterval) = CheckInterval();
-            x = Math.Max(startInterval, Math.Min(endInterval, x)); // Clamp x
-
-            double y = FunctionEvaluator.Evaluate(InputFunction!, x, 0.01);
-            double slope = FunctionEvaluator.Evaluate(SimplifiedTree!, x, 0.01);
-
-            x = Math.Round(x, 2);
-            y = Math.Round(y, 2);
-            slope = Math.Round(slope, 2);
-
-            UpdateDraggableAndTangent(x, y, slope);
-
-            DerivativeAtAPointText = x.ToString();
-
-            ValueOfFunctionAtAPointText = $"f({x}) = {y}";
-            ValueOfDerivativeAtAPointText = $"f'({x}) = {slope}";
-            EquationOfTangentText = tangentLine?.Title ?? "";
-            ShowValueOfDerivativeAtAPointText = true;
-
-            PlotModel.InvalidatePlot(false);
-        }
-
-        /// <summary>
-        /// Stops the dragging interaction when the mouse button is released.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnMouseUp(object? sender, OxyMouseEventArgs e)
-        {
-            isDragging = false;
         }
 
         /// <summary>

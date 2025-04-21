@@ -6,8 +6,6 @@ using System.Xml.Linq;
 
 namespace DerivateVisualizerModelTest
 {
-    // Szakdoga szöveg: Minden alapfüggvényt leteszteltem kompozíció nélkül és az f kör x^2 kompozícióval.
-
     [TestClass]
     public class DifferentiatorTest
     {

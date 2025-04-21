@@ -9,20 +9,20 @@ namespace DerivativeVisualizerGUI
 {
     public class DelegateCommand : ICommand
     {
-        private readonly Action<Object?> _execute; // a tevékenységet végrehajtó lambda-kifejezés
-        private readonly Func<Object?, Boolean>? _canExecute; // a tevékenység feltételét ellenőrző lambda-kifejezés
+        private readonly Action<Object?> _execute; // The lambda expression that performs the action
+        private readonly Func<Object?, Boolean>? _canExecute; // The lambda expression that checks the action's condition
 
         /// <summary>
-        /// Parancs létrehozása.
+        /// Creates the command.
         /// </summary>
-        /// <param name="execute">Végrehajtandó tevékenység.</param>
+        /// <param name="execute">The action to be executed.</param>
         public DelegateCommand(Action<Object?> execute) : this(null, execute) { }
 
         /// <summary>
-        /// Parancs létrehozása.
+        /// Creates the command.
         /// </summary>
-        /// <param name="canExecute">Végrehajthatóság feltétele.</param>
-        /// <param name="execute">Végrehajtandó tevékenység.</param>
+        /// <param name="canExecute">The condition that determines if the action can be executed.</param>
+        /// <param name="execute">The action to be executed.</param>
         public DelegateCommand(Func<Object?, Boolean>? canExecute, Action<Object?> execute)
         {
             ArgumentNullException.ThrowIfNull(execute);
@@ -32,24 +32,24 @@ namespace DerivativeVisualizerGUI
         }
 
         /// <summary>
-        /// Végrehajthatóság változásának eseménye.
+        /// Event for changes in executability.
         /// </summary>
         public event EventHandler? CanExecuteChanged;
 
         /// <summary>
-        /// Végrehajthatóság ellenőrzése
+        /// Checks if the action can be executed.
         /// </summary>
-        /// <param name="parameter">A tevékenység paramétere.</param>
-        /// <returns>Igaz, ha a tevékenység végrehajtható.</returns>
+        /// <param name="parameter">The parameter for the action.</param>
+        /// <returns>True if the action can be executed.</returns>
         public Boolean CanExecute(Object? parameter)
         {
             return _canExecute == null ? true : _canExecute(parameter);
         }
 
         /// <summary>
-        /// Tevékenység végrehajtása.
+        /// Executes the action.
         /// </summary>
-        /// <param name="parameter">A tevékenység paramétere.</param>
+        /// <param name="parameter">The parameter for the action.</param>
         public void Execute(Object? parameter)
         {
             if (!CanExecute(parameter))
@@ -60,7 +60,7 @@ namespace DerivativeVisualizerGUI
         }
 
         /// <summary>
-        /// Végrehajthatóság változásának eseménykiváltása.
+        /// Raises the event for changes in executability.
         /// </summary>
         public void RaiseCanExecuteChanged()
         {

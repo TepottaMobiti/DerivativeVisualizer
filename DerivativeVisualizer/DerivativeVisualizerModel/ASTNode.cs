@@ -5,7 +5,6 @@ using System.Xml;
 using System.Xml.Linq;
 namespace DerivativeVisualizerModel
 {
-    // TODO: Mivel ide is került azóta néhány függvény, amik elég fontosak, így ezt a classt is tesztelni kell.
     public class ASTNode
     {
         private static int counter = 0;

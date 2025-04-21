@@ -13,13 +13,13 @@ namespace DerivativeVisualizerModel
         private Differentiator differentiator = null!;
         private List<Token>? tokens = null!;
 
-        public delegate void InputProcessedDelegate(ASTNode? tree, string msg);
+        public delegate void InputProcessedDelegate(string msg);
 
         public event InputProcessedDelegate InputProcessed = null!;
 
-        private void OnInputProcessed(ASTNode? tree, string msg)
+        private void OnInputProcessed(string msg)
         {
-            InputProcessed?.Invoke(tree, msg);
+            InputProcessed?.Invoke(msg);
         }
 
         public delegate void TreeDelegate(ASTNode? tree);
@@ -58,7 +58,7 @@ namespace DerivativeVisualizerModel
             (tokens, msg) = tokenizer.Tokenize();
             if (tokens is null)
             {
-                OnInputProcessed(null, msg);
+                OnInputProcessed(msg);
             }
             else
             {
@@ -70,7 +70,7 @@ namespace DerivativeVisualizerModel
                     differentiator = new Differentiator(tree);
                     OnTreeReady(differentiator.CurrentTree);
                 }
-                OnInputProcessed(tree,msg);
+                OnInputProcessed(msg);
             }
         }
 
