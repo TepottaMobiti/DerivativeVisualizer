@@ -19,15 +19,6 @@ using System.Windows.Media;
 
 namespace DerivativeVisualizerGUI
 {
-
-    /*
-    Javítási lehetőség: Szakadásos függvények rajzolásának javítása.
-     */
-    /* Priority list
-        
-        1. TODO: Ha elmozgatod a helyéről egérrel a pontot, és utána jeleníted meg a deriváltfv-t, akkor rossz helyen fog megjelenni a deriváltfv-n a pont. Ott, ahol a kattintáskor megjelent.
-     */
-
     public class ViewModel : ViewModelBase
     {
         #region Private Fields
@@ -651,6 +642,7 @@ namespace DerivativeVisualizerGUI
             x = Math.Round(x, 2);
             y = Math.Round(y, 2);
             slope = Math.Round(slope, 2);
+            point = x;
 
             UpdateDraggableAndTangent(x, y, slope);
 
@@ -765,7 +757,7 @@ namespace DerivativeVisualizerGUI
                     IsZoomEnabled = true,
                 });
 
-                PlotModel.PlotType = PlotType.Cartesian;
+                //PlotModel.PlotType = PlotType.Cartesian;
             }
 
             return PlotModel;
