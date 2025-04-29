@@ -204,7 +204,7 @@
                         Visibility="{Binding ShowDerivativeAtAPoint, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Width="Auto"/>
 
-                <ScrollViewer Grid.Row="4" Grid.RowSpan="3" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer Grid.Row="4" Grid.RowSpan="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>

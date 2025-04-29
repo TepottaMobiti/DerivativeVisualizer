@@ -18,7 +18,6 @@ namespace DerivateVisualizerModelTest
         [TestMethod]
         public void ProcessInputInvalidTokenizationTriggersInputProcessedWithNullTree()
         {
-            // Arrange
             var model = new Model();
             bool called = false;
             string resultMsg = "";
@@ -138,17 +137,6 @@ namespace DerivateVisualizerModelTest
 
             Assert.IsTrue(updated);
             Assert.IsTrue(finished);
-        }
-
-        /// <summary>
-        /// Helper method to create a test ASTNode with ToBeDifferentiated set to true,
-        /// representing a node that is ready to be differentiated.
-        /// </summary>
-        private ASTNode GetDifferentiableNode()
-        {
-            var node = new ASTNode("x");
-            node.ToBeDifferentiated = true;
-            return node;
         }
     }
 }

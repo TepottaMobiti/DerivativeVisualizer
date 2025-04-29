@@ -3,6 +3,26 @@
   "WorkspaceRootPath": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivatevisualizermodeltest\\modeltest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|solutionrelative:derivatevisualizermodeltest\\modeltest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivatevisualizermodeltest\\functionevaluatortest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|solutionrelative:derivatevisualizermodeltest\\functionevaluatortest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivatevisualizermodeltest\\differentiatortest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|solutionrelative:derivatevisualizermodeltest\\differentiatortest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivatevisualizermodeltest\\parsertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|solutionrelative:derivatevisualizermodeltest\\parsertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivatevisualizermodeltest\\tokenizertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|solutionrelative:derivatevisualizermodeltest\\tokenizertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivatevisualizermodeltest\\astnodetest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|solutionrelative:derivatevisualizermodeltest\\astnodetest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -11,8 +31,20 @@
       "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}|DerivativeVisualizerModel\\DerivativeVisualizerModel.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizermodel\\astnode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}|DerivativeVisualizerModel\\DerivativeVisualizerModel.csproj|solutionrelative:derivativevisualizermodel\\astnode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\delegatecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\delegatecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\nulltovisibilityconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\nulltovisibilityconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}|DerivativeVisualizerModel\\DerivativeVisualizerModel.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizermodel\\differentiator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,8 +55,8 @@
       "RelativeMoniker": "D:0:0:{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}|DerivativeVisualizerModel\\DerivativeVisualizerModel.csproj|solutionrelative:derivativevisualizermodel\\functionevaluator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}|DerivativeVisualizerModel\\DerivativeVisualizerModel.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizermodel\\astnode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72ADBBAD-E899-4E3E-85CD-16FB4108FF8B}|DerivativeVisualizerModel\\DerivativeVisualizerModel.csproj|solutionrelative:derivativevisualizermodel\\astnode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -37,22 +69,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\behaviors\\horizontalscrollonshiftwheel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\behaviors\\horizontalscrollonshiftwheel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\nulltovisibilityconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\nulltovisibilityconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivatevisualizermodeltest\\tokenizertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{06EF8ABE-2F1E-4A54-9C9C-2987E2C94885}|DerivateVisualizerModelTest\\DerivateVisualizerModelTest.csproj|solutionrelative:derivatevisualizermodeltest\\tokenizertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|c:\\users\\b\u00E1lint\\documents\\github\\kw9am8_szakdolgozat\\derivativevisualizer\\derivativevisualizergui\\delegatecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{816AF293-5EDD-44D2-9AF0-DCAF066CD1F1}|DerivativeVisualizerGUI\\DerivativeVisualizerGUI.csproj|solutionrelative:derivativevisualizergui\\delegatecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -62,7 +78,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 215,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -70,67 +86,59 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ASTNode.cs",
-              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerModel\\ASTNode.cs",
-              "RelativeDocumentMoniker": "DerivativeVisualizerModel\\ASTNode.cs",
-              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerModel\\ASTNode.cs",
-              "RelativeToolTip": "DerivativeVisualizerModel\\ASTNode.cs",
-              "ViewState": "AQIAAHMBAAAAAAAAAAAqwIABAABhAAAA",
+              "DocumentIndex": 0,
+              "Title": "ModelTest.cs",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\ModelTest.cs",
+              "RelativeDocumentMoniker": "DerivateVisualizerModelTest\\ModelTest.cs",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\ModelTest.cs",
+              "RelativeToolTip": "DerivateVisualizerModelTest\\ModelTest.cs",
+              "ViewState": "AQIAAHcAAAAAAAAAAAAwwIcAAABIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T20:29:03.363Z"
+              "WhenOpened": "2025-04-29T18:37:42.894Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\MainWindow.xaml",
-              "RelativeToolTip": "DerivativeVisualizerGUI\\MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-04-21T17:00:15.753Z",
+              "Title": "FunctionEvaluatorTest.cs",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\FunctionEvaluatorTest.cs",
+              "RelativeDocumentMoniker": "DerivateVisualizerModelTest\\FunctionEvaluatorTest.cs",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\FunctionEvaluatorTest.cs",
+              "RelativeToolTip": "DerivateVisualizerModelTest\\FunctionEvaluatorTest.cs",
+              "ViewState": "AQIAAMUAAAAAAAAAAAAowN0AAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T18:30:43.769Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "AssemblyInfo.cs",
-              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\AssemblyInfo.cs",
-              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\AssemblyInfo.cs",
-              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\AssemblyInfo.cs",
-              "RelativeToolTip": "DerivativeVisualizerGUI\\AssemblyInfo.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "DocumentIndex": 2,
+              "Title": "DifferentiatorTest.cs",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\DifferentiatorTest.cs",
+              "RelativeDocumentMoniker": "DerivateVisualizerModelTest\\DifferentiatorTest.cs",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\DifferentiatorTest.cs",
+              "RelativeToolTip": "DerivateVisualizerModelTest\\DifferentiatorTest.cs",
+              "ViewState": "AQIAACUGAAAAAAAAAAAQwDAGAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T17:00:09.389Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\App.xaml",
-              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\App.xaml",
-              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\App.xaml",
-              "RelativeToolTip": "DerivativeVisualizerGUI\\App.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-04-21T16:55:11.252Z",
+              "WhenOpened": "2025-04-29T18:17:21.663Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "HorizontalScrollOnShiftWheel.cs",
-              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\Behaviors\\HorizontalScrollOnShiftWheel.cs",
-              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\Behaviors\\HorizontalScrollOnShiftWheel.cs",
-              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\Behaviors\\HorizontalScrollOnShiftWheel.cs",
-              "RelativeToolTip": "DerivativeVisualizerGUI\\Behaviors\\HorizontalScrollOnShiftWheel.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAYAAAA",
+              "DocumentIndex": 3,
+              "Title": "ParserTest.cs",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\ParserTest.cs",
+              "RelativeDocumentMoniker": "DerivateVisualizerModelTest\\ParserTest.cs",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\ParserTest.cs",
+              "RelativeToolTip": "DerivateVisualizerModelTest\\ParserTest.cs",
+              "ViewState": "AQIAAO0BAAAAAAAAAAAAwAUCAAAyAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T16:51:34.422Z"
+              "WhenOpened": "2025-04-29T18:12:17.781Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 12,
               "Title": "FunctionEvaluator.cs",
               "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerModel\\FunctionEvaluator.cs",
               "RelativeDocumentMoniker": "DerivativeVisualizerModel\\FunctionEvaluator.cs",
@@ -142,7 +150,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "NullToVisibilityConverter.cs",
               "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\NullToVisibilityConverter.cs",
               "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\NullToVisibilityConverter.cs",
@@ -154,44 +162,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "ViewModel.cs",
               "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\ViewModel.cs",
               "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\ViewModel.cs",
               "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\ViewModel.cs",
               "RelativeToolTip": "DerivativeVisualizerGUI\\ViewModel.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAYwBQAAAABAAAA",
+              "ViewState": "AQIAAFYDAAAAAAAAAAAUwGQDAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-21T01:40:45.799Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "DelegateCommand.cs",
-              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\DelegateCommand.cs",
-              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\DelegateCommand.cs",
-              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\DelegateCommand.cs",
-              "RelativeToolTip": "DerivativeVisualizerGUI\\DelegateCommand.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAIBZwBgAAABEAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T00:37:34.642Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "ASTNodeTest.cs",
               "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\ASTNodeTest.cs",
               "RelativeDocumentMoniker": "DerivateVisualizerModelTest\\ASTNodeTest.cs",
               "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\ASTNodeTest.cs",
               "RelativeToolTip": "DerivateVisualizerModelTest\\ASTNodeTest.cs",
-              "ViewState": "AQIAANIBAAAAAAAAAAAgwOIBAAA0AAAA",
+              "ViewState": "AQIAAOgAAAAAAAAAAAAqwGwAAAA1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-21T01:12:03.118Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 11,
               "Title": "Differentiator.cs",
               "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerModel\\Differentiator.cs",
               "RelativeDocumentMoniker": "DerivativeVisualizerModel\\Differentiator.cs",
@@ -203,7 +199,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 9,
               "Title": "ViewModelBase.cs",
               "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\ViewModelBase.cs",
               "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\ViewModelBase.cs",
@@ -215,15 +211,87 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 7,
+              "Title": "DelegateCommand.cs",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\DelegateCommand.cs",
+              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\DelegateCommand.cs",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\DelegateCommand.cs",
+              "RelativeToolTip": "DerivativeVisualizerGUI\\DelegateCommand.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABgAAABEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T00:37:34.642Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\MainWindow.xaml",
+              "RelativeToolTip": "DerivativeVisualizerGUI\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-04-21T17:00:15.753Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ASTNode.cs",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerModel\\ASTNode.cs",
+              "RelativeDocumentMoniker": "DerivativeVisualizerModel\\ASTNode.cs",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerModel\\ASTNode.cs",
+              "RelativeToolTip": "DerivativeVisualizerModel\\ASTNode.cs",
+              "ViewState": "AQIAAHMBAAAAAAAAAAAqwIABAABhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T20:29:03.363Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "TokenizerTest.cs",
               "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\TokenizerTest.cs",
               "RelativeDocumentMoniker": "DerivateVisualizerModelTest\\TokenizerTest.cs",
               "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivateVisualizerModelTest\\TokenizerTest.cs",
               "RelativeToolTip": "DerivateVisualizerModelTest\\TokenizerTest.cs",
-              "ViewState": "AQIAALUAAAAAAAAAAAAxwAAAAAAAAAAA",
+              "ViewState": "AQIAAMkAAAAAAAAAAAAgwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T00:57:11.883Z"
+              "WhenOpened": "2025-04-21T00:57:11.883Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "HorizontalScrollOnShiftWheel.cs",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\Behaviors\\HorizontalScrollOnShiftWheel.cs",
+              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\Behaviors\\HorizontalScrollOnShiftWheel.cs",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\Behaviors\\HorizontalScrollOnShiftWheel.cs",
+              "RelativeToolTip": "DerivativeVisualizerGUI\\Behaviors\\HorizontalScrollOnShiftWheel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T16:51:34.422Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\App.xaml",
+              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\App.xaml",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\App.xaml",
+              "RelativeToolTip": "DerivativeVisualizerGUI\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-04-21T16:55:11.252Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AssemblyInfo.cs",
+              "DocumentMoniker": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "DerivativeVisualizerGUI\\AssemblyInfo.cs",
+              "ToolTip": "C:\\Users\\B\u00E1lint\\Documents\\GitHub\\KW9AM8_Szakdolgozat\\DerivativeVisualizer\\DerivativeVisualizerGUI\\AssemblyInfo.cs",
+              "RelativeToolTip": "DerivativeVisualizerGUI\\AssemblyInfo.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T17:00:09.389Z"
             }
           ]
         }

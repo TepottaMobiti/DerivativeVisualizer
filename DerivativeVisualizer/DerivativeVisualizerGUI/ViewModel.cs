@@ -555,7 +555,7 @@ namespace DerivativeVisualizerGUI
                 double derivativeValueAtPoint = FunctionEvaluator.Evaluate(SimplifiedTree!, point, 1e-10);
                 if (!double.IsFinite(derivativeValueAtPoint))
                 {
-                    ErrorOccurred?.Invoke("A függvény nem deriválható a megadott pontban.");
+                    ErrorOccurred?.Invoke("A deriváltfüggvény hozzárendelési szabálya nincs értelmezve a megadott pontban.");
                     return;
                 }
 
@@ -709,7 +709,7 @@ namespace DerivativeVisualizerGUI
             }
             if (startInterval >= endInterval)
             {
-                ErrorOccurred?.Invoke("Az intervallum kezdete nagyobb vagy egyenlő mint a vége.");
+                ErrorOccurred?.Invoke("Az intervallum kezdete nagyobb vagy egyenlő, mint a vége.");
                 return (double.NaN, double.NaN);
             }
             if (Math.Abs(startInterval) > 50 || Math.Abs(endInterval) > 50)
