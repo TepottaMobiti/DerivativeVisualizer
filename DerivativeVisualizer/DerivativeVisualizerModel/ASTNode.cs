@@ -32,7 +32,7 @@ namespace DerivativeVisualizerModel
                 }
                 if (double.TryParse(Value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) || Value == "e")
                 {
-                    return "a' = 0 (a valós szám)";
+                    return "c' = 0 (c valós szám)";
                 }
                 switch (Value)
                 {

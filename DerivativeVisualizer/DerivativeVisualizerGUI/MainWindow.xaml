@@ -146,8 +146,6 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Interval Row -->
@@ -206,20 +204,30 @@
                         Visibility="{Binding ShowDerivativeAtAPoint, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Width="Auto"/>
 
-                <TextBlock Grid.Row="4" Text="{Binding ValueOfFunctionAtAPointText}" FontSize="20" Height="30"
-                           Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
-                           TextWrapping="Wrap"
-                           TextTrimming="None"/>
-                
-                <TextBlock Grid.Row="5" Text="{Binding ValueOfDerivativeAtAPointText}" FontSize="20" Height="30"
-                           Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
-                           TextWrapping="Wrap"
-                           TextTrimming="None"/>
-                
-                <TextBlock Grid.Row="6" Text="{Binding EquationOfTangentText}" FontSize="20" Height="30"
-                           Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
-                           TextWrapping="Wrap"
-                           TextTrimming="None"/>
+                <ScrollViewer Grid.Row="4" Grid.RowSpan="3" HorizontalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="{Binding ValueOfFunctionAtAPointText}" FontSize="20" Height="30"
+                   Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   TextWrapping="Wrap"
+                   TextTrimming="None"/>
+
+                        <TextBlock Grid.Row="1" Text="{Binding ValueOfDerivativeAtAPointText}" FontSize="20" Height="30"
+                   Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   TextWrapping="Wrap"
+                   TextTrimming="None"/>
+
+                        <TextBlock Grid.Row="2" Text="{Binding EquationOfTangentText}" FontSize="20" Height="30"
+                   Visibility="{Binding ShowValueOfDerivativeAtAPointText, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   TextWrapping="Wrap"
+                   TextTrimming="None"/>
+                    </Grid>
+                </ScrollViewer>
             </Grid>
 
             <!-- Right Panel (Function Graph) -->

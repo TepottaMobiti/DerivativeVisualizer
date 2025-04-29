@@ -486,7 +486,7 @@ namespace DerivateVisualizerModelTest
         public void TestNumberDiffRule()
         {
             function = new ASTNode("5") { ToBeDifferentiated = true };
-            expectedText = "a' = 0 (a valós szám)";
+            expectedText = "c' = 0 (c valós szám)";
             Assert.AreEqual(expectedText, function.DiffRule);
         }
 

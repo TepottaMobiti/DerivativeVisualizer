@@ -72,7 +72,7 @@ namespace DerivativeVisualizerModel
             string value = node.Value;
             ASTNode? left = node.Left;
             ASTNode? right = node.Right;
-            if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out double _) || value == "e") // a' = 0 (a valós szám)
+            if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out double _) || value == "e") // c' = 0 (c valós szám)
             {
                 return new ASTNode("0");
             }
@@ -568,25 +568,25 @@ namespace DerivativeVisualizerModel
         }
 
         /// <summary>
-        /// Recursively traverses the tree and replaces the target node with a new node while preserving the overall structure.
+        /// Recursively traverses the original tree and replaces the toBeDifferentiated node with the differentiated node while preserving the overall structure.
         /// </summary>
-        /// <param name="root"></param>
-        /// <param name="target"></param>
-        /// <param name="replacement"></param>
+        /// <param name="original"></param>
+        /// <param name="toBeDifferentiated"></param>
+        /// <param name="differentiated"></param>
         /// <returns></returns>
-        private ASTNode ReplaceNode(ASTNode root, ASTNode target, ASTNode replacement)
+        private ASTNode ReplaceNode(ASTNode original, ASTNode toBeDifferentiated, ASTNode differentiated)
         {
-            if (root == null || target == null || replacement == null) return root!;
+            if (original == null || toBeDifferentiated == null || differentiated == null) return original!;
 
-            if (root == target)
+            if (original == toBeDifferentiated)
             {
-                return replacement;
+                return differentiated;
             }
 
-            root.Left = ReplaceNode(root.Left, target, replacement);
-            root.Right = ReplaceNode(root.Right, target, replacement);
+            original.Left = ReplaceNode(original.Left, toBeDifferentiated, differentiated);
+            original.Right = ReplaceNode(original.Right, toBeDifferentiated, differentiated);
 
-            return root;
+            return original;
         }
     }
 }
